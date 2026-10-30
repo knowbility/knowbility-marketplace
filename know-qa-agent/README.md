@@ -13,6 +13,14 @@ know-qa-agent is built around that combined sense. Every pass takes in all four 
 /plugin install know-qa-agent@knowbility
 ```
 
+## Prerequisites
+
+- **Node 18+** (with `npm` on PATH).
+- **`@playwright/cli`** installed globally (`npm install -g @playwright/cli`) — the tester agent drives the browser through the `playwright-cli` command. `/know-qa:init` checks for it and installs it if missing. Note the package is `@playwright/cli`; the npm package named `playwright-cli` is something else.
+- **Google Chrome installed** — the paired/authenticated harness attaches to your real installed Chrome (it does not download a browser). On macOS the default location is found automatically; elsewhere set `CHROME_BIN`.
+
+The plugin uses two distinct browser-automation dependencies, and they don't substitute for each other: the global `playwright-cli` for autonomous runs, and the `playwright` Node library (pinned, installed into your project's `.know-qa/tools/` by `/know-qa:init`) for the paired/authenticated harness.
+
 ## Quick start
 
 ```
@@ -89,7 +97,7 @@ Spawns the tester agent, which works the spec like a skeptical human: edge cases
 /know-qa:check --url http://localhost:3000 --phase 3
 ```
 
-A fast verification gate for build boundaries: it reads what the phase was supposed to deliver, tests exactly that, and returns a structured pass/fail an orchestrator can act on. Integrates with GSD phase transitions. After three failed gate runs it stops retrying and tells you to reconsider the approach — it is explicitly not a retry loop.
+A fast verification gate for build boundaries: it reads what the phase was supposed to deliver, tests exactly that, and returns a structured pass/fail an orchestrator can act on. Integrates with phase-based build workflows that expect a structured gate result. After three failed gate runs it stops retrying and tells you to reconsider the approach — it is explicitly not a retry loop.
 
 ### /know-qa:monitor — catch what breaks after it shipped
 
@@ -99,7 +107,7 @@ A fast verification gate for build boundaries: it reads what the phase was suppo
 
 Recurring smoke runs against a live URL. It keeps a last-known-good baseline per scenario, so the alert signal is *regressions* — things that worked and now don't — rather than noise. It checks the findings registry every run, so a known, already-filed issue is annotated ("matches F-012 / WEB-123") instead of being re-raised every cycle. Alerts persist to disk and surface at your next session start.
 
-One honest caveat on schedules: `/know-qa:monitor` rides Claude Code's native `/loop`, so it recurs for as long as the session stays open and the machine stays awake — that covers a workday or a deliberate overnight (sleep disabled, session left running; pass `--unattended` so no firing stalls on a question). What it doesn't cover is true cross-day, always-on monitoring: that still needs something outside the session running `claude -p "/know-qa-agent:run ... --unattended"` on a timer (a desktop scheduled task, cron, GitHub Actions). Claude Code's cloud routines are not a fit for browser work that depends on a locally saved signed-in session — a cloud agent has no access to your machine's Chrome or auth state.
+One honest caveat on schedules: `/know-qa:monitor` rides Claude Code's native `/loop`, so it recurs for as long as the session stays open and the machine stays awake — that covers a workday or a deliberate overnight (sleep disabled, session left running; pass `--unattended` so no firing stalls on a question). What it doesn't cover is true cross-day, always-on monitoring: that still needs something outside the session running `claude -p "/know-qa:run --project . --tag smoke --unattended"` on a timer (a desktop scheduled task, cron, GitHub Actions). Claude Code's cloud routines are not a fit for browser work that depends on a locally saved signed-in session — a cloud agent has no access to your machine's Chrome or auth state.
 
 ### /know-qa:report — what happened, is it a pattern, and where does it land?
 
@@ -117,7 +125,7 @@ Reads entirely from disk, so it works in a fresh session with no memory of the r
 - **Systemic themes** — findings clustered by shared root cause. The most valuable output of a sweep is usually not any single ticket; it's "six of nine findings trace to the avatar service," which points at one fix instead of six tickets.
 - **Area roll-up** (when you use areas) — open findings grouped by area, with owner, count, and when each area was last checked. So each owner sees their slice at a glance.
 
-If you declare a sink in `.know-qa/reporting.json`, the roll-up also posts to it — a Slack channel, say — with a configurable identity and threading. Delivery rides whatever MCP you have wired; the plugin just formats and routes. No `reporting.json` means report-file-only, unchanged. The canonical definition is `reference/reporting-sinks.md`.
+If you declare a sink in `.know-qa/reporting.json`, the roll-up also posts to it — a Slack channel, say — with a configurable identity and threading. The plugin formats and routes; the actual posting is done by whatever integration you have already connected to Claude (a Slack connector, for instance). Without one, the report still writes its file locally and tells you it could not post. No `reporting.json` means report-file-only, unchanged. The canonical definition is `reference/reporting-sinks.md`.
 
 `--file` files the gated findings (only confirmed defects — never design-judgment calls) into **your** tracker, whichever it is. Filing is a learned, per-project procedure, not a GitHub feature: the agent asks where tickets land, samples a recent ticket to learn the house shape (sprint and board fields, epic links, labels, how summaries are written), files **one**, and asks you to confirm it landed where the team looks before filing the rest. The stable parts of that contract are cached in `.know-qa/`; volatile values like the active sprint are re-derived every session. No tracker connected? It degrades to an explicit "Would have filed" section — never a silent skip.
 
@@ -208,7 +216,7 @@ By default a report writes a file. If you want it pushed somewhere the team alre
 }
 ```
 
-The plugin formats and routes; **delivery rides whatever MCP you already have wired** (a Slack MCP, for instance). It does not bundle an integration or hold a token — `reporting.json` carries channel names and a posting identity, nothing secret. A noisy channel can ask for `regressions-only`; a per-owner sink with a `scope` posts just that owner's slice. `/know-qa:monitor` can post the same way at the end of a run. If the configured MCP isn't connected, the report still writes its file and tells you it couldn't post — it never fails over a missing sink. Full reference: `reference/reporting-sinks.md`.
+The plugin formats and routes; **the posting itself is done by an integration you have already connected to Claude** (a Slack connector, for instance). It does not bundle an integration or hold a token — `reporting.json` carries channel names and a posting identity, nothing secret. A noisy channel can ask for `regressions-only`; a per-owner sink with a `scope` posts just that owner's slice. `/know-qa:monitor` can post the same way at the end of a run. If the configured MCP isn't connected, the report still writes its file and tells you it couldn't post — it never fails over a missing sink. Full reference: `reference/reporting-sinks.md`.
 
 ## Findings, not noise
 
@@ -247,14 +255,6 @@ your-project/
 
 Everything the plugin writes stays under `.know-qa/`. The identical structure and commands work on any project against any server — pointing at a different deployment is a flag, not a rebuild.
 
-## Prerequisites
-
-- **Node 18+** (with `npm` on PATH).
-- **`@playwright/cli`** installed globally (`npm install -g @playwright/cli`) — the tester agent drives the browser through the `playwright-cli` command. `/know-qa:init` checks for it and installs it if missing. Note the package is `@playwright/cli`; the npm package named `playwright-cli` is something else.
-- **Google Chrome installed** — the paired/authenticated harness attaches to your real installed Chrome (it does not download a browser). On macOS the default location is found automatically; elsewhere set `CHROME_BIN`.
-
-The plugin uses two distinct browser-automation dependencies, and they don't substitute for each other: the global `playwright-cli` for autonomous runs, and the `playwright` Node library (pinned, installed into your project's `.know-qa/tools/` by `/know-qa:init`) for the paired/authenticated harness.
-
 ## Accessibility, two tiers deep
 
 Baseline accessibility rides along in every test: keyboard reachability, visible focus, alt text, form labels, obvious contrast problems. Tier 2 (opt-in per spec via `## Accessibility Focus`, or `--a11y-depth deep` when generating) goes further:
@@ -273,7 +273,7 @@ Web only — CLI and native-GUI testing are different domains. Screen-reader/AT-
 
 ## Status
 
-Version 0.1.0 is the first release in the Knowbility marketplace. Live: the `qa-tester` agent, the ten skills above, the deterministic workspace engine (manifest-backed matrix selection, dependency scheduling, interruption recovery, validated cell results, idempotent report/history/findings compilation, clean-run monitor baselines, explicit host-capability degradation), the finding lifecycle, tracker-agnostic filing, pair-then-automate, mechanical safety enforcement, owned areas, pluggable reporting sinks, paired-harness MP4 capture, and the two-tier accessibility suite with WCAG criterion annotation.
+Version 0.1.0 is the first release in the Knowbility marketplace. Everything described above works: the ten commands, the tester agent, the browser harness, the findings workflow, tracker filing, owned areas, reporting, screen recording, and the two-tier accessibility suite.
 
 **Not yet exercised end to end in this marketplace.** The port was verified by manifest validation, module resolution across every harness tool, an engine spec compile, and a dynamic-reference sweep; it has not yet been driven against a live site from a cold install here. `CHANGELOG.md` records what was removed from the plugin this was forked from and why. The grounding spec and build orientation live in the marketplace repo at `dev/know-qa-agent/` and intentionally do not ship with the installed plugin.
 

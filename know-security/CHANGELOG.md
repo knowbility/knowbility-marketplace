@@ -47,7 +47,7 @@ and reports findings.
   `FINDINGS.md` safe to commit.
 - **`reference/honest-limits.md`** leads with *absence of findings is not evidence of security*
   and is the first link in the README.
-- **`dev/know-security/tests/finder.test.mjs`** — 56 cases in both directions. Sixteen assert the tool
+- **`dev/know-security/tests/finder.test.mjs`** — 66 cases in both directions. Sixteen assert the tool
   stays **quiet**.
 
 ### Built twice

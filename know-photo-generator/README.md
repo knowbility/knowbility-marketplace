@@ -68,9 +68,9 @@ To derive a brand's settings from real photos, upload 5–10 representative shot
 
 ## Structure
 
-- `commands/know-photo:generate.md`, `commands/know-photo:setup.md` — entry points (thin wrappers)
+- `commands/know-photo/generate.md`, `commands/know-photo/setup.md` — entry points (thin wrappers)
 - `skills/photo-generate/SKILL.md` — the guided workflow engine
-- `skills/know-photo:setup/SKILL.md` — one-time setup (keys.env, dependency, default style)
+- `skills/photo-setup/SKILL.md` — one-time setup (keys.env, dependency, default style)
 - `reference/` — the photography knowledge library (7 files)
 - `scripts/generate_image.py` — Gemini API generation script (`google-genai` SDK); also `--check-keys`
 

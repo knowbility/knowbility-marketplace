@@ -13,11 +13,11 @@ the Gemini image API (`--generate`). Brand presets apply a house style in one fl
 
 ## Structure
 
-- `commands/know-photo:generate.md`, `commands/know-photo:setup.md` — thin wrappers.
+- `commands/know-photo/generate.md`, `commands/know-photo/setup.md` — thin wrappers.
 - `skills/photo-generate/SKILL.md` — the workflow engine (quick mode, full mode, style
   resolution, batch/variations orchestration, refinement loop, generation dispatch).
   Commands stay thin; behavior changes go here.
-- `skills/know-photo:setup/SKILL.md` — one-time setup (beacon-pattern): scaffolds
+- `skills/photo-setup/SKILL.md` — one-time setup (beacon-pattern): scaffolds
   `~/.know-photo-generator/` (keys.env + config.json), walks key entry via the file (never
   the chat), verifies via the script's `--check-keys`, optional default style.
 - `reference/` — read-only photography library, loaded via `${CLAUDE_PLUGIN_ROOT}`:
@@ -32,7 +32,7 @@ the Gemini image API (`--generate`). Brand presets apply a house style in one fl
 
 ## Key mechanics
 
-- **Key resolution** (mirrors beacon `harness/run-panel.mjs`): real environment >
+- **Key resolution** (the pattern this was modelled on): real environment >
   cwd `.env` (legacy) > `.know-photo-generator/keys.env` in cwd > `~/.know-photo-generator/keys.env`.
   `--check-keys` reports the resolved source and live-validates with `client.models.get()`
   — it is the single source of truth `/know-photo:setup` calls. Setup **never clobbers** an

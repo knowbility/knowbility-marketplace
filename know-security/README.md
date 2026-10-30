@@ -130,7 +130,7 @@ recoverable; a key that reaches a remote is rotated, not undone.
 
 ## Composition
 
-Standalone. If [trailhead](../trailhead) is installed, `/know-security:init` wires two gate stages —
+Standalone. If a compatible project-gate plugin is installed in the same deployment directory, `/know-security:init` wires two gate stages —
 `security-decisions` (irreversible, blocks even at prototype) and `security-findings` (costly,
 advisory by default). If it is not, the gate runs on its own. Neither plugin imports the other,
 and it never degrades to nothing.
@@ -138,7 +138,7 @@ and it never degrades to nothing.
 ## Verification
 
 `node dev/know-security/tests/finder.test.mjs` in the marketplace checkout (the suite lives beside
-the plugin, not inside it, so an installed copy does not carry it) — 56 cases, **both
+the plugin, not inside it, so an installed copy does not carry it) — 66 cases, **both
 directions**. Sixteen of them assert
 the tool stays *quiet*: a map lookup is not a route, a regex `.exec()` is not a shell call, a
 parameterized query is not a dynamic one, a fixture credential is labelled rather than filed, a
