@@ -67,7 +67,9 @@ reviewer's assignment so five entry points cannot drift.
 
 ## Scripts locate; the agent judges
 
-The deterministic layer produces candidates and measurements and **never a verdict**:
+The deterministic layer produces candidates and measurements and **never a verdict**.
+`/know-security:init` copies these into your own project at `security/scripts/`, which is
+where you will find them after setup:
 
 | | |
 |---|---|

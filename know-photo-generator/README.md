@@ -13,11 +13,23 @@ Get a professional-grade photo from a plain-language description — without kno
 
 ### Setup
 
-Run `/know-photo:setup` once. It creates `~/.know-photo-generator/keys.env`, opens it so you can paste your Gemini API key directly into the file (the key never passes through the chat), verifies the key against the API, checks the `google-genai` dependency, and optionally captures a **default style** — the brand look applied whenever you run `/know-photo:generate` without `--style`.
+**Before you run setup, get a key — or decide you don't need one yet.** Rendering an image calls
+Google's Gemini API, which needs a key and is [billed per image](https://ai.google.dev/pricing).
+Create a key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and confirm
+billing is set up on that Google account. If you only want to see what the prompts look like, skip
+the key entirely: `/know-photo:generate` without `--generate` writes a complete prompt, renders
+nothing, and costs nothing.
+
+You will also need `pip3` available, for the one Python dependency.
+
+Then run `/know-photo:setup` once. It creates `~/.know-photo-generator/keys.env`, opens it so you can paste your Gemini API key directly into the file (the key never passes through the chat), verifies the key against the API, checks the `google-genai` dependency, and optionally captures a **default style** — the brand look applied whenever you run `/know-photo:generate` without `--style`.
 
 Manual alternative: `export GEMINI_API_KEY='...'` in `~/.zshrc`, or paste the key into `~/.know-photo-generator/keys.env` yourself (get one at https://aistudio.google.com/apikey), plus `pip3 install google-genai`. Resolution order: environment > cwd `.env` > project `.know-photo-generator/keys.env` > `~/.know-photo-generator/keys.env`.
 
 Prompt-only use (no `--generate`) needs no key at all.
+
+**Your first render:** `/know-photo:generate --generate --style none`, then describe the image you
+want. It lands in `output/` under whatever folder you are working in, timestamped.
 
 ## Usage
 

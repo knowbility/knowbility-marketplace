@@ -25,12 +25,16 @@ one to work.
 
 ## Step 1: get Claude itself
 
-These are plugins *for* Claude, so you need Claude first. Pick whichever suits you; the plugins
-work the same in both.
+These are plugins *for* Claude, so you need Claude first. Pick whichever suits you. The commands
+are the same in both, with one exception worth knowing up front: `know-qa-agent`'s scheduled
+monitoring rides a Claude Code feature and so needs Claude Code. Everything else works either
+way.
 
 **Claude Desktop** is the app with a window and buttons. Download it from
 [claude.ai/download](https://claude.ai/download), install it, and sign in. If you would rather not
-use a terminal at all, choose this one.
+use a terminal at all, choose this one — but read the table in "The four tools" first, because
+`know-qa-agent` needs Node.js and Chrome on your machine before it will run, and only you can
+install those.
 
 **Claude Code** is the command-line version. It needs [Node.js](https://nodejs.org) 18 or newer,
 then:
@@ -58,28 +62,45 @@ This repository is **private**. To install anything from it you need:
 1. **Read access to the `knowbility` GitHub organization.** If you cannot open
    `github.com/knowbility/knowbility-marketplace` in a browser while signed in, you do not have it
    yet. Ask whoever administers the organization.
-2. **Git working on your machine, signed in to GitHub.** If `git clone` of any private Knowbility
-   repository works in your terminal, you are fine.
+2. **Git on your machine, signed in to GitHub.** Installing from a private repository uses your
+   machine's own git credentials underneath, so this applies in Claude Desktop too, even if you
+   have never opened a terminal.
 
-If installation fails with a "not found" or "permission denied" error, it is almost always one of
+**How to check, and how to fix it if the check fails.** Open a terminal and run:
+
+```bash
+git clone --depth 1 https://github.com/knowbility/knowbility-marketplace.git /tmp/kb-access-test
+```
+
+If that succeeds, you have what you need; delete the folder it made and carry on. If it asks for a
+password or fails with "repository not found," your git is not signed in. The shortest fix is the
+[GitHub CLI](https://cli.github.com): install it, then
+
+```bash
+gh auth login
+```
+
+choosing **HTTPS** and answering yes when it offers to authenticate git with your GitHub
+credentials. Run the clone again to confirm. Requirement 1 is separate and nobody can self-serve
+it: if the repository will not open in a browser while you are signed in, you have not been added
+to the organization yet, and only an organization administrator can do that.
+
+If installation later fails with "not found" or "permission denied," it is almost always one of
 those two things rather than anything wrong with the plugin.
-
-**If you only use Claude Desktop and have never used git**, the second requirement still applies,
-because installing from a private repository uses your machine's git credentials underneath. Ask
-whoever set up your machine to confirm git is signed in to GitHub before you start, rather than
-discovering it at the install step.
 
 ## The four tools
 
-Read this and the next two sections to decide what you want, then
-continue with Step 3 below.
+Read this and the next two sections to decide what you want, then continue with
+[Step 3](#step-3-install-the-tools). **If you already know which tool you want, go straight
+there** — the only thing you need from this section is that tool's row in the table, so you install
+its prerequisites before, rather than after, you hit them.
 
 | Tool | Version | What you get | What it needs |
 |---|---|---|---|
-| [**know-qa-agent**](./know-qa-agent) | 0.1.0 | Point it at a web page and it tests like a skeptical engineer, then tells you what broke, why, and shows the evidence. Baseline accessibility checks run in every test; a deeper tier you turn on per test adds a full axe-core pass and exact WCAG AA contrast math, with accessibility findings labelled by the success criteria they map to. Not a conformance evaluation, and the caveat below matters. | Node 18+, Google Chrome, and one global install (`npm install -g @playwright/cli`) |
-| [**know-product-spec**](./know-product-spec) | 0.1.0 | Interviews you and writes a product spec an engineer can build from. Starts by testing whether the thing is worth building at all, and will tell you when it isn't. | Nothing extra to write a spec. Filing and grooming need a connected tracker; the UI review needs browser tools and somewhere your designs live. |
+| [**know-qa-agent**](./know-qa-agent) | 0.1.0 | Point it at a web page and it tests like a skeptical engineer, then tells you what broke, why, and shows the evidence. Baseline accessibility checks run in every test; a deeper tier you turn on per test adds the full axe-core ruleset and computed WCAG AA contrast ratios, with accessibility findings labelled by the success criteria they map to where the rule has one. Not a conformance evaluation, and the caveat below matters. | [Node 18+](https://nodejs.org) and [Google Chrome](https://www.google.com/chrome/), both installed by you. Also one global browser driver (`npm install -g @playwright/cli`), which `/know-qa:init` installs for you if it is missing. |
+| [**know-product-spec**](./know-product-spec) | 0.1.0 | Interviews you and writes a product spec an engineer can build from. Starts by testing whether the thing is worth building at all, and will tell you when it isn't. | Nothing extra to write or grade a spec. Filing and grooming need a tracker connected to Claude plus a `tracker_connection` block in your project profile (see [`know-product-spec/reference/profile.md`](./know-product-spec/reference/profile.md)); the UI review needs browser tools and somewhere your designs live. |
 | [**know-security**](./know-security) | 0.1.0 | Reads your code the way someone trying to get at the data would read it, and reports what they would find. It never probes the system under review, holds no credentials, and runs no exploit. Its dependency check does contact your package registry, the same way `npm audit` does. | Node 18+ |
-| [**know-photo-generator**](./know-photo-generator) | 0.1.0 | Describe a photo in plain language and get a professional-grade image, without knowing what a key light or an 85mm prime is. | Python 3, and a Google Gemini API key you get from [AI Studio](https://aistudio.google.com/apikey). Rendering images is billed per image ([pricing](https://ai.google.dev/pricing)); building a prompt without rendering needs no key. |
+| [**know-photo-generator**](./know-photo-generator) | 0.1.0 | Describe a photo in plain language and get a professional-grade image, without knowing what a key light or an 85mm prime is. | [Python 3](https://www.python.org/downloads/) with `pip3` on your PATH, and a Google Gemini API key you get from [AI Studio](https://aistudio.google.com/apikey). Rendering images is billed per image ([pricing](https://ai.google.dev/pricing)); building a prompt without rendering needs no key. |
 
 Each version matches that plugin's `plugin.json`, which is the source of truth.
 
@@ -89,8 +110,9 @@ Each version matches that plugin's `plugin.json`, which is the source of truth.
   Node.js 18+ and a code repository on your machine. It reads code you already have without
   changing it, and writes a findings file you can judge for yourself. (Setup and reporting do
   create local config and findings files; your source is never modified.)
-- **You test or audit websites** → `know-qa-agent`. It has the longest setup of the four, and it is
-  the one closest to Knowbility's own work.
+- **You test or audit websites** → `know-qa-agent`. It is the one closest to Knowbility's own work
+  and has the longest setup of the four: install Node.js 18+ and Google Chrome yourself first, then
+  `/know-qa:init` handles the rest.
 - **You are scoping a piece of work before anyone builds it** → `know-product-spec`.
 - **You need images for a page, a deck, or a campaign** → `know-photo-generator`.
 
@@ -106,17 +128,20 @@ finding arrives as the symptom, the cause, and the proof held together.
 For accessibility it runs two tiers. **Baseline checks ride along in every test**: keyboard
 reachability, visible focus, alt text, form labels, obvious contrast problems. **The deeper tier is
 opt-in**, turned on per test with an `## Accessibility Focus` section in the spec or
-`--a11y-depth deep` when generating one. It adds a full axe-core pass (around 90 rules) and exact
-WCAG AA contrast math on solid-background text.
+`--a11y-depth deep` when generating one. It adds the full bundled axe-core ruleset — 105 rules in
+the pinned 4.12.1 — and WCAG AA contrast ratios computed from the resolved colors of
+solid-background text rather than estimated.
 
-**Accessibility findings from that deeper tier carry the WCAG success criteria they map to**, read
-from axe's own rule metadata so the mapping cannot drift from the rules actually running. That
-labelling applies to the accessibility findings, not to the tool's other findings such as a hung
-request or a layout shift. Anything the tools cannot resolve is reported as needs-review rather
-than guessed.
+**Accessibility findings from that deeper tier carry the WCAG success criteria they map to, where
+the rule has one**, read from axe's own rule metadata so the mapping cannot drift from the rules
+actually running. Of those 105 rules, 75 carry a success criterion and 30 are axe's own
+best-practice rules that map to none; a result from one of those 30 is reported with no criterion,
+and must not be presented as a WCAG violation. The labelling applies to accessibility findings
+only, not to the tool's other findings such as a hung request or a layout shift. Anything the tools
+cannot resolve is reported as needs-review rather than guessed.
 
-**Please read `know-qa-agent/reference/wcag-mapping.md` before showing this output to anyone
-outside the team.** It is coverage, not conformance. Automated rules exist for only a subset of the
+**Please read [`know-qa-agent/reference/wcag-mapping.md`](./know-qa-agent/reference/wcag-mapping.md)
+before showing this output to anyone outside the team.** It is coverage, not conformance. Automated rules exist for only a subset of the
 success criteria, so a criterion that does not appear is untested rather than satisfied, and the
 tool cannot tell those apart. It does not produce a VPAT or an accessibility statement, and it does
 not replace screen-reader or keyboard-only testing by a person.
@@ -187,6 +212,11 @@ chat).
 
 An organization owner can instead add the marketplace under **Organization settings → Plugins** and
 set a plugin to **Auto-install**, so everyone gets it without doing this themselves.
+
+> **Two names, and they are not interchangeable.** What you *add* is the repository,
+> `knowbility/knowbility-marketplace`. What you *install from* is the marketplace it contains,
+> which is named `knowbility` — that is the `@knowbility` on the end of each install command
+> below. Use each where it is shown.
 
 ### Claude Code (command line)
 

@@ -680,7 +680,7 @@ The QA plugin requires two things:
 
 2. **`playwright-cli` installed globally** — All browser automation runs through `playwright-cli`. Install it before running any agent-spawning skill:
    ```bash
-   npm install -g playwright-cli
+   npm install -g @playwright/cli
    ```
 
 ### First Test Walkthrough

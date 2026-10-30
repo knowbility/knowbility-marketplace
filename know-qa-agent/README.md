@@ -15,22 +15,44 @@ know-qa-agent is built around that combined sense. Every pass takes in all four 
 
 ## Prerequisites
 
-- **Node 18+** (with `npm` on PATH).
-- **`@playwright/cli`** installed globally (`npm install -g @playwright/cli`) — the tester agent drives the browser through the `playwright-cli` command. `/know-qa:init` checks for it and installs it if missing. Note the package is `@playwright/cli`; the npm package named `playwright-cli` is something else.
-- **Google Chrome installed** — the paired/authenticated harness attaches to your real installed Chrome (it does not download a browser). On macOS the default location is found automatically; elsewhere set `CHROME_BIN`.
+Install these before your first run. The one global install needs a terminal, whichever Claude you use.
 
-The plugin uses two distinct browser-automation dependencies, and they don't substitute for each other: the global `playwright-cli` for autonomous runs, and the `playwright` Node library (pinned, installed into your project's `.know-qa/tools/` by `/know-qa:init`) for the paired/authenticated harness.
+1. **[Node.js](https://nodejs.org) 18 or newer**, with `npm` on your PATH. Check with `node -v`.
+2. **[Google Chrome](https://www.google.com/chrome/)**. The browser is attached to, not downloaded — this plugin drives your real Chrome so a signed-in session is yours. On macOS it is found automatically; on Windows or Linux, set the `CHROME_BIN` environment variable to the Chrome executable's full path if the plugin reports it cannot find it.
+3. **The browser driver**, installed globally in a terminal:
+
+   ```bash
+   npm install -g @playwright/cli
+   ```
+
+   This provides the `playwright-cli` command. `/know-qa:init` checks for it and installs it if it is missing, so you can skip this and let init do it. Note the scope: the package is **`@playwright/cli`**. The unscoped npm package `playwright-cli` is a deprecated stub that ships no command and whose own registry entry tells you to use `@playwright/cli` instead.
+
+Then `/know-qa:init` installs the rest into your project itself. Two different browser-automation pieces are in play and they do not substitute for each other: the global `playwright-cli` for autonomous runs, and the pinned `playwright` Node library that init installs into your project's `.know-qa/tools/` for the paired and authenticated harness ("the harness" throughout this file means those project-local scripts).
 
 ## Quick start
+
+**First, have something to test.** Either a page that already loads in Chrome — a live site, a
+staging URL — or a local app you have started the way its own instructions say. Confirm the address
+opens in Chrome before you start; everything below drives that same browser.
+
+Against a URL, which is the shortest path to a result:
+
+```
+/know-qa:init .                                                             # scaffold .know-qa/ in your working folder
+/know-qa:run --url https://example.org "check keyboard navigation and form labels"
+/know-qa:report --project .                                                 # what happened, and is it a pattern?
+```
+
+Against a local app, using a written spec you can re-run:
 
 ```
 /know-qa:init .                                        # scaffold .know-qa/ in your project
 /know-qa:gen checkout "Checkout flow with saved cards" # draft a spec from a description
-/know-qa:run --project . --spec checkout               # run it against your dev server
+/know-qa:run --project . --spec checkout               # run it against your running app
 /know-qa:report --project .                            # what happened, and is it a pattern?
 ```
 
-That's the whole loop for day one. If you'd rather not memorize commands, `/know-qa:start "what you want in plain English"` sets up the right one for you, `/know-qa:guide` tells you what to run next from your project's state, and `/know-qa:help` explains any command. The rest of this README explains each command and the machinery underneath.
+Replace the URL and the description with your own. That's the whole loop for day one. If you'd rather not memorize commands, `/know-qa:start "what you want in plain English"` sets up the right one for you, `/know-qa:guide` tells you what to run next from your project's state, and `/know-qa:help` explains any command. The rest of this README explains each command and the machinery underneath.
 
 ## The skills
 
@@ -216,7 +238,7 @@ By default a report writes a file. If you want it pushed somewhere the team alre
 }
 ```
 
-The plugin formats and routes; **the posting itself is done by an integration you have already connected to Claude** (a Slack connector, for instance). It does not bundle an integration or hold a token — `reporting.json` carries channel names and a posting identity, nothing secret. A noisy channel can ask for `regressions-only`; a per-owner sink with a `scope` posts just that owner's slice. `/know-qa:monitor` can post the same way at the end of a run. If the configured MCP isn't connected, the report still writes its file and tells you it couldn't post — it never fails over a missing sink. Full reference: `reference/reporting-sinks.md`.
+The plugin formats and routes; **the posting itself is done by an integration you have already connected to Claude** (a Slack connector, for instance). It does not bundle an integration or hold a token — `reporting.json` carries channel names and a posting identity, nothing secret. A noisy channel can ask for `regressions-only`; a per-owner sink with a `scope` posts just that owner's slice. `/know-qa:monitor` can post the same way at the end of a run. If that integration (an MCP server, in Claude's terms) isn't connected, the report still writes its file and tells you it couldn't post — it never fails over a missing sink. Full reference: `reference/reporting-sinks.md`.
 
 ## Findings, not noise
 
@@ -259,9 +281,10 @@ Everything the plugin writes stays under `.know-qa/`. The identical structure an
 
 Baseline accessibility rides along in every test: keyboard reachability, visible focus, alt text, form labels, obvious contrast problems. Tier 2 (opt-in per spec via `## Accessibility Focus`, or `--a11y-depth deep` when generating) goes further:
 
-- **Exact contrast math.** Deterministic WCAG AA ratios on solid-background text — "1.98:1, needs 4.5:1" — with gradient and image backgrounds bounded where possible and flagged for review rather than guessed.
-- **A full axe-core pass.** ~90 deterministic WCAG rules (ARIA validity, labels, landmarks, contrast), pinned and bundled with the harness; violations mapped by impact, and axe's "can't decide" results judged by the agent instead of dropped.
-- **Every finding carries its success criteria.** Each violation and needs-review result is annotated with the WCAG criteria it maps to and the conformance level (`[WCAG AA: 1.4.3, 4.1.2]`), read from the pinned axe-core's own rule metadata rather than a hand-maintained table, so it cannot drift from the rules actually running. A run ends with a roll-up of which criteria were touched. **This is coverage, not conformance:** axe has rules for only a subset of the criteria, so a criterion absent from the output is untested rather than satisfied, and this tooling cannot tell those apart. `reference/wcag-mapping.md` states the four reasons it is not a conformance evaluation and what one additionally requires.
+- **Contrast ratios computed, not estimated.** WCAG AA ratios calculated from the resolved
+  foreground and background colors of solid-background text — "1.98:1, needs 4.5:1" — with gradient and image backgrounds bounded where possible and flagged for review rather than guessed.
+- **A full axe-core pass.** The complete bundled ruleset — 105 rules in the pinned axe-core 4.12.1 (ARIA validity, labels, landmarks, contrast); violations mapped by impact, and axe's "can't decide" results judged by the agent instead of dropped. Of those 105, **75 carry a WCAG success criterion and 30 are axe's own best-practice rules, which map to no criterion at all** — `heading-order` and `empty-heading` among them.
+- **Findings carry their success criteria where the rule has one.** A violation or needs-review result from a WCAG-tagged rule is annotated with the criteria it maps to and the conformance level (`[WCAG AA: 1.4.3, 4.1.2]`), read from the pinned axe-core's own rule metadata rather than a hand-maintained table, so it cannot drift from the rules actually running. A result from one of the 30 best-practice rules is reported with no criterion, which is correct and not a gap — it is a real accessibility problem that no success criterion covers, and presenting it as a WCAG violation would be wrong. A run ends with a roll-up of which criteria were touched. **This is coverage, not conformance:** axe has rules for only a subset of the criteria, so a criterion absent from the output is untested rather than satisfied, and this tooling cannot tell those apart. `reference/wcag-mapping.md` states the four reasons it is not a conformance evaluation and what one additionally requires.
 - **ARIA widget keyboard conformance.** Composite widgets (menu buttons, comboboxes, tabs, disclosures) are driven through their ARIA Authoring Practices keyboard contracts — keys pressed, focus and aria state observed — so "this menu is mouse-only" is a reproduced behavioral fact, not a lint warning.
 - Plus the structural suite: focus trapping, heading hierarchy, landmarks, touch targets, reduced motion, zoom, and form-error accessibility.
 
@@ -273,8 +296,10 @@ Web only — CLI and native-GUI testing are different domains. Screen-reader/AT-
 
 ## Status
 
-Version 0.1.0 is the first release in the Knowbility marketplace. Everything described above works: the ten commands, the tester agent, the browser harness, the findings workflow, tracker filing, owned areas, reporting, screen recording, and the two-tier accessibility suite.
-
-**Not yet exercised end to end in this marketplace.** The port was verified by manifest validation, module resolution across every harness tool, an engine spec compile, and a dynamic-reference sweep; it has not yet been driven against a live site from a cold install here. `CHANGELOG.md` records what was removed from the plugin this was forked from and why. The grounding spec and build orientation live in the marketplace repo at `dev/know-qa-agent/` and intentionally do not ship with the installed plugin.
+Version 0.1.0 is the first release in the Knowbility marketplace. Everything described above is
+implemented and present — the ten commands, the tester agent, the browser harness, the findings
+workflow, tracker filing, owned areas, reporting, screen recording, and the two-tier accessibility
+suite — and the port's code was verified. **What has not been verified is the journey you are
+about to take.** The port was verified by manifest validation, module resolution across every harness tool, an engine spec compile, and a dynamic-reference sweep; it has not yet been driven against a live site from a cold install here. `CHANGELOG.md` records what was removed from the plugin this was forked from and why. The grounding spec and build orientation live in the marketplace repo at `dev/know-qa-agent/` and intentionally do not ship with the installed plugin.
 
 Part of the [Knowbility marketplace](https://github.com/knowbility/knowbility-marketplace).

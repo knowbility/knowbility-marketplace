@@ -4,15 +4,17 @@
 
 ## Where things stand
 
-**All four plugins are ported.** Phases 0-1 committed as `6914684`, Phase 2 as `be8d1cd`;
-Phase 3 is uncommitted. Four plugins registered at 0.1.0: `know-product-spec`, `know-security`,
+**All four plugins are ported, and the documentation has been through two independent readiness
+reviews.** Phases 0-1 committed as `6914684`, Phase 2 as `be8d1cd`, Phase 3 as `768a815`,
+documentation as `b6f8d9a` and this round. Four plugins registered at 0.1.0: `know-product-spec`, `know-security`,
 `know-photo-generator`, `know-qa-agent`. Gates pass: version-prefix parity 8/8, marketplace
 manifest, four plugin manifests, `know-security`'s 66-case suite, `know-photo-generator`'s key
 check, and for `know-qa-agent` module resolution across all ten harness tools plus a real engine
 spec compile. **Nothing has been pushed** to `knowbility/knowbility-marketplace`.
 
-**The adversarial de-branding sweep is done.** One gate remains before a push: a **live browser
-run** of `know-qa-agent` from a cold install.
+**The adversarial de-branding sweep is done.** Two gates remain before a push: a **live browser
+run** of `know-qa-agent` from a cold install, and a verified answer for **Claude Desktop private-
+repository authentication** (see Open questions).
 
 ## The work
 
@@ -26,6 +28,7 @@ revised it is in `.team-runs/20261030T135852Z-8b0bac54/`.
 | 1 | `know-product-spec` + `know-security` | **Done, committed** |
 | 2 | `know-photo-generator` | **Done, committed** |
 | 3 | `know-qa-agent` | **Done; sweep passed; live run outstanding** |
+| Docs | Two readiness reviews, every finding verified and acted on | **Done, committed** |
 | 4 | Accessibility report presentation and conformance verdicts | Deferred, needs auditor input |
 | 5 | Conformance-reporting plugin | Unscoped, requirements first |
 
@@ -197,12 +200,73 @@ the adversarial review found in the first version.
 across several files, which needs a person reading whole files; and credential provenance, since
 shape alone is not proof. Both remain open by nature rather than by omission.
 
+## Documentation readiness: two review rounds
+
+Both rounds ran `cli-team run review --lead claude` against the complete user-facing documentation
+set, with a mechanically generated ground truth so the reviewers checked the docs against the
+repository rather than against themselves. Round 1 is `.team-runs/20261030T145615Z-d6eb4518/`,
+round 2 `.team-runs/20261030T161529Z-dcdefa5d/`. Both reviewers answered **No** both times.
+
+**Round 1's blocker was the front door**: the docs never said what Claude is, where to get it, or
+that a `/`-command is typed inside Claude rather than at a shell prompt. Fixed in `b6f8d9a`, along
+with four overclaims and a command that did not exist (`/know-qa-agent:run`).
+
+**Round 2 found that the fixes had not reached the per-plugin guides.** The pattern worth
+remembering: fixing the front door while leaving the same claim standing in the plugin's own README
+is not fixing it, and the second review existed to catch exactly that.
+
+What round 2 established, in order of how much it mattered:
+
+- **The accessibility numbers were wrong, measured against the pinned axe-core 4.12.1.** Both
+  READMEs said "~90 deterministic WCAG rules" and "every finding carries its success criteria."
+  The real figures: **105 rules, of which 75 carry a WCAG success criterion and 30 are axe's own
+  best-practice rules that map to none** (`heading-order`, `empty-heading`, `focus-order-semantics`
+  among them). A finding from one of those 30 carries no criterion. `reference/wcag-mapping.md:15`
+  had this right all along — the canon was correct and the README copy overclaimed past it. For an
+  accessibility nonprofit this was the most important finding in either round.
+- **A contradiction created by round 1's own fix.** The README was corrected to say the dependency
+  check contacts the package registry, but `know-security`'s plugin manifest and the marketplace
+  catalog still read "Never probes, never touches a network" — the text shown in the install UI.
+  Only findable because round 2's ground truth included the manifest and catalog descriptions.
+- **`docs/ORCHESTRATION.md` told you to install a deprecated package.** It said
+  `npm install -g playwright-cli`; the npm registry confirms that package is a deprecated stub
+  shipping no binary, whose own description says to use `@playwright/cli` instead. The READMEs were
+  right and this one file was wrong.
+- **Platform parity was overstated.** "The plugins work the same in both" is false for
+  `/know-qa:monitor`, which rides Claude Code's native `/loop`. Now carved out in the first
+  paragraph a reader sees.
+- Plus: the QA quick start never said to have something to test; repository access ended in "ask a
+  colleague" where `gh auth login` is a real self-service path; the photo guide put key acquisition
+  after the setup command that needs it; prerequisites were split between the root and plugin
+  guides; and `wcag-mapping.md` was named rather than linked.
+
+**One correction I made to my own fix.** I first wrote that `know-qa-agent` needs a terminal
+whichever Claude you use. That trades one overclaim for another: `/know-qa:init` installs the
+browser driver itself. The accurate split is Node and Chrome are yours to install, the driver is
+init's.
+
+**Where the reviewers were wrong, and how it was settled.** Gemini asserted `@playwright/cli` does
+not exist on npm and that the correct package is `playwright`. The registry says otherwise:
+`@playwright/cli` 0.1.22 exists and ships the `playwright-cli` binary. This is the third confidently
+wrong factual claim from that reviewer across the two rounds (round 1 offered `@claude/cli` as the
+Claude Code package and `example.com` as a download link). **Check every cited fact; the reports
+mix good findings with invented ones.** Codex's findings held up on verification both rounds.
+
+**`dev/scripts/ground-truth.mjs`** now generates the inventory, recursively, including every
+manifest and catalog description. Round 1's inventory was top-level only, which Codex correctly
+flagged as unable to confirm nested paths. Re-run it before any future documentation review.
+
 ## Open questions
 
 - **Provenance record.** `dev/PROVENANCE.md` names the two source marketplaces. It lives under
   `dev/`, so it never ships to a plugin user, but it does put source-organization names in the
   repository. Needs Kelsey's confirmation that this is the right read of the de-branding
   requirement.
+- **Claude Desktop private-repository authentication.** Raised by both reviewers in round 2 as the
+  most likely abandonment point. The README now gives a terminal self-check and `gh auth login` as
+  the fix, which closes it for anyone willing to open a terminal once. What is still unverified is
+  whether a Desktop-only user who never touches a terminal can install from a private repository at
+  all. This needs someone who has actually done it, not a documentation edit.
 - **Repo visibility.** Private today. Installing requires `knowbility` org read access plus git
   credentials per installer. Whether this eventually goes public is undecided, and it affects how
   much the `know-` prefix reads as a vendor prefix.
@@ -214,6 +278,8 @@ shape alone is not proof. Both remain open by nature rather than by omission.
 
 ## Next step
 
-Phase 1: port `product-spec` and `security`. Both are near-clean (2 and 4 source references
-respectively). Doing them first proves the scaffold, the catalog, and the install path end to end
-before `qa-agent`.
+**Walk the cold install.** Both reviewers, both rounds, landed on the same thing no amount of
+document review can replace: nobody has gone from nothing to a result through these instructions.
+The two specific unknowns are the Claude Desktop plugin UI labels (taken from the Kenzie and
+Hello Alice READMEs, never observed) and whether a Desktop-only user can authenticate to a private
+repository at all. Then push.

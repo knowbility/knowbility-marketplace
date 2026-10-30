@@ -23,7 +23,10 @@ docs must work for both.
 - `know-*-README.md` — the four per-plugin guides the front door links to.
 - `ground-truth.md` — **mechanically extracted from the repository**: the real marketplace name,
   every plugin's real manifest name and version, every skill and command with the exact string a
-  user types to invoke it, and every shipped path. This is authoritative. The documentation is not.
+  user types to invoke it, and a **recursive listing of every shipped file** in each plugin. The
+  file listings are complete, not top-level summaries, so a nested path the documentation
+  references either appears there or does not exist. This is authoritative. The documentation is
+  not.
 
 This is the complete user-facing documentation set, not a sample. Nothing was withheld.
 
