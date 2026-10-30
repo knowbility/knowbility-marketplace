@@ -32,6 +32,11 @@
       "name": "know-blueprint",
       "source": "./know-blueprint",
       "description": "v0.1.0 \u2014 Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down \u2014 triggers, data movement, decision criteria, exceptions, approval authority \u2014 then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off, and any step that turns on accessibility judgment defaults to Human. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own."
+    },
+    {
+      "name": "know-researcher",
+      "source": "./know-researcher",
+      "description": "v1.18.0 \u2014 Get research you can stand behind, not a confident summary that might be invented. Describe your research challenge and work through a phased plan grounded in it: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note \u2014 and every note to a declared source. Decisions the project records \u2014 corrections, resolutions, accepted gaps, your own directives \u2014 are durable, and no later draft can quietly walk one back. Completion is gated by your stated success criteria and an independent adversarial review of the whole corpus. Confidence tiers rate how well the evidence supports a claim, nothing more: a sourced finding about an accessibility requirement is a reading of the standard, not a conformance determination about any product. A research partner, not a summarizer. Standalone; runs on its own."
     }
   ]
 }

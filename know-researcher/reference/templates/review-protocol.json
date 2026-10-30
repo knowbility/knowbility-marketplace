@@ -1,0 +1,5 @@
+{
+ "protocol_version": 1,
+ "adopted": "<YYYY-MM-DD — set by init/re-init>",
+ "note": "Version pin only. The trust anchor is the shipped plugin's reference/review-protocol-contract.json — a project-local file cannot authenticate itself."
+}

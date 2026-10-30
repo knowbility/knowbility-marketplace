@@ -27,12 +27,10 @@ organization and working git credentials. That is a real setup step, not an afte
 | `know-security` | 0.1.0 | `/know-security:*` | Adversarial security and privacy reviewer that reads code the way someone trying to get at the data would. Never probes the system under review; the only network access is the dependency check, which runs your project's own package auditor against your package registry. | Ported, 66-case suite passing. |
 | `know-photo-generator` | 0.1.0 | `/know-photo:*` | Plain-language description to a physics-aware image prompt, optionally rendered via the Gemini API. Needs a Gemini key. | Ported, key check passing. **A Knowbility brand style is not yet defined**; the section is a template awaiting the organization's input, representation guidance included. |
 | `know-qa-agent` | 0.1.0 | `/know-qa:*` | Tests a web app like a skeptical engineer and reports what broke with the evidence. Two-tier accessibility suite: full axe-core ruleset and exact WCAG AA contrast math, every finding annotated with the success criteria it maps to. | Ported, engine and harness verified. **Not yet driven against a live site from a cold install here**; that and the adversarial de-branding sweep are the remaining gates. |
-
 | `know-blueprint` | 0.1.0 | `/know-blueprint:*` | Interviews you into a written process model — trigger, steps, decision criteria, exception paths, approval authority — and rates every step Automate, Monitor, or Human. No setup, no dependencies, no network. | Ported, manifest validated. No interview run end to end here. |
+| `know-researcher` | 1.18.0 | `/know-research:*` | Phased research with every claim audited back to its source note and every note to a declared source. Canonical figure registry, claim graph, integrity agent, and an output directory nothing reaches without passing audit. Works with no API keys; optional search CLIs sharpen discovery, and the optional Tier-1 corpus reviewer is the OpenAI Codex CLI, which reads the whole corpus — opt-in by installation, disclosed in both READMEs. | Ported, validator self-test 74/74, output gate tested with and without `jq`. **No research project run end to end here**; no live discovery call made. |
 
-The four planned plugins are in, plus `know-blueprint`, added after the fact. See
-`dev/review/migration-plan.md` for the plan the first four arrived under and `dev/STATE.md` for
-where the work stands.
+The four planned plugins are in, plus `know-blueprint` and `know-researcher`, both added after the original scope closed. See `dev/review/migration-plan.md` for the plan the first four arrived under and `dev/STATE.md` for where the work stands.
 
 **On accessibility output:** `know-qa-agent` annotates findings with WCAG success criteria. That
 is coverage, not conformance, and `know-qa-agent/reference/wcag-mapping.md` states why in detail.
@@ -53,6 +51,24 @@ generalizes: before adding a plugin here that assigns autonomy, trust, confidenc
 to work, check whether its scale can express "no human needed" about an accessibility decision, and
 close that off at the default.
 
+**And a third direction: a plugin that rates evidence.** `know-researcher` assigns each claim a
+confidence tier from its sourcing. The scale cannot express "no human needed" — the blueprint test
+passes — but it breaks the rule another way. A well-sourced, High-confidence finding about *what an
+accessibility criterion requires* is one claim; that a particular product *meets* it is a different
+claim resting on different evidence, and the tier belongs only to the first. So: **a confidence
+tier rates the sourcing of a claim, never the state of a thing in the world**, and a draft that
+slides from what a standard requires to what a product therefore satisfies is an unsupported claim
+no matter how strong the sourcing for its first half. Conformance comes from an evaluation somebody
+performed, cited like any other source, not inferred from the standard's text.
+
+Three directions now, and the pattern behind them is worth naming so the next plugin gets checked
+against the pattern rather than the examples. The rule is violated whenever a plugin's output could
+be **mistaken for a person having exercised the thing**: by describing an artifact (`know-qa-agent`),
+by declaring that nobody needs to look at it (`know-blueprint`), or by sounding authoritative about
+a requirement in a way that reads as a verdict on a product (`know-researcher`). Ask of any new
+plugin: what could a reader conclude about an accessibility outcome from this output that no person
+actually checked? Then close that off where the output is produced, not only in the README.
+
 ## Conventions (how every plugin here is shaped)
 
 1. **`know-` prefix, at two layers.** Plugin directory and manifest `name` are prefixed
@@ -62,6 +78,29 @@ close that off at the default.
    `<plugin>@<marketplace>`, so install names never actually collide, but the typed short command
    comes from a skill's own `name:` frontmatter field, and two plugins declaring `name: qa:run`
    make `/qa:run` ambiguous. Prefix both; only the second one prevents a real collision.
+
+   **Where the repository does not yet meet this, and why it is one decision rather than six.**
+   Two plugins satisfy the rule at the skill layer by declaring colon-prefixed skill names:
+   `know-product-spec` (`name: know-spec:write`) and `know-qa-agent` (`name: know-qa:run`). The
+   other four — `know-security`, `know-photo-generator`, `know-blueprint`, `know-researcher` —
+   carry short skill names **byte-identical to the plugins they were forked from**
+   (`security-audit`, `photo-setup`, `blueprint-capture`, `research-init`). For those four the
+   `know-` namespace is carried entirely by the `commands/` subdirectory, which is the layer a
+   user types (`/know-security:sweep`, `/know-research:init`), and the fully-qualified skill form
+   `<plugin>:<name>` always disambiguates, because the plugin names differ. What is not guaranteed
+   is a bare un-prefixed skill name: anyone with both this marketplace and a source marketplace
+   installed has two skills declaring `blueprint-capture`. Whether that is reachable depends on how
+   the host resolves un-prefixed short names, which is not documented and has changed at least once
+   — `know-researcher`'s own pre-fork changelog records its author concluding the opposite of what
+   this repository's plugins now rely on.
+
+   This is recorded as an open decision, not a convention being quietly ignored. Closing it means
+   renaming skills across four plugins in one change, with their internal cross-references, so that
+   the repository either prefixes the skill layer everywhere or documents that it prefixes the
+   command layer and relies on the plugin-qualified form. Doing it in one plugin would leave that
+   plugin the odd one out, which is worse than either answer. Until it is closed, a new plugin here
+   follows whichever pattern its own commands-versus-skills shape matches, and says which in its
+   `AGENTS.md`.
 2. **Version in the description, and the version prefix must match.** Every plugin manifest's
    `description` starts with `v<X.Y.Z> — `, matching its own `version` field *and* its entry in
    `.claude-plugin/marketplace.json`. The browse cards render the catalog description, not the

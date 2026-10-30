@@ -4,14 +4,20 @@
 
 ## Where things stand
 
-**Five plugins are ported, and the documentation has been through two independent readiness
+**Six plugins are ported, and the documentation has been through two independent readiness
 reviews.** Phases 0-1 committed as `6914684`, Phase 2 as `be8d1cd`, Phase 3 as `768a815`,
-documentation as `b6f8d9a` and `32ea127`, Phase 6 (`know-blueprint`) in this round. Five plugins
-registered at 0.1.0: `know-product-spec`, `know-security`, `know-photo-generator`, `know-qa-agent`,
-`know-blueprint`. Gates pass: version-prefix parity 10/10, marketplace manifest, five plugin
-manifests, `know-security`'s 66-case suite, `know-photo-generator`'s key check, and for
+documentation as `b6f8d9a` and `32ea127`, Phase 6 (`know-blueprint`) as `ced4316`, Phase 7
+(`know-researcher`) in this round. Five plugins registered at 0.1.0: `know-product-spec`,
+`know-security`, `know-photo-generator`, `know-qa-agent`, `know-blueprint`; `know-researcher`
+registered at **1.18.0**, the version it arrived with (see Phase 7 notes).
+
+Gates pass: version-prefix parity 6 plugins and 6 catalog entries, marketplace manifest, six plugin
+manifests with no warnings, `dev/scripts/check-described-commands.mjs` at 64 real invocations and 0
+unresolved references, `know-security`'s 66-case suite, `know-photo-generator`'s key check, and for
 `know-qa-agent` module resolution across all ten harness tools plus a real engine spec compile.
-New gate: `dev/scripts/check-described-commands.mjs`, 40 real invocations, 0 unresolved references.
+`know-researcher` adds the first *executable* gate in this repository: its corpus-review validator's
+self-test runs 74/74 green, and the validator's own SHA-256 matches the hash pinned in
+`reference/review-protocol-contract.json`, which independently proves the port did not corrupt it.
 
 **Pushed.** All six commits are on `main` at `knowbility/knowbility-marketplace` (private,
 default branch `main`, HEAD `ced4316`), pushed 2026-10-30 by Kelsey's instruction as board chair of
@@ -49,7 +55,7 @@ revised it is in `.team-runs/20261030T135852Z-8b0bac54/`.
 | 4 | Accessibility report presentation and conformance verdicts | Deferred, needs auditor input |
 | 5 | Conformance-reporting plugin | Unscoped, requirements first |
 | 6 | `know-blueprint` | **Done, pushed** |
-| 7 | `know-researcher` | Agreed, not started |
+| 7 | `know-researcher` | **Done, committed, unpushed** |
 
 ## Decisions made
 
@@ -339,6 +345,144 @@ transcripts and scorecards, twenty times the size of the plugin, recording runs 
 nobody here can reproduce. The findings worth keeping from those runs were already written into
 `AGENTS.md` as the reasons specific rules exist.
 
+## Phase 7 notes — `know-researcher`
+
+**The biggest port, and the one that found the most.** 84 shipped files, 15,894 lines, 12 skills,
+12 command wrappers, 2 agents, 3 hooks, a 2,649-line Python validator, and 11 research types with
+their own discovery playbooks. Agreed with Kelsey after Phase 6; he chose it over walking the cold
+install first.
+
+**The version was kept at 1.18.0 rather than reset to 0.1.0.** The convention in `AGENTS.md` says
+reset, and `know-photo-generator` did. The argument for the exception: nothing about the research
+system was rebuilt, and `0.1.0` on a twelve-skill system with eighteen releases of sharpening and an
+adversarial corpus-review protocol would tell a first-time reader the opposite of the truth about
+what they are installing. Kelsey chose this when he picked the work. Recorded in the plugin's
+`CHANGELOG.md`, its `AGENTS.md` arrival locks, and `dev/know-researcher/README.md`.
+
+### Three defects found, all of them invisible failures
+
+**1. The output gate stopped gating without `jq`, silently.** This is the one worth remembering.
+`hooks/gate-outputs.sh` is the hard backstop for the plugin's central guarantee — nothing reaches
+`research/outputs/` except through an audit. It parses its hook payload with `jq`. With `jq` absent,
+both parses returned empty, the empty-path guard exited 0, and **the write was allowed.** The only
+trace was `jq: command not found` on stderr, where nobody looks. Tested rather than reasoned about:
+built a PATH with every needed binary except `jq`, and the gate allowed a write to `outputs/` with
+no gate log at all. Now fails closed for writes naming the outputs directory, with a message naming
+the install command, verified across four cases (gate blocking normally, unrelated paths
+unaffected, no-`jq` blocked, legitimate promotion with a fresh pass row still allowed).
+
+Worth noting why it survived eighteen releases: `jq` ships with macOS 15 and later as
+`/usr/bin/jq` (`com.apple.jq`, confirmed on this machine). On the author's Mac the gate always
+worked. It is older macOS, minimal Linux images, and containers where it quietly did not.
+
+**2. `claude plugin validate` reported three real warnings, same failure class.** All three hook
+commands used `bash ${CLAUDE_PLUGIN_ROOT}/hooks/x.sh` unquoted, so a plugin root containing a space
+would split the command and the hook would not run at all — which, for the gate hook, means the
+gate is gone again, by a different route. Quoted. Validation now passes clean.
+
+**3. `hooks/setup-paths.sh` promised a directory its loop did not add.** The header comment listed
+`/usr/local/bin` among the locations it detects (Homebrew on Intel Macs and on Linux); the loop had
+`/opt/homebrew/{bin,sbin}` and `$HOME/.local/bin` and `$HOME/.volta/bin` but not `/usr/local/bin`.
+The skills' own `npx` probes check `/usr/local/bin/npx`, so the comment was describing intended
+behavior. Code now matches.
+
+### The namespace, and a convention gap this port exposed
+
+The command namespace moved `/research:` → `/know-research:`, 402 references rewritten. The source
+carried **two forms for the same twelve commands** — a hyphen form (`/research-audit-claims`, 366
+references) and a colon form (36) — and its own v1.5.0 changelog entry argues the hyphen is the one
+that resolves and the colon form "could never resolve." The repository's own `ground-truth.mjs`
+records the opposite empirically, and the regenerated ground truth confirms `/know-research:init`
+for all twelve. The port uses one form rather than carrying the ambiguity across; the colon form is
+the one whose resolution follows from the file layout.
+
+**The gap: four of six plugins here carry skill `name:` values byte-identical to the plugins they
+were forked from** (`blueprint-capture`, `security-audit`, `photo-setup`, `research-init`). Only
+`know-product-spec` and `know-qa-agent` prefix the skill layer, via colon-form names. Convention 1
+in the root `AGENTS.md` says the skill layer is the load-bearing one, so the repository does not
+currently meet its own written convention for four plugins. In practice the `<plugin>:<name>` form
+always disambiguates and the command layer is prefixed everywhere; what is not guaranteed is a bare
+un-prefixed skill name for anyone with both marketplaces installed, which Kelsey is. Recorded under
+convention 1 as an **open decision**, not silently ignored, because closing it means renaming skills
+across four plugins in one change — doing it in `know-researcher` alone would leave it the odd one
+out, which is worse than either answer.
+
+### The house rule, reached from a third direction
+
+`know-researcher` assigns confidence tiers from sourcing. The scale cannot express "no human
+needed," so it passes the `know-blueprint` test. It breaks the rule another way: a well-sourced,
+High-confidence finding about *what an accessibility criterion requires* is one claim, and that a
+product *meets* it is a different claim on different evidence. Step 8a of `research-audit-claims`
+now says so where the tier is assigned and flags a draft that slides from the first to the second
+as an unsupported claim. Three places, not five — the rule is narrower here than blueprint's, and
+the one that matters is where the tier gets written. The root `AGENTS.md` now names the pattern
+behind all three directions rather than listing examples: **the rule is violated whenever a
+plugin's output could be mistaken for a person having exercised the thing.**
+
+### Data egress, which the README had not disclosed
+
+The corpus review runs two independent reviewers. Tier 2 is the plugin's own agent on Claude. **Tier
+1 is the OpenAI Codex CLI, and it is pointed at the project root and reads the whole corpus** —
+notes, drafts, state, plan. That independence is the point of it, and it also means a research
+corpus reaches a second model provider. It is opt-in by installation, and with Codex absent the
+review runs Tier 2 only and records the missing tier as a failed attempt so the composition stays
+visible. Found while reading the identifier sweep's `vendor_key` class, which surfaced
+`codex exec --skip-git-repo-check`. Now disclosed in the plugin README's setup table and egress
+section, the root README's detail section and tools table, and the root `AGENTS.md` row, with the
+guidance that a corpus holding client material is a reason to leave Codex uninstalled.
+
+### A gate I wrote and then deleted
+
+A repo-wide documented-path checker is not achievable cheaply here, and the attempt is worth
+recording so nobody repeats it. The plugins deliberately use the same directory names for files
+they **ship** and files they **create in a user's project at runtime** — `reference/`,
+`research/`, `FINDINGS.md`, `areas.json`, `report.md`. A naive check reported 184 unresolved paths,
+almost all of them runtime artifacts that correctly do not exist in the repository. A gate that
+cries wolf 184 times is worse than no gate, which is what
+`dev/scripts/check-described-commands.mjs`'s own docstring warns about, so the script was deleted
+rather than shipped. It did earn its keep once: it caught
+`reference/corpus-review-protocol.md` still pointing at `dev/researcher/W7-corpus-review-design.md`
+after the directory became `dev/know-researcher/`. Paths this port introduced or renamed were
+checked by hand instead, and resolve.
+
+### What was verified, and how
+
+- `claude plugin validate` on the marketplace and all six plugins — clean, no warnings.
+- Version-prefix parity: 6 plugins, 6 catalog entries. Catalog description asserted byte-identical
+  to the manifest's at write time.
+- `check-described-commands.mjs`: 64 real invocations, 0 unresolved.
+- Validator `self-test`: **74/74**. Its `hash-self` output matches `validator_sha256` pinned in
+  `reference/review-protocol-contract.json` — independent proof the rename passes never touched the
+  Python. Both `.py` files and the contract JSON confirmed byte-identical to source.
+- **A full diff against source**, with the namespace rename normalized out on both sides: the only
+  file with changes beyond the rename is `skills/research-audit-claims/SKILL.md`, which is the one
+  deliberate behavior addition. Nothing else drifted.
+- Hook gate: four behavioral cases, with and without `jq`.
+- `know-security` 66-case suite as a regression: all 66 pass.
+- Root README links: 17 checked, 0 broken.
+- Identifier sweep over the plugin and its dev docs: 241 candidates, read by class. All benign —
+  public research hosts (`sec.gov`, `openalex.org`, paywalled-domain lists), `$EXA_API_KEY`
+  environment references with no literal keys, standards names (SHA-256, ISO-8601), internal check
+  IDs (`SC-1`, `XREF-02`), placeholder company data (`Acme Corp`, CIK `0001234567`), and standard
+  tool paths. One real nonprofit EIN appears twice in ProPublica API examples; 990 data is public
+  record by law and ProPublica publishes it, so it is a public identifier in API documentation, not
+  a leaked internal one. Left as written.
+
+### Documentation brought across
+
+`dev/know-researcher/` holds `ARCHITECTURE.md` (the explanation, 670 lines) and `MAINTAINERS.md`
+(the ownership and seam ledger, 545), plus the nine per-workstream design notes `MAINTAINERS.md`
+cites by name at nine points — a seam register pointing at missing files is worse than no pointer.
+Left in the source repository: `constraint-audit.md` (612 lines) and the corpus-review `spike/`
+(534), neither cited by anything that came across. `dev/know-researcher/README.md` records both
+lists and explains why the design notes' dated author attributions were left as written: rewriting a
+decision record to remove who decided makes the record false.
+
+### What has not been exercised
+
+No research project has been run end to end here. No live discovery call, no corpus reviewed. The
+plugin's README says so in its own "what hasn't been exercised here" section.
+
 ## Open questions
 
 - **Provenance record.** `dev/PROVENANCE.md` names the two source marketplaces. It lives under
@@ -361,24 +505,27 @@ nobody here can reproduce. The findings worth keeping from those runs were alrea
 
 ## Next step
 
-Two things are queued, and they do not block each other.
+**Push the Phase 7 commit.** Everything before it is on `main`; this one is local.
 
-**Phase 7: port `know-researcher`.** Agreed with Kelsey, not started. It is the heaviest port yet —
-90 files, 12,271 lines, 12 skills, two agents, and a 2,400-line Python validator that should be run
-before anyone vouches for it. Its search CLIs (Tavily, Firecrawl, Exa, Codex) are optional with a
-built-in floor, so the prerequisite story is softer than `know-qa-agent`'s. **Open decision:
-whether the version resets to 0.1.0.** The convention says yes; I argued against it for this one,
-because 1.18.0 on a tool with twelve skills and an adversarial corpus-review protocol is telling
-the truth about maturity and 0.1.0 denies it. Kelsey has not ruled.
+**Then walk the cold install.** Both readiness reviews, both rounds, landed on the same thing no
+amount of document review replaces: nobody has gone from nothing to a result through these
+instructions. Two specific unknowns remain, and both are platform-level rather than per-plugin —
+the Claude Desktop plugin UI labels (taken from the source marketplaces' READMEs, never observed)
+and whether a Desktop-only user can authenticate to a private repository at all. Six plugins in
+the catalog does not change either one.
 
-**Walk the cold install.** Both reviewers, both rounds, landed on the same thing no amount of
-document review can replace: nobody has gone from nothing to a result through these instructions.
-The two specific unknowns are the Claude Desktop plugin UI labels (taken from the two source
-marketplaces' READMEs, never observed) and whether a Desktop-only user can authenticate to a
-private repository at all. The part of that walk which matters most — Desktop auth and where a
-`/`-command gets typed — is platform-level and does not care how many plugins are in the catalog,
-so it can run before or after Phase 7. The per-plugin first-run paths are the part that multiplies.
+`know-blueprint` is still the best candidate for the first walk: no Node, no Chrome, no key, no
+billing, and a finished document in one sitting. `know-researcher` is the second, and more
+informative about the long path — it also needs nothing installed, but a research project runs over
+days, which is where resumability and the `STATE.md` handoff either work or don't.
 
-**`know-blueprint` is the best candidate for the first walk**, because it needs nothing installed.
-A reader can go from adding the marketplace to a finished document in one sitting with no Node, no
-Chrome, no API key, and no billing. If the instructions break for it, they break for everything.
+**One decision is open and is Kelsey's**, recorded under convention 1 in the root `AGENTS.md`:
+whether the skill-name layer gets the `know-` prefix. Four of six plugins currently carry skill
+names identical to their source plugins. Closing it means renaming skills across those four in one
+change; leaving it means amending convention 1 to say the command layer carries the namespace and
+the plugin-qualified form is relied on. Either is defensible. What is not defensible is the current
+state, where the convention as written says one thing and four plugins do another.
+
+The remaining open questions — the provenance file, repository visibility, the maintenance model
+(raised five times now, still unanswered), the MIT attribution line — are in **Open questions**
+above and none of them blocks a push or a walk.

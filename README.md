@@ -1,6 +1,7 @@
 # Knowbility marketplace
 
-**Five tools for building, documenting, and checking software, set up to run inside Claude.**
+**Six tools for building, documenting, researching, and checking software, set up to run
+inside Claude.**
 Owned and maintained by Knowbility.
 
 ## What this actually is
@@ -20,7 +21,7 @@ Once a plugin is installed, it shows up as **slash commands** you type into Clau
 after installing `know-qa-agent`, typing `/know-qa:run` starts a QA run. You do not need to read
 the plugin's code or understand how it works to use it.
 
-Each of the five is independent. Install one or all five, in any order. None of them needs
+Each of the six is independent. Install one or all six, in any order. None of them needs
 another one to work.
 
 ## Step 1: get Claude itself
@@ -32,7 +33,7 @@ way, and `know-blueprint` needs nothing installed at all, so it behaves identica
 
 **Claude Desktop** is the app with a window and buttons. Download it from
 [claude.ai/download](https://claude.ai/download), install it, and sign in. If you would rather not
-use a terminal at all, choose this one — but read the table in "The five tools" first, because
+use a terminal at all, choose this one — but read the table in "The six tools" first, because
 `know-qa-agent` needs Node.js and Chrome on your machine before it will run, and only you can
 install those.
 
@@ -88,7 +89,7 @@ to the organization yet, and only an organization administrator can do that.
 If installation later fails with "not found" or "permission denied," it is almost always one of
 those two things rather than anything wrong with the plugin.
 
-## The five tools
+## The six tools
 
 Read this and the next two sections to decide what you want, then continue with
 [Step 3](#step-3-install-the-tools). **If you already know which tool you want, go straight
@@ -102,6 +103,7 @@ its prerequisites before, rather than after, you hit them.
 | [**know-security**](./know-security) | 0.1.0 | Reads your code the way someone trying to get at the data would read it, and reports what they would find. It never probes the system under review, holds no credentials, and runs no exploit. Its dependency check does contact your package registry, the same way `npm audit` does. | Node 18+ |
 | [**know-photo-generator**](./know-photo-generator) | 0.1.0 | Describe a photo in plain language and get a professional-grade image, without knowing what a key light or an 85mm prime is. | [Python 3](https://www.python.org/downloads/) with `pip3` on your PATH, and a Google Gemini API key you get from [AI Studio](https://aistudio.google.com/apikey). Rendering images is billed per image ([pricing](https://ai.google.dev/pricing)); building a prompt without rendering needs no key. |
 | [**know-blueprint**](./know-blueprint) | 0.1.0 | Interviews you into a written process. Ask someone how they do a thing they do every week and you get the idealized version; this gets the real one, including the exceptions and the judgment calls, and marks each step for whether automation is safe there. | **Nothing.** No key, no account, no installed tool. It reads and writes Markdown files and nothing else. |
+| [**know-researcher**](./know-researcher) | 1.18.0 | Phased research where every claim is audited back to its source note and every note to a declared source. Finds sources, turns them into structured notes, cross-references them, maps what is still missing, drafts from the evidence, and refuses to promote a draft that does not hold up. Numbers are registered once so they cannot drift between note and summary. | **Nothing to start.** Runs on Claude's built-in web search with no keys. Optional search tools sharpen it. `jq` is needed only for the hook that guards the output folder on Claude Code, and macOS 15+ already has it. The optional second corpus reviewer is the OpenAI Codex CLI and it reads the whole corpus — see the detail section before installing it. |
 
 Each version matches that plugin's `plugin.json`, which is the source of truth.
 
@@ -112,13 +114,17 @@ Each version matches that plugin's `plugin.json`, which is the source of truth.
   changing it, and writes a findings file you can judge for yourself. (Setup and reporting do
   create local config and findings files; your source is never modified.)
 - **You test or audit websites** → `know-qa-agent`. It is the one closest to Knowbility's own work
-  and has the longest setup of the five: install Node.js 18+ and Google Chrome yourself first, then
+  and has the longest setup of the six: install Node.js 18+ and Google Chrome yourself first, then
   `/know-qa:init` handles the rest.
 - **You are scoping a piece of work before anyone builds it** → `know-product-spec`.
 - **You need images for a page, a deck, or a campaign** → `know-photo-generator`.
 - **Nobody has written down how your team actually does something** → `know-blueprint`. This is
   also the one to start with if you want to try a tool with no setup at all: it needs nothing
   installed, so you can go from installing the plugin to a real result in one sitting.
+- **You need to research something and be able to defend the answer** → `know-researcher`. Also
+  needs nothing installed to start. It is the largest of the six and the one that rewards reading
+  its own README first, because a research project runs over days and several sessions rather than
+  in one sitting.
 
 ## What each one does, in more detail
 
@@ -224,12 +230,53 @@ anything to the person hearing it — a tool can find a missing attribute, but w
 describes is *right* is a judgment about what a person needs. You can overrule the default; the
 document records that you did.
 
-It needs nothing installed, and it is the only one of the five for which "works identically in
+It needs nothing installed, and it is the only one of the six for which "works identically in
 Claude Code and Claude Desktop" is true without qualification.
 
 Start with `/know-blueprint:guide` if you are not sure which of its four jobs you want, or
 `/know-blueprint:capture` if you already know which process to write down.
 → [Full guide](./know-blueprint/README.md)
+
+### know-researcher
+
+**Research you can hand to someone who will check it.** You describe what you need to find out; it
+researches your subject first, writes you a phased plan from what it found, and then works the plan
+with you — finding candidate sources, turning the ones you pick into structured notes,
+cross-referencing them against each other, telling you where coverage is still thin, drafting from
+the evidence, and auditing the draft before it becomes a deliverable. Every claim in a finished
+output traces to a specific note, and every note names the source it came from.
+
+The point is that you can check it yourself. A number that drifted between the source and the
+summary gets caught, because every cross-phase figure is registered once and compared everywhere. A
+qualifier that quietly vanished gets restored. Three articles citing the same study count as one
+data point, not three. A draft nothing supports does not get promoted — on Claude Code a hook
+enforces that, and in Claude Desktop it holds because only the audit step writes to the output
+folder.
+
+**It starts with nothing installed.** Discovery runs on Claude's built-in web search; candidate
+files say when a run came from that floor rather than a dedicated search tool. Adding a Tavily,
+Firecrawl, or Exa key sharpens discovery later without changing anything you have already done.
+
+**A confidence tier rates evidence, not products.** This matters here more than elsewhere: a
+well-sourced, high-confidence finding about *what an accessibility requirement says* is a reading
+of the standard. It is not a determination that some product meets it. That determination takes a
+person exercising the thing with assistive technology, and no amount of good sourcing substitutes
+for it. The tool is built to keep those two claims apart and flags a draft that blurs them.
+
+**One thing to know before a research project touches client material.** The final corpus review
+runs two independent reviewers. One is Claude. The other is optional, and it is the OpenAI Codex
+CLI — which does not get a search query, it reads your whole research corpus. That independence is
+exactly what makes its findings worth having, and it also means the corpus reaches a second model
+provider. It is opt-in by installation: with the Codex CLI not installed, the review runs with one
+reviewer, says so in the record rather than hiding it, and everything still works. If a corpus
+holds client material, leave it uninstalled.
+
+It is the largest tool here, and a research project runs across days and several sessions rather
+than one sitting. Read its own README before starting one.
+
+Start with `/know-research:init`, and `/know-research:progress` any time you want to know where you
+are.
+→ [Full guide](./know-researcher/README.md)
 
 ## Step 3: install the tools
 
@@ -257,6 +304,7 @@ set a plugin to **Auto-install**, so everyone gets it without doing this themsel
 /plugin install know-security@knowbility
 /plugin install know-photo-generator@knowbility
 /plugin install know-blueprint@knowbility
+/plugin install know-researcher@knowbility
 ```
 
 Install only the lines you want; they are independent.
@@ -280,6 +328,7 @@ one: the first configures, the second gives you output you can look at.
 | know-qa-agent | `/know-qa:init` — creates `.know-qa/` and installs the browser harness | `/know-qa:start` — asks what you want tested in plain language and sets it up. Or go straight at a page with `/know-qa:run --url <address> "check keyboard navigation and form labels"` |
 | know-product-spec | nothing to set up | `/know-spec:start` — works out what exists and points you at the right step |
 | know-photo-generator | `/know-photo:setup` — creates the file you paste your Gemini key into, checks it works | `/know-photo:generate --generate` — then describe the image you want. Without `--generate` it writes the prompt and renders nothing, which costs nothing |
+| know-researcher | nothing to set up | `/know-research:init` — four questions, then it researches your subject and writes you a phased plan. Allow about 20 minutes; it makes real web searches. |
 | know-blueprint | nothing to set up | `/know-blueprint:capture` — pick a process you already run, answer questions for about fifteen minutes, and get a written process in `blueprints/`. If you can't decide which process, `/know-blueprint:discover` finds candidates first |
 
 Replace `<address>` with the URL of a page you want tested. If it is an app running on your own
@@ -288,7 +337,8 @@ Chrome first.
 
 **If you lose your place**, `know-qa-agent` has `/know-qa:guide`, which looks at your project and
 tells you what to run next, and `/know-qa:help` explains any single command. `know-product-spec`
-has `/know-spec:start` and `know-blueprint` has `/know-blueprint:guide`, which do the same thing.
+has `/know-spec:start`, `know-blueprint` has `/know-blueprint:guide`, and `know-researcher` has
+`/know-research:progress`, which do the same thing.
 
 ## Updates
 
@@ -328,11 +378,20 @@ mechanical and marking it automatable is correct. Deciding whether the alt text 
 and a process document that says otherwise is the organization's own method making the claim its
 reports refuse to make.
 
+`know-researcher` can break it from a third direction, so it is built not to. It rates how well
+sources support a claim, and a high rating on "WCAG 2.2 requires X" is honest. What it must never
+become is a verdict on a product. "The standard requires X" and "this product satisfies X" are
+different claims needing different evidence, and the second one is an evaluation somebody performed
+— cited like any other source, never inferred from the standard's text. A well-sourced research
+output is still research. The rule is the same one each time, reached from a different angle: if a
+reader could conclude something about an accessibility outcome that no person actually checked, the
+tool has overstated itself.
+
 ## For maintainers
 
 [AGENTS.md](AGENTS.md) is the entry point for changing anything in this repository: the naming
 convention, the version rule that CI enforces, what ships to users and what does not, and how
-these five plugins arrived here.
+these six plugins arrived here.
 
 Work in progress and open questions live in [dev/STATE.md](dev/STATE.md).
 

@@ -8,13 +8,14 @@ Check the documentation against this, not against itself.
 
 - marketplace name: `knowbility`  (so install syntax is `<plugin>@knowbility`)
 - owner: Knowbility
-- registered plugins: 5
+- registered plugins: 6
 
   - `know-product-spec` from `./know-product-spec`
   - `know-qa-agent` from `./know-qa-agent`
   - `know-security` from `./know-security`
   - `know-photo-generator` from `./know-photo-generator`
   - `know-blueprint` from `./know-blueprint`
+  - `know-researcher` from `./know-researcher`
 
 ## know-product-spec
 
@@ -310,6 +311,136 @@ Check the documentation against this, not against itself.
 - `skills/blueprint-guide/SKILL.md`
 - `templates/CLAUDE.md`
 
+## know-researcher
+
+- manifest name: `know-researcher`
+- version: `1.18.0`
+- manifest description: `v1.18.0 — Get research you can stand behind, not a confident summary that might be invented. Describe your research challenge and work through a phased plan grounded in it: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note — and every note to a declared source. Decisions the project records — corrections, resolutions, accepted gaps, your own directives — are durable, and no later draft can quietly walk one back. Completion is gated by your stated success criteria and an independent adversarial review of the whole corpus. Confidence tiers rate how well the evidence supports a claim, nothing more: a sourced finding about an accessibility requirement is a reading of the standard, not a conformance determination about any product. A research partner, not a summarizer. Standalone; runs on its own.`
+- catalog description: `v1.18.0 — Get research you can stand behind, not a confident summary that might be invented. Describe your research challenge and work through a phased plan grounded in it: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note — and every note to a declared source. Decisions the project records — corrections, resolutions, accepted gaps, your own directives — are durable, and no later draft can quietly walk one back. Completion is gated by your stated success criteria and an independent adversarial review of the whole corpus. Confidence tiers rate how well the evidence supports a claim, nothing more: a sourced finding about an accessibility requirement is a reading of the standard, not a conformance determination about any product. A research partner, not a summarizer. Standalone; runs on its own.`
+- install command: `/plugin install know-researcher@knowbility`
+
+**Skills (directory → frontmatter `name:` → how a user types it):**
+
+- `skills/research-audit-claims/` → `name: research-audit-claims` → user types **`/know-researcher:research-audit-claims`**
+- `skills/research-check-gaps/` → `name: research-check-gaps` → user types **`/know-researcher:research-check-gaps`**
+- `skills/research-cross-ref/` → `name: research-cross-ref` → user types **`/know-researcher:research-cross-ref`**
+- `skills/research-discover/` → `name: research-discover` → user types **`/know-researcher:research-discover`**
+- `skills/research-graph-analysis/` → `name: research-graph-analysis` → user types **`/know-researcher:research-graph-analysis`**
+- `skills/research-init/` → `name: research-init` → user types **`/know-researcher:research-init`**
+- `skills/research-phase-insight/` → `name: research-phase-insight` → user types **`/know-researcher:research-phase-insight`**
+- `skills/research-process-source/` → `name: research-process-source` → user types **`/know-researcher:research-process-source`**
+- `skills/research-progress/` → `name: research-progress` → user types **`/know-researcher:research-progress`**
+- `skills/research-review-corpus/` → `name: research-review-corpus` → user types **`/know-researcher:research-review-corpus`**
+- `skills/research-start-phase/` → `name: research-start-phase` → user types **`/know-researcher:research-start-phase`**
+- `skills/research-summarize-section/` → `name: research-summarize-section` → user types **`/know-researcher:research-summarize-section`**
+
+**Commands (path → how a user types it):**
+
+- `commands/know-research/audit-claims.md` → user types **`/know-research:audit-claims`**
+- `commands/know-research/check-gaps.md` → user types **`/know-research:check-gaps`**
+- `commands/know-research/cross-ref.md` → user types **`/know-research:cross-ref`**
+- `commands/know-research/discover.md` → user types **`/know-research:discover`**
+- `commands/know-research/graph-analysis.md` → user types **`/know-research:graph-analysis`**
+- `commands/know-research/init.md` → user types **`/know-research:init`**
+- `commands/know-research/phase-insight.md` → user types **`/know-research:phase-insight`**
+- `commands/know-research/process-source.md` → user types **`/know-research:process-source`**
+- `commands/know-research/progress.md` → user types **`/know-research:progress`**
+- `commands/know-research/review-corpus.md` → user types **`/know-research:review-corpus`**
+- `commands/know-research/start-phase.md` → user types **`/know-research:start-phase`**
+- `commands/know-research/summarize-section.md` → user types **`/know-research:summarize-section`**
+
+**Agents:**
+
+- `agents/corpus-reviewer.md`
+- `agents/research-integrity.md`
+
+**Every shipped file (84 files, recursive):**
+
+- `.claude-plugin/plugin.json`
+- `AGENTS.md`
+- `CHANGELOG.md`
+- `README.md`
+- `agents/corpus-reviewer.md`
+- `agents/research-integrity.md`
+- `commands/know-research/audit-claims.md`
+- `commands/know-research/check-gaps.md`
+- `commands/know-research/cross-ref.md`
+- `commands/know-research/discover.md`
+- `commands/know-research/graph-analysis.md`
+- `commands/know-research/init.md`
+- `commands/know-research/phase-insight.md`
+- `commands/know-research/process-source.md`
+- `commands/know-research/progress.md`
+- `commands/know-research/review-corpus.md`
+- `commands/know-research/start-phase.md`
+- `commands/know-research/summarize-section.md`
+- `hooks/gate-outputs.sh`
+- `hooks/hooks.json`
+- `hooks/setup-paths.sh`
+- `hooks/state-staleness-check.sh`
+- `reference/corpus-review-brief.md`
+- `reference/corpus-review-protocol.md`
+- `reference/coverage-assessment-guide.md`
+- `reference/discovery/channel-playbooks/academic.md`
+- `reference/discovery/channel-playbooks/domain-specific.md`
+- `reference/discovery/channel-playbooks/financial.md`
+- `reference/discovery/channel-playbooks/regulatory.md`
+- `reference/discovery/channel-playbooks/social-signals.md`
+- `reference/discovery/channel-playbooks/web-search.md`
+- `reference/discovery/type-channel-maps/company-for-profit.md`
+- `reference/discovery/type-channel-maps/company-non-profit.md`
+- `reference/discovery/type-channel-maps/competitive-analysis.md`
+- `reference/discovery/type-channel-maps/curriculum-research.md`
+- `reference/discovery/type-channel-maps/customer-safari.md`
+- `reference/discovery/type-channel-maps/exploratory-thesis.md`
+- `reference/discovery/type-channel-maps/market-industry.md`
+- `reference/discovery/type-channel-maps/opportunity-discovery.md`
+- `reference/discovery/type-channel-maps/person-research.md`
+- `reference/discovery/type-channel-maps/prd-validation.md`
+- `reference/discovery/type-channel-maps/presentation-research.md`
+- `reference/evidence-failure-modes.md`
+- `reference/pattern-recognition-guide.md`
+- `reference/posture-register.md`
+- `reference/prompt-templates-guide.md`
+- `reference/prompt-templates-runtime.md`
+- `reference/review-protocol-contract.json`
+- `reference/source-assessment-guide.md`
+- `reference/templates/canonical-figures.json`
+- `reference/templates/completion-criteria.md`
+- `reference/templates/cross-reference.md`
+- `reference/templates/decision-ledger.md`
+- `reference/templates/registry.md`
+- `reference/templates/review-protocol.json`
+- `reference/templates/source-standards.md`
+- `reference/templates/types/company-for-profit.md`
+- `reference/templates/types/company-non-profit.md`
+- `reference/templates/types/competitive-analysis.md`
+- `reference/templates/types/curriculum-research.md`
+- `reference/templates/types/customer-safari.md`
+- `reference/templates/types/exploratory-thesis.md`
+- `reference/templates/types/market-industry.md`
+- `reference/templates/types/opportunity-discovery.md`
+- `reference/templates/types/person-research.md`
+- `reference/templates/types/prd-validation.md`
+- `reference/templates/types/presentation-research.md`
+- `reference/tools-guide.md`
+- `reference/validate-corpus-review.py`
+- `reference/where-am-i.py`
+- `reference/workflow-ownership.md`
+- `reference/writing-standards.md`
+- `skills/research-audit-claims/SKILL.md`
+- `skills/research-check-gaps/SKILL.md`
+- `skills/research-cross-ref/SKILL.md`
+- `skills/research-discover/SKILL.md`
+- `skills/research-graph-analysis/SKILL.md`
+- `skills/research-init/SKILL.md`
+- `skills/research-phase-insight/SKILL.md`
+- `skills/research-process-source/SKILL.md`
+- `skills/research-progress/SKILL.md`
+- `skills/research-review-corpus/SKILL.md`
+- `skills/research-start-phase/SKILL.md`
+- `skills/research-summarize-section/SKILL.md`
+
 ## Repository root (not shipped to plugin users)
 
 - `.ai/`
@@ -326,5 +457,6 @@ Check the documentation against this, not against itself.
 - `know-photo-generator/`
 - `know-product-spec/`
 - `know-qa-agent/`
+- `know-researcher/`
 - `know-security/`
 

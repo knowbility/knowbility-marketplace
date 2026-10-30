@@ -1,0 +1,21 @@
+{
+  "name": "know-researcher",
+  "version": "1.18.0",
+  "description": "v1.18.0 \u2014 Get research you can stand behind, not a confident summary that might be invented. Describe your research challenge and work through a phased plan grounded in it: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note \u2014 and every note to a declared source. Decisions the project records \u2014 corrections, resolutions, accepted gaps, your own directives \u2014 are durable, and no later draft can quietly walk one back. Completion is gated by your stated success criteria and an independent adversarial review of the whole corpus. Confidence tiers rate how well the evidence supports a claim, nothing more: a sourced finding about an accessibility requirement is a reading of the standard, not a conformance determination about any product. A research partner, not a summarizer. Standalone; runs on its own.",
+  "author": {
+    "name": "Knowbility",
+    "url": "https://github.com/knowbility"
+  },
+  "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-researcher",
+  "repository": "https://github.com/knowbility/knowbility-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "structured-research",
+    "evidence",
+    "fact-checking",
+    "source-tracking",
+    "audit",
+    "discovery"
+  ]
+}
