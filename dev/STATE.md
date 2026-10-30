@@ -396,16 +396,29 @@ records the opposite empirically, and the regenerated ground truth confirms `/kn
 for all twelve. The port uses one form rather than carrying the ambiguity across; the colon form is
 the one whose resolution follows from the file layout.
 
-**The gap: four of six plugins here carry skill `name:` values byte-identical to the plugins they
-were forked from** (`blueprint-capture`, `security-audit`, `photo-setup`, `research-init`). Only
-`know-product-spec` and `know-qa-agent` prefix the skill layer, via colon-form names. Convention 1
-in the root `AGENTS.md` says the skill layer is the load-bearing one, so the repository does not
-currently meet its own written convention for four plugins. In practice the `<plugin>:<name>` form
-always disambiguates and the command layer is prefixed everywhere; what is not guaranteed is a bare
-un-prefixed skill name for anyone with both marketplaces installed, which Kelsey is. Recorded under
-convention 1 as an **open decision**, not silently ignored, because closing it means renaming skills
-across four plugins in one change — doing it in `know-researcher` alone would leave it the odd one
-out, which is worse than either answer.
+**I raised a skill-name collision as a gap, and it is not one. Closed on evidence, same day.**
+Four of six plugins here carry skill `name:` values byte-identical to the plugins they were forked
+from (`blueprint-capture`, `security-audit`, `photo-setup`, `research-init`), and convention 1 in
+the root `AGENTS.md` used to claim the skill layer was the load-bearing one — that a duplicate short
+name made the typed form ambiguous. Kelsey asked what the relevance was, which was the right
+question, because checking the machine answers it:
+
+- Anthropic's own official marketplace ships `telegram`, `imessage`, and `discord`, and **all three
+  declare `name: access` and `name: configure`.** A three-way collision, shipped by the vendor.
+- Two plugins in another installed marketplace both declare a bare `name: run`; the host lists them
+  as `advisor-evaluation:run` and `aia-queue:run`. Both reachable, each qualified by its plugin,
+  with no bare `run` offered.
+
+Skills are addressed `<plugin>:<name>`, so the plugin name already disambiguates and a duplicate
+short name costs nothing. **No renaming needed, in any plugin.** Convention 1 was rewritten to state
+what the host actually does, with the evidence inline so it does not get reopened, and to say the
+rule plainly: prefix the directory, the manifest `name`, and whatever a user actually types — the
+`commands/` subdirectory where there are command wrappers, the skill `name:` where there are not.
+Both shapes in this repository are correct, and which one a plugin uses follows from whether it
+ships command wrappers.
+
+The lesson worth keeping: I built an "open decision" out of an untested assumption about host
+behavior, and it would have cost a four-plugin rename. The check was two greps.
 
 ### The house rule, reached from a third direction
 
@@ -513,38 +526,71 @@ months later.
   once rather than re-litigated; it is a drafting judgment, not legal advice, and it rests on the
   one fact Kelsey has confirmed.
 
-## Still open
+## Also settled 2026-10-30, on evidence rather than opinion
 
-- **Claude Desktop private-repository authentication.** The only genuine unknown left, and it
-  belongs to the cold-install walk rather than to a documentation edit. The README gives a terminal
-  self-check and `gh auth login`, which closes it for anyone willing to open a terminal once. What
-  is unverified is whether a Desktop-only user who never touches a terminal can install from a
-  private repository at all. Now that visibility is settled as private, this is load-bearing: it is
-  the difference between "every installer needs a terminal once" and "every installer needs a
-  terminal once, and here is the sentence that tells them so."
-- **Skill-name prefix across four plugins.** Kelsey asked what the relevance is, which is the right
-  question. Recommendation on the table: amend convention 1 to say the command layer carries the
-  namespace, rather than renaming skills in four plugins. See the Phase 7 notes for the mechanics.
+Both of these were on my "still open" list. Kelsey pushed back on one and asked what the other was
+for, and checking the machine closed both.
+
+- **Claude Desktop private-repository install: not an issue, and I should not have raised it.**
+  Kelsey's objection was that he almost never uses a terminal and the migration did not change the
+  installation path, so the concern looked invented. It was. The `hello-alice` marketplace installed
+  on this machine points at `thecircularboard/helloalice-plugin-marketplace`, which is **private**
+  (created 2026-06-08, 3.8 MB), and he installs from it. Private-repo install via the Desktop app
+  demonstrably works; I had turned "nobody verified this" into "this might not work," which are not
+  the same claim.
+
+  The accurate residual, and it is small: the install needs git credentials for the org on the
+  installer's machine. This one has `osxkeychain` and an authenticated `gh`. A new Knowbility
+  employee's machine would need that once, which is ordinary onboarding rather than an abandonment
+  risk. The README already covers it and does not need rewriting.
+
+- **Skill-name prefix: nothing to fix.** Closed on evidence; see the Phase 7 notes for the two
+  observations and the rewritten convention 1. Short version: Anthropic's own marketplace ships
+  three plugins that all declare `name: access`, skills are addressed `<plugin>:<name>`, and a
+  duplicate short name costs nothing. No renaming, in any plugin.
+
+## Accepted into scope
+
+- **Phase 4 — per-criterion conformance presentation inside `know-qa-agent`.** Kelsey wants it.
+  `know-qa-agent` already annotates every finding with the WCAG success criteria it maps to; Phase 4
+  turns that into auditor-shaped presentation and per-criterion verdicts. **What it needs to start:**
+  one of Knowbility's own auditors looking at real output from a live run, because how auditors
+  structure findings is knowable by asking and much worse when guessed. That makes it dependent on
+  the cold-install walk producing real output first. The boundary statement already in the README
+  stays either way: these passes catch a deterministic subset, do not produce a formal conformance
+  report, and do not replace screen-reader or keyboard-only testing.
+- **Phase 5 — a separate conformance/VPAT reporting plugin.** Kelsey wants it, and he flagged it
+  himself early as the one genuinely missing piece. It is separate from Phase 4 on purpose: criterion
+  mapping annotates output `know-qa-agent` already produces, while a conformance document must merge
+  manual and assistive-technology evidence that plugin cannot produce, and its output is
+  quasi-legal. **What it needs to start:** its own requirements pass — what document, to which
+  standard, for whose signature, carrying what evidence. Nothing about it has been scoped. This is
+  the one piece of remaining work that is a project rather than a task, and it does not depend on
+  the walk.
 
 ## Next step
 
-**Push `fc8cd0f` and this commit, then walk the cold install.** Nothing else blocks handoff.
+**Push the three commits, then walk the cold install.** Nothing is blocked and nothing is waiting on
+Kelsey.
 
-The walk is the last real gate. Both readiness reviews landed on the same thing no amount of
-document review replaces: nobody has gone from nothing to a result through these instructions. With
-visibility now settled as private, the specific thing it has to answer is whether a Desktop-only
-user can install from a private repository at all, or whether every installer needs a terminal once.
-The README currently says the latter is the fix; that sentence is unverified.
+The walk is the last gate on the migration itself. Both readiness reviews landed on the same thing
+no amount of document review replaces: nobody has gone from nothing to a result through these
+instructions. It is no longer about whether a private-repo install works — that is answered — but
+about whether the written sequence is followable and whether each plugin's first-run path produces
+what the README says it will. Order: `know-blueprint` first (nothing installed, finished document in
+one sitting; if the instructions break for it they break for everything), then `know-researcher` for
+the long path where resumability and the `STATE.md` handoff either work or don't.
 
-Order within the walk: `know-blueprint` first (no Node, no Chrome, no key, no billing, finished
-document in one sitting — if the instructions break for it they break for everything), then
-`know-researcher` as the second, which tests the long path where resumability and the `STATE.md`
-handoff either work or don't.
+**The walk is also the gate on Phase 4**, which needs real output in front of one of Knowbility's
+auditors before any of it can be designed.
 
-**Not blocking, whenever Kelsey wants them:** the skill-name prefix decision, and Phase 4 / Phase 5
-if they come back into scope. Phase 4 is per-criterion conformance presentation inside
-`know-qa-agent` and is deferred on purpose — it needs one of Knowbility's own auditors to look at
-real output first, because how auditors structure findings is knowable by asking and worse when
-guessed. Phase 5 is a separate conformance-reporting plugin, which has to merge manual and
-assistive-technology evidence that `know-qa-agent` cannot produce; it was never scoped and needs its
-own requirements pass before any of it gets built.
+**Phase 5 does not depend on the walk** and is the one piece of remaining work that is a project
+rather than a task. It needs a requirements pass before anything is built: what document, to which
+standard, for whose signature, carrying what evidence. That conversation can happen whenever Kelsey
+wants it.
+
+**One housekeeping item worth surfacing once.** There are two Knowbility marketplace repositories:
+`knowbility/knowbility-marketplace` (what we built, everything is here) and
+`knowbility/knowbility-plugin-marketplace` (private, created 2026-08-14, 2 KB — effectively empty).
+Two repos with near-identical names is a way for someone to add the wrong marketplace. Kelsey's call
+whether to delete the empty one, archive it, or leave it; no action taken.

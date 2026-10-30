@@ -83,8 +83,11 @@ These were decided during the port into this marketplace. Change them deliberate
   this was forked from used two forms for the same commands — a hyphen form (366 references) and a
   colon form (36) — and its own changelog argues for the hyphen. This port uses one form
   everywhere. Skill `name:` frontmatter was left un-prefixed (`research-init`, not
-  `know-research-init`) to match the three plugins already shipped here; see the root `AGENTS.md`
-  note on the skill-name layer.
+  `know-research-init`), which is correct and settled: skills are addressed `<plugin>:<name>`, so
+  the plugin name already disambiguates, and duplicate short skill names across plugins are normal
+  — Anthropic's own marketplace ships three plugins that all declare `name: access`. Convention 1
+  in the root `AGENTS.md` carries the evidence. Do not rename these to chase a collision that does
+  not exist.
 - **The version was not reset.** `1.18.0` came across as-is rather than restarting at `0.1.0`.
   A twelve-skill system with an adversarial corpus-review protocol is telling the truth about its
   maturity; `0.1.0` would deny it. `know-photo-generator` reset and said why; this one didn't and

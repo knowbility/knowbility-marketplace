@@ -71,36 +71,39 @@ actually checked? Then close that off where the output is produced, not only in 
 
 ## Conventions (how every plugin here is shaped)
 
-1. **`know-` prefix, at two layers.** Plugin directory and manifest `name` are prefixed
-   (`know-qa-agent`), and the invocation namespace is prefixed too (`/know-qa:run`). The install
-   layer is for legibility: the marketplace card and `/plugin` lists should make it obvious these
-   are Knowbility's. The invocation layer is load-bearing: installed plugins are keyed
-   `<plugin>@<marketplace>`, so install names never actually collide, but the typed short command
-   comes from a skill's own `name:` frontmatter field, and two plugins declaring `name: qa:run`
-   make `/qa:run` ambiguous. Prefix both; only the second one prevents a real collision.
+1. **`know-` prefix, at two layers, and the reason is legibility rather than collision.** The
+   plugin directory and manifest `name` are prefixed (`know-qa-agent`), and the invocation
+   namespace is prefixed too (`/know-qa:run`, `/know-research:init`). Both layers exist so that a
+   marketplace card, a `/plugin` list, and a typed command all make it obvious these are
+   Knowbility's.
 
-   **Where the repository does not yet meet this, and why it is one decision rather than six.**
-   Two plugins satisfy the rule at the skill layer by declaring colon-prefixed skill names:
-   `know-product-spec` (`name: know-spec:write`) and `know-qa-agent` (`name: know-qa:run`). The
-   other four — `know-security`, `know-photo-generator`, `know-blueprint`, `know-researcher` —
-   carry short skill names **byte-identical to the plugins they were forked from**
-   (`security-audit`, `photo-setup`, `blueprint-capture`, `research-init`). For those four the
-   `know-` namespace is carried entirely by the `commands/` subdirectory, which is the layer a
-   user types (`/know-security:sweep`, `/know-research:init`), and the fully-qualified skill form
-   `<plugin>:<name>` always disambiguates, because the plugin names differ. What is not guaranteed
-   is a bare un-prefixed skill name: anyone with both this marketplace and a source marketplace
-   installed has two skills declaring `blueprint-capture`. Whether that is reachable depends on how
-   the host resolves un-prefixed short names, which is not documented and has changed at least once
-   — `know-researcher`'s own pre-fork changelog records its author concluding the opposite of what
-   this repository's plugins now rely on.
+   **Skill-name collisions between plugins are not a problem, and this was checked rather than
+   assumed.** An earlier version of this convention claimed the skill layer was load-bearing —
+   that two plugins declaring the same skill `name:` would make the short form ambiguous, and that
+   only prefixing the skill name prevented a real collision. That is false. Observed on a machine
+   with twenty-odd marketplaces installed:
 
-   This is recorded as an open decision, not a convention being quietly ignored. Closing it means
-   renaming skills across four plugins in one change, with their internal cross-references, so that
-   the repository either prefixes the skill layer everywhere or documents that it prefixes the
-   command layer and relies on the plugin-qualified form. Doing it in one plugin would leave that
-   plugin the odd one out, which is worse than either answer. Until it is closed, a new plugin here
-   follows whichever pattern its own commands-versus-skills shape matches, and says which in its
-   `AGENTS.md`.
+   - Anthropic's own official marketplace ships `telegram`, `imessage`, and `discord`, and **all
+     three declare `name: access` and `name: configure`.** Three-way collisions, shipped
+     deliberately by the vendor.
+   - Two plugins in another marketplace both declare a bare `name: run`, and the host lists them
+     as `advisor-evaluation:run` and `aia-queue:run` — both reachable, each qualified by its
+     plugin. No bare `run` is offered to disambiguate.
+
+   Installed plugins are keyed `<plugin>@<marketplace>` and skills are addressed
+   `<plugin>:<name>`, so the plugin name already disambiguates and a duplicate short name costs
+   nothing. **Consequence for this repository: four of the six plugins carry skill `name:` values
+   identical to the plugins they were forked from** (`security-audit`, `photo-setup`,
+   `blueprint-capture`, `research-init`), and that is fine and stays. `know-product-spec` and
+   `know-qa-agent` use colon-prefixed skill names (`know-spec:write`, `know-qa:run`) because they
+   ship no `commands/` directory, so their skill name *is* the typed name. Both shapes are
+   correct; which one a plugin uses follows from whether it has command wrappers.
+
+   The rule, stated so it does not need revisiting: **prefix the directory, the manifest `name`,
+   and whatever a user actually types.** For a plugin with command wrappers that is the
+   `commands/` subdirectory. For a plugin without them it is the skill `name:`. Do not rename a
+   forked plugin's skills to chase a collision that does not exist.
+
 2. **Version in the description, and the version prefix must match.** Every plugin manifest's
    `description` starts with `v<X.Y.Z> — `, matching its own `version` field *and* its entry in
    `.claude-plugin/marketplace.json`. The browse cards render the catalog description, not the
