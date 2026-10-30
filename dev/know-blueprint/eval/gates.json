@@ -1,0 +1,119 @@
+{
+  "target": "blueprint",
+  "rubric_version": "1.1.0",
+  "gates": [
+    {
+      "name": "blueprint_written",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "^#\\s+Process Blueprint",
+      "feeds": "Artifact Integrity"
+    },
+    {
+      "name": "autonomy_ratings_present",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "\\*\\*Autonomy:\\*\\*\\s*(Automate|Monitor|Human)",
+      "feeds": "Autonomy Calibration",
+      "na_when_zero_steps": true
+    },
+    {
+      "name": "open_questions_present",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "^##\\s+.*Open questions",
+      "feeds": "Gap Honesty"
+    },
+    {
+      "name": "status_honest",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "stakeholder validation not yet done",
+      "feeds": "Validation Honesty"
+    },
+    {
+      "name": "timing_filled",
+      "type": "section_filled",
+      "file": "blueprints/captured-blueprint.md",
+      "section": "Timing",
+      "placeholder": "[How long a run takes, any deadline or SLA, and how often the process runs.]",
+      "feeds": "Mode Discipline",
+      "na_for_entries": [
+        "quick"
+      ]
+    },
+    {
+      "name": "risk_filled",
+      "type": "section_filled",
+      "file": "blueprints/captured-blueprint.md",
+      "section": "Risks and failure impact",
+      "placeholder": "[What a bad run costs — money, compliance, customer trust, brand. This drives the autonomy\nratings above.]",
+      "feeds": "Mode Discipline",
+      "na_for_entries": [
+        "quick"
+      ]
+    },
+    {
+      "name": "improvement_loop_filled",
+      "type": "section_filled",
+      "file": "blueprints/captured-blueprint.md",
+      "section": "Improvement loop",
+      "placeholder": "[How corrections and overrides feed back into this Blueprint — who updates it, on what\ntrigger.]",
+      "feeds": "Mode Discipline",
+      "na_for_entries": [
+        "quick"
+      ]
+    },
+    {
+      "name": "quick_mode_marked",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "Not captured — quick mode",
+      "feeds": "Mode Discipline",
+      "na_for_entries": [
+        "deep"
+      ]
+    },
+    {
+      "name": "inventory_updated",
+      "type": "file_contains",
+      "file": "blueprints/process-inventory.md",
+      "pattern": "Status:\\*\\*\\s*Captured",
+      "feeds": "Loop Closure",
+      "na_if_file_absent": true
+    }
+  ],
+  "content_lint": [
+    {
+      "name": "no_template_field_brackets",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "\\[(Action name|Process Name|Input|Format|Step #|The question|Person / agent|Frequency|Unknown, and who could answer it|Who runs it today|Quick / Deep|Steps)\\]",
+      "feeds": "Artifact Integrity"
+    },
+    {
+      "name": "no_placeholder_tokens",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "(\\[(TODO|TBD|placeholder|FILL)\\b|\\b(TBD|TODO)\\b|\\?\\?\\?)",
+      "feeds": "Artifact Integrity"
+    },
+    {
+      "name": "no_unresolved_autonomy",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "\\*\\*Autonomy:\\*\\*\\s*\\[",
+      "feeds": "Artifact Integrity"
+    },
+    {
+      "name": "no_unfilled_deep_sections",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "\\[(How long a run takes|What a bad run costs|How corrections and overrides)",
+      "feeds": "Mode Discipline"
+    },
+    {
+      "name": "no_interview_narration",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "(the interview (did|didn'?t|never|covered|ended)|person interviewed|(this |the )session (ran|ended|didn'?t)|(not |never )asked (before|during|yet)|asked,? not (yet )?answered|ran out of turns|not (covered|reached) (in|this|before) (this )?session|interview area|out of turns|the operator (first|initially) (said|stated|described|mentioned)|then (described|said) (this|it))",
+      "flags": "mi",
+      "feeds": "Register"
+    }
+  ]
+}

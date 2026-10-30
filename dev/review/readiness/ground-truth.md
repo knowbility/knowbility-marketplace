@@ -8,12 +8,13 @@ Check the documentation against this, not against itself.
 
 - marketplace name: `knowbility`  (so install syntax is `<plugin>@knowbility`)
 - owner: Knowbility
-- registered plugins: 4
+- registered plugins: 5
 
   - `know-product-spec` from `./know-product-spec`
   - `know-qa-agent` from `./know-qa-agent`
   - `know-security` from `./know-security`
   - `know-photo-generator` from `./know-photo-generator`
+  - `know-blueprint` from `./know-blueprint`
 
 ## know-product-spec
 
@@ -232,8 +233,8 @@ Check the documentation against this, not against itself.
 
 - manifest name: `know-photo-generator`
 - version: `0.1.0`
-- manifest description: `v0.1.0 — Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is. A guided workflow turns your scene into a physics-aware Nano Banana Pro prompt — camera body, lens, lighting setup, and color grade chosen from a curated reference library — then generates the image directly via the Gemini API at the right aspect ratio for print, social, or hero-banner use. /photo-setup handles the API key (pasted into a local keys.env, never the chat) and an optional default house style; batch and variations modes cover shot lists and multiple takes. Standalone; runs on its own.`
-- catalog description: `v0.1.0 — Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is. A guided workflow turns your scene into a physics-aware Nano Banana Pro prompt — camera body, lens, lighting setup, and color grade chosen from a curated reference library — then generates the image directly via the Gemini API at the right aspect ratio for print, social, or hero-banner use. /photo-setup handles the API key (pasted into a local keys.env, never the chat) and an optional default house style; batch and variations modes cover shot lists and multiple takes. Standalone; runs on its own.`
+- manifest description: `v0.1.0 — Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is. A guided workflow turns your scene into a physics-aware Nano Banana Pro prompt — camera body, lens, lighting setup, and color grade chosen from a curated reference library — then generates the image directly via the Gemini API at the right aspect ratio for print, social, or hero-banner use. /know-photo:setup handles the API key (pasted into a local keys.env, never the chat) and an optional default house style; batch and variations modes cover shot lists and multiple takes. Standalone; runs on its own.`
+- catalog description: `v0.1.0 — Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is. A guided workflow turns your scene into a physics-aware Nano Banana Pro prompt — camera body, lens, lighting setup, and color grade chosen from a curated reference library — then generates the image directly via the Gemini API at the right aspect ratio for print, social, or hero-banner use. /know-photo:setup handles the API key (pasted into a local keys.env, never the chat) and an optional default house style; batch and variations modes cover shot lists and multiple takes. Standalone; runs on its own.`
 - install command: `/plugin install know-photo-generator@knowbility`
 
 **Skills (directory → frontmatter `name:` → how a user types it):**
@@ -265,6 +266,50 @@ Check the documentation against this, not against itself.
 - `skills/photo-generate/SKILL.md`
 - `skills/photo-setup/SKILL.md`
 
+## know-blueprint
+
+- manifest name: `know-blueprint`
+- version: `0.1.0`
+- manifest description: `v0.1.0 — Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down — triggers, data movement, decision criteria, exceptions, approval authority — then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off, and any step that turns on accessibility judgment defaults to Human. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own.`
+- catalog description: `v0.1.0 — Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down — triggers, data movement, decision criteria, exceptions, approval authority — then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off, and any step that turns on accessibility judgment defaults to Human. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own.`
+- install command: `/plugin install know-blueprint@knowbility`
+
+**Skills (directory → frontmatter `name:` → how a user types it):**
+
+- `skills/blueprint-capture/` → `name: blueprint-capture` → user types **`/know-blueprint:blueprint-capture`**
+- `skills/blueprint-design/` → `name: blueprint-design` → user types **`/know-blueprint:blueprint-design`**
+- `skills/blueprint-discover/` → `name: blueprint-discover` → user types **`/know-blueprint:blueprint-discover`**
+- `skills/blueprint-guide/` → `name: blueprint-guide` → user types **`/know-blueprint:blueprint-guide`**
+
+**Commands (path → how a user types it):**
+
+- `commands/know-blueprint/capture.md` → user types **`/know-blueprint:capture`**
+- `commands/know-blueprint/design.md` → user types **`/know-blueprint:design`**
+- `commands/know-blueprint/discover.md` → user types **`/know-blueprint:discover`**
+- `commands/know-blueprint/guide.md` → user types **`/know-blueprint:guide`**
+
+**Every shipped file (19 files, recursive):**
+
+- `.claude-plugin/plugin.json`
+- `AGENTS.md`
+- `CHANGELOG.md`
+- `README.md`
+- `commands/know-blueprint/capture.md`
+- `commands/know-blueprint/design.md`
+- `commands/know-blueprint/discover.md`
+- `commands/know-blueprint/guide.md`
+- `reference/README.md`
+- `reference/blueprint-template.md`
+- `reference/design-doctrine.md`
+- `reference/discovery-sweep.md`
+- `reference/example-blog-content-blueprint.md`
+- `reference/process-inventory-template.md`
+- `skills/blueprint-capture/SKILL.md`
+- `skills/blueprint-design/SKILL.md`
+- `skills/blueprint-discover/SKILL.md`
+- `skills/blueprint-guide/SKILL.md`
+- `templates/CLAUDE.md`
+
 ## Repository root (not shipped to plugin users)
 
 - `.ai/`
@@ -277,6 +322,7 @@ Check the documentation against this, not against itself.
 - `LICENSE`
 - `README.md`
 - `dev/`
+- `know-blueprint/`
 - `know-photo-generator/`
 - `know-product-spec/`
 - `know-qa-agent/`

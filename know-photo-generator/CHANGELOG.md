@@ -16,7 +16,13 @@ What changed in the port:
 
 - **Renamed** to `know-photo-generator`. Commands moved from `/generate-photo` and `/photo-setup`
   to `/know-photo:generate` and `/know-photo:setup`, so they cannot collide with the plugin this
-  was forked from. 42 references updated.
+  was forked from. 42 references updated — and one missed, corrected on 2026-10-30 while the fifth
+  plugin was being ported: the manifest and catalog descriptions still read "`/photo-setup` handles
+  the API key," naming a command that no longer exists, in the one piece of text a user reads
+  before installing anything. Two existing gates passed it, because one compares only the version
+  prefix and the other compares the manifest description to the catalog description — which agreed,
+  since both carried the same wrong name. `dev/scripts/check-described-commands.mjs` now resolves
+  every command string inside every description against the real invocation list.
 - **Brand-style library rebuilt**, 264 lines down to 143. Both source organizations' house styles
   were removed, along with an undefined placeholder style. **Design-Ready Headshot** stays: it is
   brand-neutral and immediately usable. The authoring guide for adding styles stays.

@@ -1,0 +1,20 @@
+{
+  "name": "know-blueprint",
+  "version": "0.1.0",
+  "description": "v0.1.0 \u2014 Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down \u2014 triggers, data movement, decision criteria, exceptions, approval authority \u2014 then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off, and any step that turns on accessibility judgment defaults to Human. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own.",
+  "author": {
+    "name": "Knowbility",
+    "url": "https://github.com/knowbility"
+  },
+  "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-blueprint",
+  "repository": "https://github.com/knowbility/knowbility-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "process-mapping",
+    "sop",
+    "workflow-design",
+    "automation-readiness",
+    "human-in-the-loop",
+    "operations"
+  ]
+}

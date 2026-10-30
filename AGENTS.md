@@ -24,18 +24,34 @@ organization and working git credentials. That is a real setup step, not an afte
 | Plugin | Version | Invoked as | What it does | State |
 |---|---|---|---|---|
 | `know-product-spec` | 0.1.0 | `/know-spec:*` | Interview to PRD, then grades its own draft by decomposing it into workstreams and tasks and reporting every decision it had to invent. Tracker-agnostic. | Ported, manifest validated. Not yet driven end to end. |
-| `know-security` | 0.1.0 | `/know-security:*` | Adversarial security and privacy reviewer that reads code the way someone trying to get at the data would. Never probes, never touches a network. | Ported, 66-case suite passing. |
+| `know-security` | 0.1.0 | `/know-security:*` | Adversarial security and privacy reviewer that reads code the way someone trying to get at the data would. Never probes the system under review; the only network access is the dependency check, which runs your project's own package auditor against your package registry. | Ported, 66-case suite passing. |
 | `know-photo-generator` | 0.1.0 | `/know-photo:*` | Plain-language description to a physics-aware image prompt, optionally rendered via the Gemini API. Needs a Gemini key. | Ported, key check passing. **A Knowbility brand style is not yet defined**; the section is a template awaiting the organization's input, representation guidance included. |
 | `know-qa-agent` | 0.1.0 | `/know-qa:*` | Tests a web app like a skeptical engineer and reports what broke with the evidence. Two-tier accessibility suite: full axe-core ruleset and exact WCAG AA contrast math, every finding annotated with the success criteria it maps to. | Ported, engine and harness verified. **Not yet driven against a live site from a cold install here**; that and the adversarial de-branding sweep are the remaining gates. |
 
-All four planned plugins are in. See `dev/review/migration-plan.md` for the plan they arrived
-under and `dev/STATE.md` for where the work stands.
+| `know-blueprint` | 0.1.0 | `/know-blueprint:*` | Interviews you into a written process model — trigger, steps, decision criteria, exception paths, approval authority — and rates every step Automate, Monitor, or Human. No setup, no dependencies, no network. | Ported, manifest validated. No interview run end to end here. |
+
+The four planned plugins are in, plus `know-blueprint`, added after the fact. See
+`dev/review/migration-plan.md` for the plan the first four arrived under and `dev/STATE.md` for
+where the work stands.
 
 **On accessibility output:** `know-qa-agent` annotates findings with WCAG success criteria. That
 is coverage, not conformance, and `know-qa-agent/reference/wcag-mapping.md` states why in detail.
 No plugin here may imply it produces a conformance evaluation, a VPAT, or an accessibility
 statement, and none may imply automated passes substitute for assistive-technology or
 keyboard-only testing by a person. This is the house rule the organization's own work depends on.
+
+**The same rule binds a plugin that rates work rather than performing it.** `know-blueprint` marks
+each step of a process Automate, Monitor, or Human, and an "Automate" mark on a step whose output
+is an accessibility determination is the house rule being broken from an unexpected direction — not
+a claim about an artifact, but a claim that no person needs to look at one. So: **a step whose
+output is an accessibility judgment is rated Human by default**, and a Blueprint that departs from
+that default records the departure and what the rating would otherwise have been. Finding a missing
+alt attribute is mechanical. Deciding whether the alt text is right, whether an image is
+decorative, whether the reading order makes sense, or whether an accessible name means anything to
+the person hearing it is judgment about human need, and no automated pass settles it. This
+generalizes: before adding a plugin here that assigns autonomy, trust, confidence, or risk levels
+to work, check whether its scale can express "no human needed" about an accessibility decision, and
+close that off at the default.
 
 ## Conventions (how every plugin here is shaped)
 

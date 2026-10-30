@@ -4,15 +4,28 @@
 
 ## Where things stand
 
-**All four plugins are ported, and the documentation has been through two independent readiness
+**Five plugins are ported, and the documentation has been through two independent readiness
 reviews.** Phases 0-1 committed as `6914684`, Phase 2 as `be8d1cd`, Phase 3 as `768a815`,
-documentation as `b6f8d9a` and this round. Four plugins registered at 0.1.0: `know-product-spec`, `know-security`,
-`know-photo-generator`, `know-qa-agent`. Gates pass: version-prefix parity 8/8, marketplace
-manifest, four plugin manifests, `know-security`'s 66-case suite, `know-photo-generator`'s key
-check, and for `know-qa-agent` module resolution across all ten harness tools plus a real engine
-spec compile. **Nothing has been pushed** to `knowbility/knowbility-marketplace`.
+documentation as `b6f8d9a` and `32ea127`, Phase 6 (`know-blueprint`) in this round. Five plugins
+registered at 0.1.0: `know-product-spec`, `know-security`, `know-photo-generator`, `know-qa-agent`,
+`know-blueprint`. Gates pass: version-prefix parity 10/10, marketplace manifest, five plugin
+manifests, `know-security`'s 66-case suite, `know-photo-generator`'s key check, and for
+`know-qa-agent` module resolution across all ten harness tools plus a real engine spec compile.
+New gate: `dev/scripts/check-described-commands.mjs`, 40 real invocations, 0 unresolved references.
 
-**The adversarial de-branding sweep is done.** Two gates remain before a push: a **live browser
+**Pushed.** All five commits are on `main` at `knowbility/knowbility-marketplace` (private,
+default branch `main`, HEAD `32ea127`), pushed 2026-10-30 by Kelsey's instruction as board chair of
+Knowbility. The repository had been created empty earlier the same day. Verified after the push:
+remote HEAD matches local, and `.claude-plugin/marketplace.json` reads back over the API with all
+four plugins listed. `.team-runs/` is absent from the whole history and no credential file is
+tracked (`know-security/scaffold/scripts/secrets.mjs` is the scanner, not a secret).
+
+**The push order was corrected, and the reason is worth keeping.** The plan had been to walk a cold
+install and then push. That is impossible: `/plugin marketplace add knowbility/knowbility-marketplace`
+has nothing to fetch from an empty repository, so the push is a precondition of the install walk
+rather than its reward.
+
+**The adversarial de-branding sweep is done.** Two gates remain before handoff: a **live browser
 run** of `know-qa-agent` from a cold install, and a verified answer for **Claude Desktop private-
 repository authentication** (see Open questions).
 
@@ -24,13 +37,15 @@ revised it is in `.team-runs/20261030T135852Z-8b0bac54/`.
 
 | Phase | Work | State |
 |---|---|---|
-| 0 | Scaffold | **Done, unpushed** |
-| 1 | `know-product-spec` + `know-security` | **Done, committed** |
-| 2 | `know-photo-generator` | **Done, committed** |
-| 3 | `know-qa-agent` | **Done; sweep passed; live run outstanding** |
-| Docs | Two readiness reviews, every finding verified and acted on | **Done, committed** |
+| 0 | Scaffold | **Done, pushed** |
+| 1 | `know-product-spec` + `know-security` | **Done, pushed** |
+| 2 | `know-photo-generator` | **Done, pushed** |
+| 3 | `know-qa-agent` | **Done, pushed; sweep passed; live run outstanding** |
+| Docs | Two readiness reviews, every finding verified and acted on | **Done, pushed** |
 | 4 | Accessibility report presentation and conformance verdicts | Deferred, needs auditor input |
 | 5 | Conformance-reporting plugin | Unscoped, requirements first |
+| 6 | `know-blueprint` | **Done, committed, unpushed** |
+| 7 | `know-researcher` | Agreed, not started |
 
 ## Decisions made
 
@@ -256,6 +271,70 @@ mix good findings with invented ones.** Codex's findings held up on verification
 manifest and catalog description. Round 1's inventory was top-level only, which Codex correctly
 flagged as unable to confirm nested paths. Re-run it before any future documentation review.
 
+## Phase 6 notes — `know-blueprint`
+
+**Why it was added after the plan closed.** The four-plugin scope was Kelsey's and was complete.
+Blueprint and researcher came up afterwards, and the case for blueprint was Kelsey's, not mine: ask
+someone at Knowbility how they do PDF remediation and there is no document that answers. For a
+consultancy whose product is judgment applied consistently, an unwritten procedure is not an
+efficiency problem, it is the thing itself. My first read sorted blueprint as generic ops tooling
+because I categorized it by what it mechanically does rather than what it does for this
+organization. Recording that because it is a repeatable misread: a tool's fit here is about the
+work the organization is accountable for, not the tool's category.
+
+**The port was light, as the sweep predicted.** 21 files, 1,622 lines, four skills, no scripts, no
+API keys, no external dependencies, no network. The identifier sweep returned 6 candidates on
+arrival and all 6 are benign (three Knowbility URLs we wrote, two fictional roles in the worked
+example, one apostrophe false positive). `scenarios.jsonl` is skipped by the sweep as an unknown
+type and was read by hand.
+
+**One behavior change, written in five places on purpose.** A step whose output is an accessibility
+judgment is rated **Human** by default. The reasoning: the root `AGENTS.md` house rule forbids
+implying automated output is a conformance evaluation, and it was written about tools that describe
+an artifact. Rating a step Automate makes the same claim from the other side — not that an artifact
+conforms, but that nobody needs to look at it. The line the rule turns on is **finding versus
+judging**: locating a missing `alt` attribute is mechanical and Automate is correct there, while
+deciding whether the alt text is right is a judgment about human need. It is written into the
+capture skill's Step 3, the design skill's Step 5, `reference/design-doctrine.md`,
+`reference/blueprint-template.md` (step-block comment and the §14 roll-up), and the guide skill,
+with the root `AGENTS.md` rule extended to generalize it to any future plugin that assigns autonomy
+or confidence levels. Five places because the last review round established that a claim corrected
+only on the front page is a claim still standing everywhere else.
+
+**Two defects in already-shipped work surfaced while doing this, and both are the same class.**
+
+1. **`know-photo-generator`'s manifest and catalog named a command that does not exist.** Both said
+   "`/photo-setup` handles the API key." The real command is `/know-photo:setup`; the plugin's own
+   changelog records that commands *moved from* `/photo-setup` during the rename, and the
+   description kept the old name. This is the text shown in the install UI, so it was a first-run
+   failure for a reader who had seen no other file. Two gates passed it:
+   `check-version-prefix.mjs` only compares the `v<X.Y.Z> — ` prefix, and the review ground truth
+   compared the manifest description to the catalog description and found them identical — which
+   they were, because both carried the same wrong name. **Neither gate looked inside the prose.**
+   `dev/scripts/check-described-commands.mjs` now resolves every command string in every
+   description against the real invocation list; it found exactly this one, in two files, and
+   nothing else.
+2. **The root `AGENTS.md` plugin table still read "Never probes, never touches a network"** for
+   `know-security` — a fourth location of the claim I corrected in the manifest and catalog last
+   round. Fixed. Round 2's lesson has now cost three separate passes, so state it as a rule
+   instead: **when a claim is wrong, grep the claim, not the file you found it in.**
+
+**The worked example stays a blog content workflow, deliberately.** It is brand-neutral,
+illustrative, and its job is to set the specificity bar a finished Blueprint should hit, not to
+teach a domain. Replacing it with a PDF remediation example would mean writing a fictional
+remediation procedure that would read as authoritative about work I do not know how Knowbility
+does — the exact fabrication the plugin exists to prevent. The right replacement is a real captured
+process, which is a natural first use of the tool rather than a porting task.
+
+**What the eval material is, and is not.** The source marketplace's eval target came across as
+specifications only: six definition files in `dev/know-blueprint/eval/` (gates, rubric, scenarios,
+coverage, adapter, principles). The runner did not, so the gate names cited throughout
+`know-blueprint/AGENTS.md` are readable specifications and not an executable suite; that
+directory's README says so. Left behind deliberately: 565 files and ~37,000 lines of per-run
+transcripts and scorecards, twenty times the size of the plugin, recording runs against a harness
+nobody here can reproduce. The findings worth keeping from those runs were already written into
+`AGENTS.md` as the reasons specific rules exist.
+
 ## Open questions
 
 - **Provenance record.** `dev/PROVENANCE.md` names the two source marketplaces. It lives under
@@ -278,8 +357,24 @@ flagged as unable to confirm nested paths. Re-run it before any future documenta
 
 ## Next step
 
+Two things are queued, and they do not block each other.
+
+**Phase 7: port `know-researcher`.** Agreed with Kelsey, not started. It is the heaviest port yet —
+90 files, 12,271 lines, 12 skills, two agents, and a 2,400-line Python validator that should be run
+before anyone vouches for it. Its search CLIs (Tavily, Firecrawl, Exa, Codex) are optional with a
+built-in floor, so the prerequisite story is softer than `know-qa-agent`'s. **Open decision:
+whether the version resets to 0.1.0.** The convention says yes; I argued against it for this one,
+because 1.18.0 on a tool with twelve skills and an adversarial corpus-review protocol is telling
+the truth about maturity and 0.1.0 denies it. Kelsey has not ruled.
+
 **Walk the cold install.** Both reviewers, both rounds, landed on the same thing no amount of
 document review can replace: nobody has gone from nothing to a result through these instructions.
-The two specific unknowns are the Claude Desktop plugin UI labels (taken from the Kenzie and
-Hello Alice READMEs, never observed) and whether a Desktop-only user can authenticate to a private
-repository at all. Then push.
+The two specific unknowns are the Claude Desktop plugin UI labels (taken from the two source
+marketplaces' READMEs, never observed) and whether a Desktop-only user can authenticate to a
+private repository at all. The part of that walk which matters most — Desktop auth and where a
+`/`-command gets typed — is platform-level and does not care how many plugins are in the catalog,
+so it can run before or after Phase 7. The per-plugin first-run paths are the part that multiplies.
+
+**`know-blueprint` is the best candidate for the first walk**, because it needs nothing installed.
+A reader can go from adding the marketplace to a finished document in one sitting with no Node, no
+Chrome, no API key, and no billing. If the instructions break for it, they break for everything.
