@@ -483,49 +483,68 @@ decision record to remove who decided makes the record false.
 No research project has been run end to end here. No live discovery call, no corpus reviewed. The
 plugin's README says so in its own "what hasn't been exercised here" section.
 
-## Open questions
+## Settled 2026-10-30
 
-- **Provenance record.** `dev/PROVENANCE.md` names the two source marketplaces. It lives under
-  `dev/`, so it never ships to a plugin user, but it does put source-organization names in the
-  repository. Needs Kelsey's confirmation that this is the right read of the de-branding
-  requirement.
-- **Claude Desktop private-repository authentication.** Raised by both reviewers in round 2 as the
-  most likely abandonment point. The README now gives a terminal self-check and `gh auth login` as
-  the fix, which closes it for anyone willing to open a terminal once. What is still unverified is
-  whether a Desktop-only user who never touches a terminal can install from a private repository at
-  all. This needs someone who has actually done it, not a documentation edit.
-- **Repo visibility.** Private today. Installing requires `knowbility` org read access plus git
-  credentials per installer. Whether this eventually goes public is undecided, and it affects how
-  much the `know-` prefix reads as a vendor prefix.
-- **Maintenance model.** Who owns these after handoff: Knowbility outright, a fork Kelsey keeps
-  syncing, or a seeded start they inherit later. Raised twice, including independently by the
-  planning review, and still open. It affects documentation depth.
-- **Attribution line** in the MIT header. Clearance to migrate is settled; what notice the license
-  carries is a separate drafting detail.
+Kelsey ruled on everything that was open except two items, which he delegated. Recorded here rather
+than deleted, because "we decided not to decide this" and "nobody ever asked" look identical six
+months later.
+
+- **Maintenance model: it does not matter.** Kelsey is on Knowbility's board and can support the
+  plugins either way. **The instruction that follows from it: the documentation is written to be
+  solid regardless of who maintains them.** So the depth question is closed in the direction of
+  more, not less — nothing gets trimmed on the assumption that the original author will be around
+  to answer questions. This was raised five times across the project; it is closed.
+- **Repository visibility: private.** Installing therefore requires `knowbility` org read access
+  plus git credentials per installer, which is what the README already documents. No change needed;
+  the open question is closed, and the `know-` prefix stays a legibility choice rather than a
+  public-namespace one.
+- **Provenance record: keep it, under `dev/`.** Delegated to me on maintainability grounds and
+  decided that way. Six plugins from two sources, two different version decisions, one plugin
+  carrying verbatim pre-fork history — without the table those answers live only in one person's
+  memory, which is the wrong place for a repository being handed to an organization. It never
+  reaches a plugin user's cache. `dev/PROVENANCE.md` is updated to six rows with current status and
+  now also carries the licensing reasoning.
+- **MIT attribution line: a single Knowbility copyright, no retained third-party notice.**
+  Delegated to me and decided. MIT requires its notice to travel with copies, so the question is
+  real for the four plugins that were MIT — but Kelsey holds the copyright on those four, and a
+  holder relicensing their own work is not a licensee retaining someone else's notice. The other
+  two were proprietary, so there was no MIT notice to retain. Adding a courtesy line would imply an
+  obligation that does not exist. The reasoning is written into `dev/PROVENANCE.md` so it is settled
+  once rather than re-litigated; it is a drafting judgment, not legal advice, and it rests on the
+  one fact Kelsey has confirmed.
+
+## Still open
+
+- **Claude Desktop private-repository authentication.** The only genuine unknown left, and it
+  belongs to the cold-install walk rather than to a documentation edit. The README gives a terminal
+  self-check and `gh auth login`, which closes it for anyone willing to open a terminal once. What
+  is unverified is whether a Desktop-only user who never touches a terminal can install from a
+  private repository at all. Now that visibility is settled as private, this is load-bearing: it is
+  the difference between "every installer needs a terminal once" and "every installer needs a
+  terminal once, and here is the sentence that tells them so."
+- **Skill-name prefix across four plugins.** Kelsey asked what the relevance is, which is the right
+  question. Recommendation on the table: amend convention 1 to say the command layer carries the
+  namespace, rather than renaming skills in four plugins. See the Phase 7 notes for the mechanics.
 
 ## Next step
 
-**Push the Phase 7 commit.** Everything before it is on `main`; this one is local.
+**Push `fc8cd0f` and this commit, then walk the cold install.** Nothing else blocks handoff.
 
-**Then walk the cold install.** Both readiness reviews, both rounds, landed on the same thing no
-amount of document review replaces: nobody has gone from nothing to a result through these
-instructions. Two specific unknowns remain, and both are platform-level rather than per-plugin —
-the Claude Desktop plugin UI labels (taken from the source marketplaces' READMEs, never observed)
-and whether a Desktop-only user can authenticate to a private repository at all. Six plugins in
-the catalog does not change either one.
+The walk is the last real gate. Both readiness reviews landed on the same thing no amount of
+document review replaces: nobody has gone from nothing to a result through these instructions. With
+visibility now settled as private, the specific thing it has to answer is whether a Desktop-only
+user can install from a private repository at all, or whether every installer needs a terminal once.
+The README currently says the latter is the fix; that sentence is unverified.
 
-`know-blueprint` is still the best candidate for the first walk: no Node, no Chrome, no key, no
-billing, and a finished document in one sitting. `know-researcher` is the second, and more
-informative about the long path — it also needs nothing installed, but a research project runs over
-days, which is where resumability and the `STATE.md` handoff either work or don't.
+Order within the walk: `know-blueprint` first (no Node, no Chrome, no key, no billing, finished
+document in one sitting — if the instructions break for it they break for everything), then
+`know-researcher` as the second, which tests the long path where resumability and the `STATE.md`
+handoff either work or don't.
 
-**One decision is open and is Kelsey's**, recorded under convention 1 in the root `AGENTS.md`:
-whether the skill-name layer gets the `know-` prefix. Four of six plugins currently carry skill
-names identical to their source plugins. Closing it means renaming skills across those four in one
-change; leaving it means amending convention 1 to say the command layer carries the namespace and
-the plugin-qualified form is relied on. Either is defensible. What is not defensible is the current
-state, where the convention as written says one thing and four plugins do another.
-
-The remaining open questions — the provenance file, repository visibility, the maintenance model
-(raised five times now, still unanswered), the MIT attribution line — are in **Open questions**
-above and none of them blocks a push or a walk.
+**Not blocking, whenever Kelsey wants them:** the skill-name prefix decision, and Phase 4 / Phase 5
+if they come back into scope. Phase 4 is per-criterion conformance presentation inside
+`know-qa-agent` and is deferred on purpose — it needs one of Knowbility's own auditors to look at
+real output first, because how auditors structure findings is knowable by asking and worse when
+guessed. Phase 5 is a separate conformance-reporting plugin, which has to merge manual and
+assistive-technology evidence that `know-qa-agent` cannot produce; it was never scoped and needs its
+own requirements pass before any of it gets built.
