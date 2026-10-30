@@ -568,29 +568,93 @@ for, and checking the machine closed both.
   the one piece of remaining work that is a project rather than a task, and it does not depend on
   the walk.
 
+## The cold-install walk — first run, 2026-10-30
+
+Run at Kelsey's instruction, before pushing, which bounded it: **only the five plugins on the
+remote were installable.** `know-researcher` is in three local commits, so its first-run path is
+still unwalked. Everything below is `know-blueprint`, chosen because it needs nothing installed.
+
+### What worked, verified rather than assumed
+
+| Step | Result |
+|---|---|
+| `claude plugin marketplace add knowbility/knowbility-marketplace` | **Works.** Cloned over HTTPS using the existing `osxkeychain` credential. "SSH not configured, cloning via HTTPS" is informational, not a warning. |
+| The marketplace appears in the catalog listing | **Yes**, as `knowbility`, source `knowbility/knowbility-marketplace` |
+| `claude plugin install know-blueprint@knowbility` | **Works.** Installed at user scope, reports enabled |
+| Files land correctly in the cache | **Yes** — `commands/know-blueprint/{capture,design,discover,guide}.md`, `skills/`, `reference/`, `templates/` all present |
+| The skill loads and executes | **Yes.** `know-blueprint:blueprint-guide` loaded clean and returned its real first line, "Someone has asked how Blueprint works or where to begin." |
+
+**This independently confirms the private-repository question is closed.** The repo is private, the
+add and install both succeeded, and nothing was done by hand beyond the two documented commands.
+
+### The one thing the walk could not settle
+
+**Whether the exact short command strings the README documents resolve when typed.** The README
+tells users to type `/know-blueprint:capture`. The commands exist on disk at
+`commands/know-blueprint/capture.md`, and a fresh session's own listing reports the invocations as
+`/know-blueprint:know-blueprint:capture` (plugin, then command namespace, then command) and
+`/know-blueprint:blueprint-capture` (plugin, then skill) — the shortened `/know-blueprint:capture`
+did not appear in that listing.
+
+It probably works, because dropping a redundant prefix is the normal affordance, and
+`dev/scripts/ground-truth.mjs` records the two-part form as the resolvable one. But "probably" is
+not verified, and this applies to the four plugins that ship a `commands/` directory:
+`know-security` (`/know-security:*`), `know-photo-generator` (`/know-photo:*`), `know-blueprint`
+(`/know-blueprint:*`), and `know-researcher` (`/know-research:*`). `know-product-spec` and
+`know-qa-agent` are unaffected — they ship no commands, so their colon-form skill names *are* the
+typed names, and those resolve.
+
+**Nothing was changed in the documentation on this.** Editing the README to a different form on
+unverified evidence risks replacing a string that works with one that does not. **This needs
+Kelsey to type one command in a normal interactive session** — `/know-blueprint:guide`, which is
+read-only and takes five seconds — and say whether it ran.
+
+### Why I could not test it myself, recorded so nobody repeats the attempt
+
+`claude -p "/some:command"` does **not** invoke a slash command. The string arrives as an ordinary
+user message and the model reasons about it, so two runs gave two contradictory answers about which
+forms exist — one session said `/know-blueprint:guide` was unavailable and suggested
+`/blueprint:guide`; the next said the reverse. Neither was reporting; both were guessing. Discard
+both.
+
+Separately, the first skill-execution attempts reported as failures with "no error detail," which
+looked like the plugin being broken. It was not. Non-interactive mode gates the `Skill` tool behind
+a permission prompt that cannot be answered, and the model surfaced the prompt title
+(`Execute skill: know-blueprint:blueprint-guide`) as an error string. With `--allowedTools Skill`
+the same call succeeded immediately. **A tool failure in `-p` mode is a permission gate until
+proven otherwise.**
+
+### Left installed
+
+The `knowbility` marketplace is now added on this machine and `know-blueprint@knowbility` is
+installed and enabled, at user scope. Left in place deliberately — Kelsey wants these installed —
+but it does mean this machine is no longer a cold environment for a second walk. The next walk of
+`know-researcher`, after the push, starts from a machine that already has the marketplace added,
+which is the normal state for a returning user and a reasonable thing to test.
+
 ## Next step
 
-**Push the three commits, then walk the cold install.** Nothing is blocked and nothing is waiting on
-Kelsey.
+**One thing needs Kelsey: type `/know-blueprint:guide` in a normal session and say whether it ran.**
+It is read-only and takes five seconds. It settles whether the README's command strings are right
+for four of the six plugins, and it is the only question the cold-install walk could not answer
+itself.
 
-The walk is the last gate on the migration itself. Both readiness reviews landed on the same thing
-no amount of document review replaces: nobody has gone from nothing to a result through these
-instructions. It is no longer about whether a private-repo install works — that is answered — but
-about whether the written sequence is followable and whether each plugin's first-run path produces
-what the README says it will. Order: `know-blueprint` first (nothing installed, finished document in
-one sitting; if the instructions break for it they break for everything), then `know-researcher` for
-the long path where resumability and the `STATE.md` handoff either work or don't.
+Everything else about the install path is verified: adding a private marketplace works, installing
+works, the files land, and the skill loads and runs its real content.
 
-**The walk is also the gate on Phase 4**, which needs real output in front of one of Knowbility's
-auditors before any of it can be designed.
+**Then push the three local commits**, which also makes `know-researcher` installable so its own
+first-run path can be walked. That walk matters more than `know-blueprint`'s did, because it is the
+long one — a research project runs over days, and resumability and the `STATE.md` handoff either
+work or don't.
 
-**Phase 5 does not depend on the walk** and is the one piece of remaining work that is a project
-rather than a task. It needs a requirements pass before anything is built: what document, to which
-standard, for whose signature, carrying what evidence. That conversation can happen whenever Kelsey
-wants it.
+**Then Phase 4 becomes possible**: it needs real output from a live run in front of one of
+Knowbility's auditors before any of it can be designed.
 
-**One housekeeping item worth surfacing once.** There are two Knowbility marketplace repositories:
-`knowbility/knowbility-marketplace` (what we built, everything is here) and
-`knowbility/knowbility-plugin-marketplace` (private, created 2026-08-14, 2 KB — effectively empty).
-Two repos with near-identical names is a way for someone to add the wrong marketplace. Kelsey's call
-whether to delete the empty one, archive it, or leave it; no action taken.
+**Phase 5 depends on nothing** and is the one remaining piece that is a project rather than a task.
+It needs a requirements pass first: what document, to which standard, for whose signature, carrying
+what evidence.
+
+**Still unaddressed, Kelsey's call:** two Knowbility marketplace repositories exist —
+`knowbility/knowbility-marketplace` (this one, everything is here) and
+`knowbility/knowbility-plugin-marketplace` (private, created 2026-08-14, 2 KB, effectively empty).
+Near-identical names are a way for someone to add the wrong one.
