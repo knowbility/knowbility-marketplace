@@ -13,12 +13,16 @@ manifests, `know-security`'s 66-case suite, `know-photo-generator`'s key check, 
 `know-qa-agent` module resolution across all ten harness tools plus a real engine spec compile.
 New gate: `dev/scripts/check-described-commands.mjs`, 40 real invocations, 0 unresolved references.
 
-**Pushed.** All five commits are on `main` at `knowbility/knowbility-marketplace` (private,
-default branch `main`, HEAD `32ea127`), pushed 2026-10-30 by Kelsey's instruction as board chair of
-Knowbility. The repository had been created empty earlier the same day. Verified after the push:
+**Pushed.** All six commits are on `main` at `knowbility/knowbility-marketplace` (private,
+default branch `main`, HEAD `ced4316`), pushed 2026-10-30 by Kelsey's instruction as board chair of
+Knowbility. The repository had been created empty earlier the same day. The first five went up
+together; `ced4316` (Phase 6) followed on its own once he gave the word. Verified after each push:
 remote HEAD matches local, and `.claude-plugin/marketplace.json` reads back over the API with all
-four plugins listed. `.team-runs/` is absent from the whole history and no credential file is
-tracked (`know-security/scaffold/scripts/secrets.mjs` is the scanner, not a secret).
+five plugins listed and each `source` path resolving to a directory that exists on the remote. The
+`know-photo-generator` description fix is confirmed on the remote too — the served manifest now
+names `/know-photo:setup` and nothing else. `.team-runs/` is absent from the whole history
+(rechecked before the second push) and no credential file is tracked
+(`know-security/scaffold/scripts/secrets.mjs` is the scanner, not a secret).
 
 **The push order was corrected, and the reason is worth keeping.** The plan had been to walk a cold
 install and then push. That is impossible: `/plugin marketplace add knowbility/knowbility-marketplace`
@@ -44,7 +48,7 @@ revised it is in `.team-runs/20261030T135852Z-8b0bac54/`.
 | Docs | Two readiness reviews, every finding verified and acted on | **Done, pushed** |
 | 4 | Accessibility report presentation and conformance verdicts | Deferred, needs auditor input |
 | 5 | Conformance-reporting plugin | Unscoped, requirements first |
-| 6 | `know-blueprint` | **Done, committed, unpushed** |
+| 6 | `know-blueprint` | **Done, pushed** |
 | 7 | `know-researcher` | Agreed, not started |
 
 ## Decisions made
