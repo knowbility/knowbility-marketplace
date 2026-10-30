@@ -1,0 +1,377 @@
+# Candidate identifier digest
+
+Machine-extracted from all 4 plugins. 355 candidate lines from 66 files, out of 148 files total.
+
+## The extraction patterns used
+
+- `email`: `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`
+- `url`: `https?://[^\s)\"'`<>]+`
+- `host`: `\b[a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+){1,}\.(?:com|net|org|io|dev|co|ai|app|cloud)\b`
+- `digits7plus`: `\b\d{7,}\b`
+- `hex7to40`: `\b[0-9a-f]{7,40}\b`
+- `uuid`: `\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b`
+- `ticketkey`: `\b[A-Z]{2,6}-\d{2,6}\b`
+- `keyshaped`: `\b(?:sk|pk|gho|ghp|ghs|AIza|xox[bapr])[-_A-Za-z0-9]{8,}\b`
+- `capnoun`: `\b(?:[A-Z][a-z]{2,}\s){1,2}(?:Inc|LLC|Ltd|Corp|Creative|Alice|Labs|Group|Board)\b`
+- `personish`: `\b(?:owner|author|assignee|reporter|confirmed with|by)\s*[=:]?\s*[A-Z][a-z]+\b`
+- `abspath`: `/Users/[A-Za-z0-9._-]+`
+- `slackchan`: `#[a-z][a-z0-9-]{2,}`
+- `customfield`: `customfield_\d+`
+
+## Candidates
+
+- `know-product-spec/.claude-plugin/plugin.json:7` [url] — "url": "https://github.com/knowbility"
+- `know-product-spec/.claude-plugin/plugin.json:9` [url] — "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-product-spec",
+- `know-product-spec/.claude-plugin/plugin.json:10` [url] — "repository": "https://github.com/knowbility/knowbility-marketplace",
+- `know-product-spec/README.md:114` [url] — Part of the [Knowbility marketplace](https://github.com/knowbility/knowbility-marketplace).
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:8` [slackchan] — :root { --ink:#1a1a1a; --muted:#666; --line:#ddd; --bg:#fff; --ok:#0a7d5a; --warn:#8a5a00; --stop:#a33; --chip:#f4f4f4; }
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:10` [slackchan] — :root { --ink:#eee; --muted:#aaa; --line:#3a3a3a; --bg:#151515; --ok:#4fd1a5; --warn:#e0a44a; --stop:#f08a8a; --chip:#242424; }
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:51` [personish] — <div class="meta">Eastside · posted by Priya</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:62` [personish] — <div class="meta">Eastside · posted by Priya</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:83` [personish] — <div class="meta">Westside · posted by Priya · claimed by Marcus</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:98` [personish] — <div class="meta">Westside · posted by Priya · claimed by Marcus</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:113` [personish] — <div class="meta">Eastside · posted by Joss · covered by Marcus</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:123` [personish] — <div class="meta">Westside · overnight · posted by Ade</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:136` [personish] — <div class="meta">Eastside &middot; posted by Priya</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:137` [personish] — <span class="label">Withdrawn by Priya</span>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:146` [personish] — <div class="meta">Eastside · posted by Marcus</div>
+- `know-product-spec/reference/exemplar/fixtures/shift-swap-board.html:173` [personish] — <div class="meta">Eastside · posted by Priya</div>
+- `know-product-spec/reference/exemplar/weak.md:35` [personish] — This serves the clinic's staffing-reliability goal: a desk covered every open hour without paying agency rates for last-minute cover. The minimal increment is a board where requests are posted, claimed, and approved, with the eligibility ch
+- `know-product-spec/tools/prd-lint.mjs:216` [personish] — const byCheck = new Map();
+- `know-product-spec/tools/prd-lint.mjs:218` [personish] — if (!byCheck.has(check)) byCheck.set(check, []);
+- `know-product-spec/tools/prd-lint.mjs:219` [personish] — byCheck.get(check).push(detail);
+- `know-product-spec/tools/prd-lint.mjs:232` [personish] — if (byCheck.has(check)) {
+- `know-product-spec/tools/prd-lint.mjs:233` [personish] — console.log(`\n${check}  (${byCheck.get(check).length})`);
+- `know-product-spec/tools/prd-lint.mjs:234` [personish] — for (const d of byCheck.get(check)) console.log(`  - ${d}`);
+- `know-product-spec/tools/prd-lint.mjs:244` [personish] — console.log(`\n${fresh.length} NEW across ${byCheck.size} checks${tail}.`);
+- `know-qa-agent/.claude-plugin/plugin.json:7` [url] — "url": "https://github.com/knowbility"
+- `know-qa-agent/.claude-plugin/plugin.json:30` [url] — "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-qa-agent",
+- `know-qa-agent/.claude-plugin/plugin.json:31` [url] — "repository": "https://github.com/knowbility/knowbility-marketplace",
+- `know-qa-agent/README.md:66` [url] — /know-qa:gen profile --from http://localhost:3000/profile             # by exploring the live page
+- `know-qa-agent/README.md:81` [url] — /know-qa:run --url http://localhost:3000 "Test that search handles empty queries gracefully"
+- `know-qa-agent/README.md:89` [url] — /know-qa:check --url http://localhost:3000 --phase 3
+- `know-qa-agent/README.md:97` [host,url] — /know-qa:monitor --project . --url https://staging.my-app.com --tag smoke --interval 30
+- `know-qa-agent/README.md:100` [ticketkey] — Recurring smoke runs against a live URL. It keeps a last-known-good baseline per scenario, so the alert signal is *regressions* — things that worked and now don't — rather than noise. It checks the findings registry every run, so a known, a
+- `know-qa-agent/README.md:127` [host,url] — /know-qa:pair --project . --url https://staging.my-app.com
+- `know-qa-agent/README.md:160` [email] — "jdoe": { "display": "Jane Doe", "notify": "jane@example.com" }
+- `know-qa-agent/README.md:201` [slackchan] — "target": "#qa-web",
+- `know-qa-agent/README.md:280` [url] — Part of the [Knowbility marketplace](https://github.com/knowbility/knowbility-marketplace).
+- `know-qa-agent/agents/qa-tester.md:376` [url] — Both accept `--cdp http://localhost:9222` instead of `--url` to attach to an already-open (paired/authenticated) window, and `--storage`/`--profile` for saved sessions. Output lands in `.know-qa/runs/contrast-{name}/` and `.know-qa/runs/axe
+- `know-qa-agent/agents/qa-tester.md:556` [ticketkey] — ### 1. Validation Boundary Testing (FORM-01)
+- `know-qa-agent/agents/qa-tester.md:567` [ticketkey] — ### 2. Error Message Quality (FORM-02)
+- `know-qa-agent/agents/qa-tester.md:577` [ticketkey] — ### 3. Submission States (FORM-03)
+- `know-qa-agent/agents/qa-tester.md:586` [ticketkey] — ### 4. Autofill & Field Types (FORM-04)
+- `know-qa-agent/agents/qa-tester.md:593` [ticketkey] — ### 5. Multi-Step Forms (FORM-05)
+- `know-qa-agent/agents/qa-tester.md:616` [ticketkey] — ### 1. Route Change Verification (SPA-01)
+- `know-qa-agent/agents/qa-tester.md:625` [ticketkey] — ### 2. Browser History (SPA-02)
+- `know-qa-agent/agents/qa-tester.md:634` [ticketkey] — ### 3. State Persistence (SPA-03)
+- `know-qa-agent/agents/qa-tester.md:643` [ticketkey] — ### 4. Hydration Mismatches (SPA-04)
+- `know-qa-agent/agents/qa-tester.md:670` [ticketkey] — ### 1. API Error Handling (ERR-01)
+- `know-qa-agent/agents/qa-tester.md:678` [ticketkey] — ### 2. Error Message Quality (ERR-02)
+- `know-qa-agent/agents/qa-tester.md:687` [ticketkey] — ### 3. Recovery Paths (ERR-03)
+- `know-qa-agent/agents/qa-tester.md:842` [ticketkey] — #### Mockup Comparison (DESIGN-01)
+- `know-qa-agent/agents/qa-tester.md:875` [slackchan] — - Background color slightly off (e.g., #f5f5f5 vs #fafafa) — color category, use eval to read actual computed background-color
+- `know-qa-agent/agents/qa-tester.md:878` [ticketkey] — #### Typography Verification (DESIGN-02)
+- `know-qa-agent/agents/qa-tester.md:937` [ticketkey] — #### Image & Media Quality (DESIGN-03)
+- `know-qa-agent/agents/qa-tester.md:995` [ticketkey] — #### Color & Theme Consistency (DESIGN-04)
+- `know-qa-agent/agents/qa-tester.md:1025` [ticketkey] — 3. If no expected values exist, record the token list for cross-page comparison (see DESIGN-05 below).
+- `know-qa-agent/agents/qa-tester.md:1106` [ticketkey] — #### Cross-Page Consistency (DESIGN-05)
+- `know-qa-agent/agents/qa-tester.md:1112` [ticketkey] — 1. On each page in the spec, read CSS custom properties using the token reading probe from DESIGN-04 step 1.
+- `know-qa-agent/agents/qa-tester.md:1163` [ticketkey] — Present design verification findings grouped by confidence level, consistent with the existing accessibility findings format. Use the "live page shows X vs reference shows Y" format for mockup comparison findings (DESIGN-01).
+- `know-qa-agent/agents/qa-tester.md:1192` [ticketkey] — #### State Existence (STATE-01)
+- `know-qa-agent/agents/qa-tester.md:1214` [personish] — bySelector: selectors.filter(s => document.querySelector(s)),
+- `know-qa-agent/agents/qa-tester.md:1240` [ticketkey] — - `playwright-cli route "*/api/*" --status 500 --body "{\"error\":\"Internal Server Error\"}" --content-type "application/json"` (uses existing error simulation pattern from Phase 3 ERR-01)
+- `know-qa-agent/agents/qa-tester.md:1287` [ticketkey] — #### Interaction State Matrix (STATE-02)
+- `know-qa-agent/agents/qa-tester.md:1289` [ticketkey] — Systematically sweep each interactive component through its full state matrix. This extends the DESIGN-04 hover/focus verification pattern to eight states per component.
+- `know-qa-agent/agents/qa-tester.md:1309` [ticketkey] — b. **Hover**: Trigger hover via `playwright-cli hover <element-ref>`, then **immediately** eval the same properties (per D-05, extending DESIGN-04 hover-then-eval). Compare to default — if all properties are identical, the element has no vi
+- `know-qa-agent/agents/qa-tester.md:1333` [ticketkey] — f. **Loading/Error/Success** (per D-07): If the component has loading, error, or success states exposed via the application flow, navigate to them. For error states, use `playwright-cli route` to intercept the component's API endpoint with 
+- `know-qa-agent/agents/qa-tester.md:1339` [ticketkey] — #### Interactive Feedback Quality (STATE-03)
+- `know-qa-agent/agents/qa-tester.md:1430` [ticketkey] — #### Animation & Transition Quality (STATE-04)
+- `know-qa-agent/agents/qa-tester.md:1432` [ticketkey] — Check CSS transition and animation quality on interactive elements. This complements the existing reduced-motion checks in Structured Accessibility (which verify animation suppression when `prefers-reduced-motion: reduce` is set) — STATE-04
+- `know-qa-agent/agents/qa-tester.md:1476` [ticketkey] — 5. **Loading animation presence** (per D-15): During async operations (when a loading state is triggered via STATE-01 route delay), take a screenshot. The binary check: is a spinner, skeleton, or progress indicator visible, or is the screen
+- `know-qa-agent/agents/qa-tester.md:1512` [ticketkey] — **Environment note:** DOM content injection (LAYOUT-03) mutates live page state. Use only in test environments — never against production data. Reload the page after all LAYOUT-03 checks before proceeding.
+- `know-qa-agent/agents/qa-tester.md:1514` [ticketkey] — #### Spacing & Alignment Checks (LAYOUT-01)
+- `know-qa-agent/agents/qa-tester.md:1516` [ticketkey] — Verify spacing consistency, element alignment, and content clipping WITHOUT a design reference — infer correctness from internal consistency (sibling comparison, padding symmetry). This is distinct from DESIGN-01 (which compares to a refere
+- `know-qa-agent/agents/qa-tester.md:1613` [ticketkey] — 4. **Content clipping** (per D-05): Run `playwright-cli eval` to check `scrollWidth > clientWidth` or `scrollHeight > clientHeight` on ALL visible elements (not just text elements as in DESIGN-02). Filter with `el.offsetParent !== null` to 
+- `know-qa-agent/agents/qa-tester.md:1639` [ticketkey] — #### Cross-Page Structural Consistency (LAYOUT-02)
+- `know-qa-agent/agents/qa-tester.md:1641` [ticketkey] — Verify that shared page regions (header, navigation, footer) have consistent DOM structure and link content across all pages in the spec. This complements DESIGN-05 (which compares CSS computed style values across pages) — LAYOUT-02 compare
+- `know-qa-agent/agents/qa-tester.md:1697` [ticketkey] — #### Realistic-Data Overflow Testing (LAYOUT-03)
+- `know-qa-agent/agents/qa-tester.md:1725` [email,host] — | `firstname.lastname+tag@very-long-subdomain.example.com` | Email/form field overflow | Form inputs, profile displays, email columns |
+- `know-qa-agent/agents/qa-tester.md:1741` [ticketkey] — 3. **Check overflow after injection** (per D-16): After each injection, run the `scrollWidth > clientWidth` or `scrollHeight > clientHeight` check on the injected element and its container. Reuses the DESIGN-02 overflow detection mechanism.
+- `know-qa-agent/agents/qa-tester.md:1766` [ticketkey] — 6. **Page reload after all checks** (mandatory): After all LAYOUT-03 injection checks on a page are complete, reload the page with `playwright-cli navigate [same url]` to restore the original DOM state. This prevents mutated content from pr
+- `know-qa-agent/agents/qa-tester.md:1771` [digits7plus,hex7to40] — playwright-cli route "*/api/products*" --body '[{"name":"Donaudampfschifffahrtsgesellschaft Produktionsprogramm","price":1234567890.99}]' --content-type "application/json"
+- `know-qa-agent/agents/qa-tester.md:1778` [ticketkey] — #### Placeholder & Draft Content Detection (LAYOUT-04)
+- `know-qa-agent/agents/qa-tester.md:1793` [email] — { pattern: /\\btest@test\\.com\\b/i, label: 'test@test.com placeholder email' },
+- `know-qa-agent/agents/qa-tester.md:1896` [ticketkey] — #### Core Web Vitals (PERF-01)
+- `know-qa-agent/agents/qa-tester.md:1908` [ticketkey] — **Browser support note:** `largest-contentful-paint` and `layout-shift` PerformanceObserver types are not supported in Firefox. PERF-01 CLS and LCP run in Chromium and WebKit only. INP is measurable in Firefox 144+ via `event` type. If an o
+- `know-qa-agent/agents/qa-tester.md:1999` [ticketkey] — #### Cross-Browser Rendering Comparison (PERF-02)
+- `know-qa-agent/agents/qa-tester.md:2003` [ticketkey] — **When this runs:** Only when the agent is executing a multi-engine run (multiple engines listed in spec's `## Browsers` section). During a single-engine run, skip PERF-02 entirely and note "Cross-browser comparison requires multi-engine ru
+- `know-qa-agent/agents/qa-tester.md:2035` [ticketkey] — 1. **Select target elements for comparison.** Query for key structural elements — use the same element set you'd evaluate for DESIGN-05 cross-page consistency:
+- `know-qa-agent/agents/qa-tester.md:2089` [ticketkey] — #### Breakpoint Sweep (PERF-03)
+- `know-qa-agent/agents/qa-tester.md:2186` [ticketkey] — #### UX Anti-Pattern Detection (PERF-04)
+- `know-qa-agent/agents/qa-tester.md:2266` [slackchan] — const mainSelectors = ['[role=\"main\"]', 'main', '#main', '#content', '.main-content', 'article'];
+- `know-qa-agent/agents/qa-tester.md:2371` [ticketkey] — For the comparison methodology, see the Mockup Comparison (DESIGN-01) procedure in the Design Verification section above.
+- `know-qa-agent/docs/HARNESS-GUIDE.md:146` [url] — Common flags: `--name` sets the output folder, `--wait` adds settle time in ms, `--cdp` overrides the debugging endpoint (default `http://localhost:9222`).
+- `know-qa-agent/docs/ORCHESTRATION.md:22` [keyshaped] — | `/know-qa:help` | List/explain the skills and all their options | No | `[skill-name]` |
+- `know-qa-agent/docs/ORCHESTRATION.md:165` [url] — This is a web application. After completing each phase, run `/know-qa:check --url http://localhost:3000`
+- `know-qa-agent/docs/ORCHESTRATION.md:299` [url] — /know-qa:gen user-profile --from http://localhost:3000/profile "Explore the user profile page"
+- `know-qa-agent/docs/ORCHESTRATION.md:347` [host,url] — /know-qa:run --project ~/Projects/my-app --spec login --url https://staging.example.com
+- `know-qa-agent/docs/ORCHESTRATION.md:356` [url] — /know-qa:run --url http://localhost:3000 "Test that the homepage loads without console errors"
+- `know-qa-agent/docs/ORCHESTRATION.md:388` [url] — /know-qa:check --url http://localhost:3000
+- `know-qa-agent/docs/ORCHESTRATION.md:391` [url] — /know-qa:check --url http://localhost:3000 --phase 3
+- `know-qa-agent/docs/ORCHESTRATION.md:397` [personish] — - Lists findings grouped by Definite / Likely / Possible
+- `know-qa-agent/docs/ORCHESTRATION.md:429` [host,url] — /know-qa:monitor --project ~/Projects/my-app --url https://my-app.example.com
+- `know-qa-agent/docs/ORCHESTRATION.md:432` [host,url] — /know-qa:monitor --project ~/Projects/my-app --url https://staging.example.com --tag critical --interval 10
+- `know-qa-agent/docs/ORCHESTRATION.md:435` [host,url] — /know-qa:monitor --project ~/Projects/my-app --url https://my-app.example.com --runs 12
+- `know-qa-agent/docs/ORCHESTRATION.md:564` [keyshaped] — | `[skill-name]` | No | — | A skill to drill into (`run` or `qa:run`). Omit to list every skill. |
+- `know-qa-agent/docs/ORCHESTRATION.md:704` [url] — /know-qa:run --project ~/Projects/my-app --spec smoke-test --url http://localhost:3000
+- `know-qa-agent/engine/lib/compile.mjs:39` [personish] — const byKey = new Map(registry.findings.map((finding) => [finding.dedup_key, finding]));
+- `know-qa-agent/engine/lib/compile.mjs:49` [personish] — let finding = byKey.get(key);
+- `know-qa-agent/engine/lib/compile.mjs:60` [personish] — byKey.set(key, finding);
+- `know-qa-agent/engine/lib/manifest.mjs:34` [personish] — const byId = new Map(scenarios.map((scenario) => [scenario.id, scenario]));
+- `know-qa-agent/engine/lib/manifest.mjs:41` [personish] — for (const dependency of byId.get(id)?.depends_on ?? []) visit(dependency, [...path, id]);
+- `know-qa-agent/engine/lib/manifest.mjs:85` [personish] — const byName = new Map();
+- `know-qa-agent/engine/lib/manifest.mjs:88` [personish] — const matches = byName.get(scenario.name) ?? [];
+- `know-qa-agent/engine/lib/manifest.mjs:90` [personish] — byName.set(scenario.name, matches);
+- `know-qa-agent/engine/lib/manifest.mjs:96` [personish] — const globalMatches = byName.get(name) ?? [];
+- `know-qa-agent/engine/lib/manifest.mjs:120` [personish] — const byId = new Map(all.map((scenario) => [scenario.id, scenario]));
+- `know-qa-agent/engine/lib/manifest.mjs:126` [personish] — selected.push(byId.get(dependencyId));
+- `know-qa-agent/engine/lib/manifest.mjs:128` [personish] — includeDependencies(byId.get(dependencyId));
+- `know-qa-agent/engine/schemas/result.schema.json:2` [url] — "$schema": "https://json-schema.org/draft/2020-12/schema",
+- `know-qa-agent/engine/schemas/result.schema.json:3` [url] — "$id": "https://knowbility.org/know-qa-agent/result.schema.json",
+- `know-qa-agent/engine/schemas/run-manifest.schema.json:2` [url] — "$schema": "https://json-schema.org/draft/2020-12/schema",
+- `know-qa-agent/engine/schemas/run-manifest.schema.json:3` [url] — "$id": "https://knowbility.org/know-qa-agent/run-manifest.schema.json",
+- `know-qa-agent/examples/SPEC-FORMAT.md:14` [url] — http://localhost:3000
+- `know-qa-agent/examples/SPEC-FORMAT.md:18` [email] — - logged-in user (use test@example.com / testpass123)
+- `know-qa-agent/examples/SPEC-FORMAT.md:19` [email] — - admin user (use admin@example.com / adminpass123)
+- `know-qa-agent/examples/SPEC-FORMAT.md:31` [url] — base_url: http://localhost:3000
+- `know-qa-agent/examples/SPEC-FORMAT.md:32` [email] — credentials: test@example.com / localpass
+- `know-qa-agent/examples/SPEC-FORMAT.md:37` [host,url] — base_url: https://staging.example.com
+- `know-qa-agent/examples/SPEC-FORMAT.md:38` [email,host] — credentials: test@staging.example.com / $STAGING_PASSWORD
+- `know-qa-agent/examples/SPEC-FORMAT.md:112` [url] — http://localhost:3000
+- `know-qa-agent/examples/SPEC-FORMAT.md:118` [email] — 2. Enter valid credentials (test@example.com / password123)
+- `know-qa-agent/examples/SPEC-FORMAT.md:172` [url] — base_url: http://localhost:3000
+- `know-qa-agent/examples/SPEC-FORMAT.md:173` [email] — credentials: test@example.com / devpassword
+- `know-qa-agent/examples/SPEC-FORMAT.md:178` [host,url] — base_url: https://staging.example.com
+- `know-qa-agent/examples/SPEC-FORMAT.md:179` [email,host] — credentials: qauser@staging.example.com / $STAGING_PASSWORD
+- `know-qa-agent/examples/SPEC-FORMAT.md:186` [url] — base_url: https://example.com
+- `know-qa-agent/examples/SPEC-FORMAT.md:187` [email] — credentials: monitoring@example.com / $PROD_MONITOR_PASSWORD
+- `know-qa-agent/examples/SPEC-FORMAT.md:465` [email] — email: test@example.com
+- `know-qa-agent/examples/SPEC-FORMAT.md:470` [email] — email: expired@example.com
+- `know-qa-agent/examples/SPEC-FORMAT.md:475` [email] — email: locked@example.com
+- `know-qa-agent/examples/consistency-diff-example.md:37` [ticketkey] — Filed as WEB-4288. Visually it is Baskerville 32/400 like the other H1s, but it is the wrong element and the page has no H1.
+- `know-qa-agent/examples/jira-ticket-guide-example.md:11` [ticketkey] — **Why this exists:** Board 42 in project **WEB (Web Platform)** is the board engineers track for the current release. WEB's release-triage workflow treats a finding as in front of the team only once it is **on the active board** rather than
+- `know-qa-agent/examples/jira-ticket-guide-example.md:13` [ticketkey] — **The whole thing in one line:** File into **WEB** as a **Bug**, put it in the **active sprint**, set **Epic Link = WEB-4190**, add label **`App`**. That replicates a confirmed on-board ticket and is what makes it appear where WEB's release
+- `know-qa-agent/examples/jira-ticket-guide-example.md:33` [ticketkey] — ## 2. What actually puts a ticket on the board (verified against WEB-4212)
+- `know-qa-agent/examples/jira-ticket-guide-example.md:35` [ticketkey] — WEB-4212 is on the board. Its config tells us what matters:
+- `know-qa-agent/examples/jira-ticket-guide-example.md:37` [ticketkey] — | Field | Value on WEB-4212 | Verdict |
+- `know-qa-agent/examples/jira-ticket-guide-example.md:40` [customfield] — | **Sprint** (`customfield_10020`) | active sprint, `boardId 42` | **the gate, in WEB** |
+- `know-qa-agent/examples/jira-ticket-guide-example.md:41` [customfield,ticketkey] — | **Epic Link** (`customfield_10014`) | WEB-4190 "Checkout Rework Feedback" | match it (groups the batch) |
+- `know-qa-agent/examples/jira-ticket-guide-example.md:45` [customfield] — | Severity (`customfield_10032`) | empty | optional |
+- `know-qa-agent/examples/jira-ticket-guide-example.md:46` [customfield] — | Environment (`customfield_10415`) | empty | optional |
+- `know-qa-agent/examples/jira-ticket-guide-example.md:54` [ticketkey] — 5. **Epic Link = `WEB-4190`** (Checkout Rework Feedback)
+- `know-qa-agent/examples/jira-ticket-guide-example.md:59` [ticketkey] — **Optional, helps triage but is NOT a gate** (all blank on WEB-4212, so skip if it slows you down): Priority, Severity (Critical/High/Medium/Low), Environment (Prod/Stg/Dev), Component (whatever your project's component list holds). Setting
+- `know-qa-agent/examples/jira-ticket-guide-example.md:65` [customfield,ticketkey] — 1. `getJiraIssue` on any recent on-board WEB bug (e.g. WEB-4212), fields `["customfield_10020"]`.
+- `know-qa-agent/examples/jira-ticket-guide-example.md:66` [customfield] — 2. In the returned `customfield_10020` array, find the entry where `state == "active"` and `boardId == 42`.
+- `know-qa-agent/examples/jira-ticket-guide-example.md:119` [ticketkey] — This replicates WEB-4212. Read the active sprint id first (§2.1) and substitute it.
+- `know-qa-agent/examples/jira-ticket-guide-example.md:130` [customfield] — customfield_10020: 0,               // Sprint id — REPLACE with the live active sprint (see 2.1)
+- `know-qa-agent/examples/jira-ticket-guide-example.md:131` [customfield,ticketkey] — customfield_10014: "WEB-4190",      // Epic Link: Checkout Rework Feedback
+- `know-qa-agent/examples/jira-ticket-guide-example.md:135` [customfield] — // customfield_10032: { value: "High" },  // Severity
+- `know-qa-agent/examples/jira-ticket-guide-example.md:136` [customfield] — // customfield_10415: { value: "Stg" }    // Environment
+- `know-qa-agent/examples/jira-ticket-guide-example.md:142` [customfield] — - Sprint = `customfield_10020` (value = sprint **id**, integer)
+- `know-qa-agent/examples/jira-ticket-guide-example.md:143` [customfield,ticketkey] — - Epic Link = `customfield_10014` (value = epic key, e.g. `"WEB-4190"`)
+- `know-qa-agent/examples/jira-ticket-guide-example.md:144` [customfield] — - Severity = `customfield_10032` ({value: Critical/High/Medium/Low})
+- `know-qa-agent/examples/jira-ticket-guide-example.md:145` [customfield] — - Environment = `customfield_10415` ({value: Prod/Stg/Dev})
+- `know-qa-agent/examples/jira-ticket-guide-example.md:158` [ticketkey] — - [ ] **Epic Link = WEB-4190**
+- `know-qa-agent/examples/qa-session-state-template.md:37` [url] — 2. Check the window is alive: `curl -s http://localhost:9222/json | grep '"url"' | grep -v devtools`. If dead, `bash open-browser.sh "<url>"`. If a run redirects to a login page / 401, the session expired: `node login.mjs --url "<url>"`.
+- `know-qa-agent/examples/sample-login-spec.md:9` [url] — <http://localhost:3000>
+- `know-qa-agent/examples/sample-login-spec.md:14` [email] — - user with valid credentials: test@example.com / password123
+- `know-qa-agent/examples/sample-login-spec.md:15` [email] — - user with invalid credentials: wrong@example.com / wrongpass
+- `know-qa-agent/examples/sample-login-spec.md:26` [url] — base_url: <http://localhost:3000>
+- `know-qa-agent/examples/sample-login-spec.md:27` [email] — credentials: test@example.com / password123
+- `know-qa-agent/examples/sample-login-spec.md:33` [host,url] — base_url: <https://staging.example.com>
+- `know-qa-agent/examples/sample-login-spec.md:34` [email,host] — credentials: test@staging.example.com / $STAGING_PASSWORD
+- `know-qa-agent/examples/sample-login-spec.md:54` [email] — 3. Enter email: test@example.com
+- `know-qa-agent/examples/sample-login-spec.md:93` [email] — email: wrong@example.com
+- `know-qa-agent/examples/sample-login-spec.md:100` [email] — email: expired@example.com
+- `know-qa-agent/examples/sample-login-spec.md:107` [email] — email: locked@example.com
+- `know-qa-agent/examples/visual-testing-spec.md:11` [url] — http://localhost:3000
+- `know-qa-agent/examples/visual-testing-spec.md:16` [email] — - logged-in user (use test@example.com / password123)
+- `know-qa-agent/harness/tools/audit.mjs:21` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/axe.mjs:9` [url] — //   node axe.mjs --cdp http://localhost:9222 [--name <prefix>]  # attach to open Chrome
+- `know-qa-agent/harness/tools/capture-loading.mjs:26` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/capture-loading.mjs:64` [personish] — try { await route.continue(); } catch { /* aborted/retried by Next */ }
+- `know-qa-agent/harness/tools/contrast.mjs:11` [url] — //   node contrast.mjs --cdp http://localhost:9222 [--name <prefix>] # attach to open Chrome
+- `know-qa-agent/harness/tools/drive.mjs:9` [url] — //                  [--name <prefix>] [--wait <ms>] [--cdp http://localhost:9222]
+- `know-qa-agent/harness/tools/drive.mjs:37` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/fingerprint.mjs:17` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/inspect-chat.mjs:19` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/inspect-labels.mjs:24` [url] — const browser = await chromium.connectOverCDP(arg('--cdp', 'http://localhost:9222'));
+- `know-qa-agent/harness/tools/load-timing.mjs:26` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/nav-timing.mjs:26` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/record.mjs:13` [url] — //   node record.mjs --name hero --seconds 8 [--cdp http://localhost:9222] [--project <dir>]
+- `know-qa-agent/harness/tools/record.mjs:51` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/harness/tools/record.mjs:138` [slackchan] — const SIM = `<!doctype html><meta charset=utf-8><style>:root{color-scheme:dark}body{margin:0;background:#0b1020;color:#e8ecf5;font:22px/1.6 -apple-system,Roboto,sans-serif;width:1920px;height:1080px;overflow:hidden}.m{margin:60px;padding:24
+- `know-qa-agent/harness/tools/watch.mjs:22` [url] — const cdp = arg('--cdp', 'http://localhost:9222');
+- `know-qa-agent/reference/finding-lifecycle.md:83` [digits7plus,hex7to40] — ## F-20260611-03 — Avatar 404 collapses the team-row layout
+- `know-qa-agent/reference/finding-lifecycle.md:92` [ticketkey] — - duplicate_of: — · ticket_link: WEB-1042
+- `know-qa-agent/reference/reporting-sinks.md:22` [slackchan] — "target": "#qa-web",
+- `know-qa-agent/reference/reporting-sinks.md:25` [email] — "scope": { "areas": ["opportunities"], "owner": "qa-lead@example.com" },
+- `know-qa-agent/reference/reporting-sinks.md:42` [slackchan] — A minimal sink is `{ "type": "slack", "target": "#qa-web" }`.
+- `know-qa-agent/reference/reporting-sinks.md:53` [slackchan] — 4. **Resolve the MCP** for the sink's `type`. If the matching MCP isn't wired in this session, emit one plain line — "reporting sink '#qa-web' configured but no Slack MCP is wired; wrote the report file only" — and continue. Never fail the 
+- `know-qa-agent/reference/safety.md:23` [url] — { "origin": "http://localhost", "write_allowed": true },
+- `know-qa-agent/reference/safety.md:24` [url] — { "origin": "http://127.0.0.1", "write_allowed": true }
+- `know-qa-agent/skills/check/SKILL.md:23` [url] — /know-qa:check --url http://localhost:3000
+- `know-qa-agent/skills/check/SKILL.md:24` [url] — /know-qa:check --url http://localhost:3000 --phase 3
+- `know-qa-agent/skills/check/SKILL.md:187` [url] — /know-qa:check --url http://localhost:3000
+- `know-qa-agent/skills/check/SKILL.md:203` [url] — /know-qa:check --url http://localhost:3000
+- `know-qa-agent/skills/gen/SKILL.md:25` [url] — /know-qa:gen user-profile --from http://localhost:3000/profile "Explore the user profile page and generate a spec for testing it"
+- `know-qa-agent/skills/gen/SKILL.md:123` [url] — - **base_url**: http://localhost:3000
+- `know-qa-agent/skills/gen/SKILL.md:203` [url] — /know-qa:gen settings --from http://localhost:3000/settings "Document all the settings options and generate tests for each"
+- `know-qa-agent/skills/gen/SKILL.md:213` [url] — /know-qa:gen settings --from http://localhost:3000/settings --a11y-depth deep
+- `know-qa-agent/skills/help/SKILL.md:4` [keyshaped] — argument-hint: "[skill-name]"
+- `know-qa-agent/skills/help/SKILL.md:31` [keyshaped] — | `[skill-name]` | No | — | A skill to drill into. Accept bare (`run`) or namespaced (`qa:run`). Omit to list every skill. |
+- `know-qa-agent/skills/help/SKILL.md:37` [keyshaped] — Optional `[skill-name]`. Normalize `qa:run` → `run`. No other flags.
+- `know-qa-agent/skills/init/SKILL.md:94` [url] — { "origin": "http://localhost", "write_allowed": true },
+- `know-qa-agent/skills/init/SKILL.md:95` [url] — { "origin": "http://127.0.0.1", "write_allowed": true }
+- `know-qa-agent/skills/init/SKILL.md:207` [host,url] — /know-qa:run --project . --spec smoke-test --url https://staging.example.com
+- `know-qa-agent/skills/init/SKILL.md:238` [url] — http://localhost:3000
+- `know-qa-agent/skills/init/SKILL.md:243` [url] — - **base_url**: http://localhost:3000
+- `know-qa-agent/skills/monitor/SKILL.md:30` [host,url] — /know-qa:monitor --project ~/Projects/my-app --url https://my-app.example.com
+- `know-qa-agent/skills/monitor/SKILL.md:31` [host,url] — /know-qa:monitor --project ~/Projects/my-app --url https://staging.my-app.com --tag critical
+- `know-qa-agent/skills/monitor/SKILL.md:32` [host,url] — /know-qa:monitor --project ~/Projects/my-app --url https://my-app.example.com --interval 10 --runs 12
+- `know-qa-agent/skills/monitor/SKILL.md:320` [host,url] — /know-qa:monitor --project ~/Projects/store --url https://store.example.com
+- `know-qa-agent/skills/monitor/SKILL.md:325` [host,url] — /know-qa:monitor --project ~/Projects/store --url https://staging.store.com --interval 10 --runs 6
+- `know-qa-agent/skills/monitor/SKILL.md:330` [host,url] — /know-qa:monitor --project ~/Projects/store --url https://store.example.com --tag critical
+- `know-qa-agent/skills/pair/SKILL.md:17` [url] — /know-qa:pair --project ~/Projects/my-app --url http://localhost:3000
+- `know-qa-agent/skills/pair/SKILL.md:18` [host,url] — /know-qa:pair --project . --url https://staging.example.com        # gated target: login.mjs first (step 2)
+- `know-qa-agent/skills/pair/SKILL.md:40` [url] — curl -s http://localhost:9222/json/version > /dev/null && echo "CDP alive" || echo "no browser"
+- `know-qa-agent/skills/report/SKILL.md:510` [keyshaped] — "status": "created | skipped-duplicate"
+- `know-qa-agent/skills/run/SKILL.md:28` [url] — /know-qa:run --url http://localhost:3000 "Test that the homepage loads without console errors and all navigation links work"
+- `know-qa-agent/skills/run/SKILL.md:34` [host,url] — /know-qa:run --project ~/Projects/my-app --spec login --url https://staging.example.com
+- `know-qa-agent/skills/run/SKILL.md:428` [host,url] — /know-qa:run --project ~/Projects/store --url https://staging.store.com
+- `know-qa-agent/skills/run/SKILL.md:433` [url] — /know-qa:run --url http://localhost:3000 "Verify the search function returns relevant results and handles empty queries gracefully"
+- `know-qa-agent/skills/run/SKILL.md:438` [url] — /know-qa:run --url http://localhost:3000 "Test the checkout flow on mobile viewport (375x667), ensure all buttons are tappable and forms are usable"
+- `know-security/.claude-plugin/plugin.json:7` [url] — "url": "https://github.com/knowbility"
+- `know-security/.claude-plugin/plugin.json:9` [url] — "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-security",
+- `know-security/.claude-plugin/plugin.json:10` [url] — "repository": "https://github.com/knowbility/knowbility-marketplace",
+- `know-security/AGENTS.md:35` [personish] — M surfaces are guarded." It was reviewed twice by Codex and judged not trustworthy both times.
+- `know-security/README.md:148` [url] — Part of the [Knowbility marketplace](https://github.com/knowbility/knowbility-marketplace).
+- `know-security/agents/security-reviewer.md:167` [ticketkey] — | **INJ-01** | **SQL injection.** *Trigger:* string concatenation or interpolation building SQL; `query()`, `raw()`, `execute()`, `$queryRaw`, f-strings in `cursor.execute`. *Read:* the origin of every interpolated fragment, and whether the
+- `know-security/agents/security-reviewer.md:168` [ticketkey] — | **INJ-02** | **Command injection.** *Trigger:* `exec`, `execSync`, `spawn` with `shell: true`, `system`, `popen`, backticks, `os.system`, `subprocess` with `shell=True`. *Read:* argument construction. *High:* attacker-controlled data in a
+- `know-security/agents/security-reviewer.md:169` [ticketkey] — | **INJ-03** | **Template / SSTI.** *Trigger:* a template compiled or rendered from a value rather than a file; `Function`, `eval`, `new Function`, `render_template_string`, Handlebars/EJS compiled at request time. *High:* attacker input be
+- `know-security/agents/security-reviewer.md:170` [ticketkey] — | **INJ-04** | **NoSQL / query-object injection.** *Trigger:* a request body or query object spread directly into a filter — `find(req.query)`, `{ $where: … }`. *Read:* whether operator keys can survive from input to filter. *High:* an obje
+- `know-security/agents/security-reviewer.md:171` [ticketkey] — | **INJ-05** | **Path traversal.** *Trigger:* `path.join`, `readFile`, `sendFile`, `open`, static file serving, archive extraction, with a non-literal segment. *Read:* normalization and containment — is the resolved path checked to still be
+- `know-security/agents/security-reviewer.md:172` [ticketkey] — | **INJ-06** | **XXE and unsafe parsers.** *Trigger:* XML parsing with entity resolution on, YAML `load` rather than `safe_load`, SVG or document parsing of uploads. *High:* an untrusted document reaches a parser with external entities or a
+- `know-security/agents/security-reviewer.md:173` [ticketkey] — | **INJ-07** | **Unsafe deserialization.** *Trigger:* `pickle`, `yaml.load`, `Marshal.load`, PHP `unserialize`, Java native deserialization, a JS revive/`__proto__` path. *High:* untrusted bytes reach a deserializer that can instantiate typ
+- `know-security/agents/security-reviewer.md:174` [ticketkey] — | **INJ-08** | **ORM escapes.** *Trigger:* the raw or literal escape hatch of an ORM that is otherwise safe — `Sequelize.literal`, `knex.raw`, `.extra()`, `whereRaw`, `sql` template tags. *Read:* what the project's *other* call sites do; th
+- `know-security/agents/security-reviewer.md:182` [ticketkey] — | **AUTHZ-01** | **No authorization decision on the path.** *Trigger:* any surface that returns data or mutates state. *Read:* every layer that could supply a check (see "Absence takes more work"). *High:* the path is read completely, no la
+- `know-security/agents/security-reviewer.md:183` [ticketkey] — | **AUTHZ-02** | **Object-level authorization / IDOR.** *Trigger:* a handler that takes an id from the request and fetches by it. *Read:* whether the fetch is constrained to the caller's subject, or fetched-then-checked, or never checked. *
+- `know-security/agents/security-reviewer.md:184` [ticketkey] — | **AUTHZ-03** | **Missing tenant / subject scope.** *Trigger:* a query against a table with a subject column, in a multi-subject product. *Read:* the project's scoping convention, then every query that bypasses it. *High:* a data-returning
+- `know-security/agents/security-reviewer.md:185` [ticketkey] — | **AUTHZ-04** | **Over-broad permission.** *Trigger:* a role or permission check that is coarser than the action. *Read:* the permission matrix, then what this route actually does. *Ceiling:* usually `needs_threat_judgment` — least privile
+- `know-security/agents/security-reviewer.md:186` [ticketkey] — | **AUTHZ-05** | **Mass assignment.** *Trigger:* a request body spread into a model create or update. *Read:* whether the fields are allowlisted, and what a non-allowlisted field could set. *High:* the body reaches a write with no field fil
+- `know-security/agents/security-reviewer.md:187` [ticketkey] — | **AUTHZ-06** | **Privilege escalation through user-settable state.** *Trigger:* a field on a user-writable path that participates in an authorization decision. *High:* a user can write the value that later authorizes them. Includes self-s
+- `know-security/agents/security-reviewer.md:188` [ticketkey] — | **AUTHZ-07** | **Export, admin, and support surfaces.** *Trigger:* anything that bulk-reads, reports, exports, impersonates, or serves an admin UI. *Read:* the scope on the bulk query especially — these are the surfaces where one missing 
+- `know-security/agents/security-reviewer.md:194` [ticketkey] — | **AUTHN-01** | **Password and secret storage.** *Trigger:* any code that persists an authenticator. *High:* plaintext, a bare hash, an unsalted hash, or a fast hash (MD5, SHA-family) used for a password. A modern KDF (scrypt, argon2, bcry
+- `know-security/agents/security-reviewer.md:195` [ticketkey] — | **AUTHN-02** | **Timing-unsafe comparison.** *Trigger:* `===`, `==`, `strcmp` comparing a token, signature, HMAC, or password hash. *High:* a non-constant-time comparison of a secret against a user-supplied value. *Ceiling:* comparing a v
+- `know-security/agents/security-reviewer.md:196` [ticketkey] — | **AUTHN-03** | **Session fixation and rotation.** *Trigger:* login, privilege change, impersonation. *High:* the session identifier is not rotated at a privilege boundary. |
+- `know-security/agents/security-reviewer.md:197` [ticketkey] — | **AUTHN-04** | **No revocation path.** *Trigger:* a stateless token with a long lifetime and no denylist, or a session store with no invalidate. *Read:* what happens on logout, password change, and role removal. *High:* a live credential 
+- `know-security/agents/security-reviewer.md:198` [ticketkey] — | **AUTHN-05** | **Token scope and lifetime.** *Trigger:* token issuance. *Read:* audience, expiry, scope, and whether the verifier checks all three. *High:* a token is accepted without verifying signature, audience, or expiry — including `
+- `know-security/agents/security-reviewer.md:199` [ticketkey] — | **AUTHN-06** | **Account enumeration and reset flows.** *Trigger:* login, signup, password reset, invitation. *High:* the response distinguishes "no such user" from "wrong password," or a reset token is guessable, unexpiring, or single-us
+- `know-security/agents/security-reviewer.md:215` [ticketkey] — | **PII-01** | **Collection.** What personal data enters, and where? Migration columns, form schemas, request bodies, third-party webhook payloads, uploads, inferred data. *Finding:* personal data collected with no apparent purpose in the c
+- `know-security/agents/security-reviewer.md:216` [ticketkey] — | **PII-02** | **In logs.** *Trigger:* any log, error, or trace call whose argument could carry personal data — `logger.info(user)`, a whole request body, an exception with a bound parameter, a stack trace with arguments. *High:* a field es
+- `know-security/agents/security-reviewer.md:217` [ticketkey] — | **PII-03** | **In URLs.** *Trigger:* personal data in a path segment, a query string, a redirect target, or a webhook URL. *High:* a personal field appears in a URL. This is worse than it looks: URLs land in access logs, proxies, browser 
+- `know-security/agents/security-reviewer.md:218` [ticketkey] — | **PII-04** | **To third parties.** *Trigger:* an outbound request, an SDK call, an analytics event, an error tracker, a webhook, an email or SMS payload, **an LLM prompt**. *Read:* what is actually in the payload, including whole-object s
+- `know-security/agents/security-reviewer.md:219` [ticketkey] — | **PII-05** | **Retention and deletion reachability.** *Trigger:* a store holding personal data. *Read:* whether a deletion path reaches it — and whether it reaches the *derived* copies: search indexes, caches, denormalized duplicates, blo
+- `know-security/agents/security-reviewer.md:220` [ticketkey] — | **PII-06** | **Egress width.** *Trigger:* an export, a report, an admin view, a support tool, a join. *High:* a query returns more personal fields than its purpose needs, or widens across subjects. `SELECT *` into a response is the common
+- `know-security/agents/security-reviewer.md:221` [ticketkey] — | **PII-07** | **Sensitive categories.** *Trigger:* government identifiers, financial account numbers, health data, biometrics, precise location, credentials, data about minors, or anything a jurisdiction treats as special. *High:* a specia
+- `know-security/agents/security-reviewer.md:222` [ticketkey] — | **PII-08** | **Subject rights reachability.** *Trigger:* the product handles personal data. *Read:* can a subject's data be **exported** and **deleted** by any code path that exists? *High:* neither exists and the product collects persona
+- `know-security/agents/security-reviewer.md:228` [ticketkey] — | **SEC-01** | **In source.** *Trigger:* the detector's candidates. *Read:* the assignment and the sink, per the confirm procedure. *High:* a real credential assigned to a credential-shaped name in committed source. *Ceiling:* fixtures, `.e
+- `know-security/agents/security-reviewer.md:229` [ticketkey] — | **SEC-02** | **In config and infrastructure.** *Trigger:* committed config, CI definitions, container files, deployment manifests, terraform. *High:* a live credential in a committed configuration file. |
+- `know-security/agents/security-reviewer.md:230` [ticketkey] — | **SEC-03** | **In history.** *Trigger:* always, when a history scanner is available. *High:* a credential in a reachable commit, even if removed from HEAD — removal from the working tree is not revocation, and the remediation is *rotate*,
+- `know-security/agents/security-reviewer.md:231` [ticketkey] — | **SEC-04** | **In logs and errors.** *Trigger:* a log or error call whose argument could carry a credential — a whole config object, a request with an `Authorization` header, a connection string in a connection error. *High:* a credential
+- `know-security/agents/security-reviewer.md:232` [ticketkey] — | **SEC-05** | **Shipped to the client.** *Trigger:* a bundler entry, a public env prefix (`NEXT_PUBLIC_`, `VITE_`, `REACT_APP_`), a template rendering config into HTML. *High:* a server-side secret is reachable from client code. This is ea
+- `know-security/agents/security-reviewer.md:238` [ticketkey] — | **XSS-01** | **Unescaped output.** *Trigger:* templating with escaping disabled — `\|safe`, `{{{ }}}`, `v-html`, `autoescape off`, string-built HTML. *High:* attacker-controlled data reaches HTML with escaping off. |
+- `know-security/agents/security-reviewer.md:239` [ticketkey] — | **XSS-02** | **`dangerouslySetInnerHTML` and peers.** *Trigger:* the API by name, plus `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`. *Read:* whether the value is sanitized and by what. *High:* untrusted data reaches it
+- `know-security/agents/security-reviewer.md:240` [ticketkey] — | **XSS-03** | **URL-scheme sinks.** *Trigger:* an `href`, `src`, `action`, or `formaction` built from data. *High:* an attacker can supply `javascript:` or a `data:` URL to a navigational attribute. |
+- `know-security/agents/security-reviewer.md:241` [ticketkey] — | **XSS-04** | **Stored XSS through a data path.** *Trigger:* user content persisted and later rendered. *Read:* both ends — sanitize-on-write and escape-on-read are different decisions and a project sometimes has neither. *High:* content s
+- `know-security/agents/security-reviewer.md:247` [ticketkey] — | **SSRF-01** | **User-influenced destination.** *Trigger:* an HTTP client whose URL, host, or port is not a literal — webhook registration, URL preview, avatar fetch, import-from-URL, PDF or image rendering from a URL. *High:* attacker-con
+- `know-security/agents/security-reviewer.md:248` [ticketkey] — | **SSRF-02** | **Redirect following.** *Trigger:* a client with redirects enabled on a user-influenced request. *High:* an allowlisted initial host can redirect to an internal one, because the check ran once at the start. |
+- `know-security/agents/security-reviewer.md:249` [ticketkey] — | **SSRF-03** | **Internal reachability.** *Trigger:* SSRF-01 or SSRF-02 confirmed. *Read:* what the internal network exposes — cloud metadata endpoints, internal admin services, `localhost` ports. *This determines severity*: SSRF to an int
+- `know-security/agents/security-reviewer.md:255` [ticketkey] — | **CRYPTO-01** | **Homemade construction.** *Trigger:* hand-rolled encryption, a custom token format, XOR, a bespoke signature scheme. *High:* the project builds a primitive it could have used. |
+- `know-security/agents/security-reviewer.md:256` [ticketkey] — | **CRYPTO-02** | **Weak algorithm or parameters.** *Trigger:* MD5 or SHA-1 where collision resistance matters, DES, RC4, ECB mode, an RSA key under 2048 bits, a KDF at a trivial cost. *Ceiling:* MD5 as a cache key or a content fingerprint 
+- `know-security/agents/security-reviewer.md:257` [ticketkey] — | **CRYPTO-03** | **IV and nonce reuse.** *Trigger:* a static, zero, or counter-derived IV; a nonce from a predictable source. *High:* the same key and nonce pair can encrypt two messages. |
+- `know-security/agents/security-reviewer.md:258` [ticketkey] — | **CRYPTO-04** | **Unauthenticated encryption.** *Trigger:* CBC or CTR with no MAC, or a MAC computed over the wrong bytes. *High:* ciphertext an attacker can modify is decrypted without integrity verification. |
+- `know-security/agents/security-reviewer.md:259` [ticketkey] — | **CRYPTO-05** | **Signature not verified, or verified wrong.** *Trigger:* webhook handlers, JWT verification, license or receipt checks, package verification. *High:* a signature is decoded but not verified, verified against a key the mes
+- `know-security/agents/security-reviewer.md:265` [ticketkey] — | **CONF-01** | **Debug and verbose errors in production.** *Trigger:* a debug flag, a stack-trace error handler, a framework debug mode, a introspection endpoint enabled unconditionally. *High:* the setting is enabled on a path with no env
+- `know-security/agents/security-reviewer.md:266` [ticketkey,url] — | **CONF-02** | **CORS.** *Trigger:* CORS configuration. *High:* origin reflection with credentials, `*` with credentials, or a regex that matches an attacker-registrable domain (`^https://.*example\.com$` matching `evil-example.com`). |
+- `know-security/agents/security-reviewer.md:267` [ticketkey] — | **CONF-03** | **Missing transport and browser protections.** *Trigger:* a web-serving app. *Read:* HSTS, cookie `Secure`/`HttpOnly`/`SameSite`, CSP presence. *Ceiling:* usually Low to Medium — defense in depth. A session cookie without `H
+- `know-security/agents/security-reviewer.md:268` [ticketkey] — | **CONF-04** | **Over-broad grants.** *Trigger:* IAM policies, database roles, service accounts, container privileges, cloud storage ACLs in committed infrastructure. *High:* a wildcard action or resource, a public bucket, or a database us
+- `know-security/agents/security-reviewer.md:269` [ticketkey] — | **CONF-05** | **Default and dev credentials reachable in a real environment.** *Trigger:* a seeded admin, a dev bypass, a test authentication shortcut, a magic header. *High:* the bypass is not gated on an environment check. Search for it
+- `know-security/agents/security-reviewer.md:275` [ticketkey] — | **LOG-01** | **A security-relevant action with no audit trail.** *Trigger:* authentication events, permission changes, data export, deletion, impersonation, admin action, configuration change. *High:* the action exists and emits nothing d
+- `know-security/agents/security-reviewer.md:276` [ticketkey] — | **LOG-02** | **PII in a log.** Cross-reference PII-02; report under PII-02 and note the check overlap rather than filing twice. |
+- `know-security/agents/security-reviewer.md:277` [ticketkey] — | **LOG-03** | **Log injection and forgery.** *Trigger:* unescaped user data in a log line. *High:* an attacker can inject newlines or structured-log delimiters, forging entries in the record meant to hold them accountable. |
+- `know-security/agents/security-reviewer.md:283` [ticketkey] — | **DEP-01** | **Known-vulnerable dependency.** *Trigger:* always. Run the ecosystem's own auditor: `npm audit --json`, `pip-audit`, `bundle audit`, `cargo audit` — whichever the project has. *Read:* whether the vulnerable path is actually 
+- `know-security/agents/security-reviewer.md:284` [ticketkey] — | **DEP-02** | **Unpinned or unverified install.** *Trigger:* a build or CI step installing from a mutable reference — a floating tag, a branch, `curl \| sh`, an unpinned action. *High:* code executes in a build from a source that can chang
+- `know-security/agents/security-reviewer.md:322` [ticketkey] — npm audit --json                               # or the project's own auditor, for DEP-01
+- `know-security/reference/adversarial-list.md:94` [ticketkey] — | E3 | A vendored dependency or a committed bundle scanned as project code | **Fixture (must be quiet).** Class 3. Problems here are `DEP-01`, not code findings. |
+- `know-security/reference/finding-contract.md:29` [ticketkey] — | `check` | The check ID that surfaced it — `INJ-02`, `AUTHZ-04`, `PII-01`. A finding with no check ID is an observation; say so rather than inventing one. |
+- `know-security/reference/finding-contract.md:146` [ticketkey] — (`DEP-01`), not code problems.
+- `know-security/reference/finding-contract.md:170` [ticketkey] — `password` assigned from `req.body` and passed to `logger.info` is `SEC-04` at High. The
+- `know-security/reference/finding-contract.md:183` [digits7plus,hex7to40] — Suppressed 2 findings under accepted_risk (S-20260714-02 expires 2026-10-01).
+- `know-security/reference/finding-contract.md:241` [digits7plus,hex7to40] — ## S-20260726-03 — Reports export queries the model without tenant scope
+- `know-security/reference/finding-contract.md:243` [ticketkey] — - check: AUTHZ-03 · disposition: vulnerability
+- `know-security/reference/finding-contract.md:254` [ticketkey] — - duplicate_of: — · ticket_link: NOB-412
+- `know-security/reference/safety.md:18` [ticketkey] — was **false**, and an external review caught it: the `DEP-01` check instructs the agent to run
+- `know-security/scaffold/config.json.tmpl:19` [ticketkey] — "_declared_stores": "Caches, buckets, search indexes, queues, log sinks, and third-party processors — the places personal data lands that no static scan finds reliably, and exactly where deletion quietly fails to reach (PII-05). Declaring o
+- `know-security/scaffold/config.json.tmpl:25` [ticketkey] — "_sensitive_categories": "Categories in this product carrying obligations beyond ordinary personal data (PII-07): government identifiers, health, financial, biometric, precise location, data about minors. The reviewer flags findings by the 
+- `know-security/scaffold/scripts/check.mjs:84` [digits7plus,hex7to40] — // `S-20260726-1` produced no entry AND no malformed error, so a Critical could be
+- `know-security/scaffold/scripts/check.mjs:85` [digits7plus,hex7to40] — // hidden by dropping one digit. `S-20260726-100` was worse: the un-anchored match took
+- `know-security/scaffold/scripts/check.mjs:86` [digits7plus,hex7to40] — // the first two digits and silently became `S-20260726-10`, which could collide with a
+- `know-security/scaffold/scripts/check.mjs:152` [hex7to40] — /** `owner=alex date=2026-01-15 expires=2026-04-15 commit=a1b2c3d` */
+- `know-security/scaffold/scripts/locate.mjs:132` [ticketkey] — { category: 'sql-dynamic', check: 'INJ-01', re: /\.(?:query|execute|exec|raw|unsafe|queryRaw|executeRaw|prepare)\s*\(\s*[^)]{0,400}?(?:\$\{|["'`]\s*\+|\+\s*[A-Za-z_$])/gi },
+- `know-security/scaffold/scripts/locate.mjs:135` [ticketkey] — // everywhere else is the Compare-with-neighbours signal (INJ-08).
+- `know-security/scaffold/scripts/locate.mjs:136` [ticketkey] — { category: 'sql-escape-hatch', check: 'INJ-08', re: /\.(?:raw|unsafe|literal|whereRaw|havingRaw|joinRaw|orderByRaw|queryRaw|executeRaw)\s*\(|\bsql\s*`/gi },
+- `know-security/scaffold/scripts/locate.mjs:141` [ticketkey] — { category: 'shell', check: 'INJ-02', re: /(?<![.\w])(?:exec|execSync|execFile|execFileSync|system|popen|Popen|check_output)\s*\(|\bchild_process\b|\bspawn\s*\([^)]*shell\s*:\s*true|shell\s*=\s*True/g },
+- `know-security/scaffold/scripts/locate.mjs:142` [ticketkey] — { category: 'dynamic-eval', check: 'INJ-03', re: /\beval\s*\(|new\s+Function\s*\(|\brender_template_string\s*\(|\bTemplate\s*\(\s*[A-Za-z_$]/g },
+- `know-security/scaffold/scripts/locate.mjs:143` [ticketkey] — { category: 'deserialize', check: 'INJ-06, INJ-07', re: /\b(?:pickle\.loads?|yaml\.load|Marshal\.load|unserialize|readObject)\s*\(|yaml\.load\s*\([^)]*\)/g },
+- `know-security/scaffold/scripts/locate.mjs:144` [ticketkey] — { category: 'filesystem', check: 'INJ-05', re: /\b(?:readFile|readFileSync|createReadStream|sendFile|writeFile|writeFileSync|unlink|open)\s*\(|\bpath\.join\s*\(|\bos\.path\.join\s*\(/g },
+- `know-security/scaffold/scripts/locate.mjs:145` [ticketkey] — { category: 'html-sink', check: 'XSS-01, XSS-02', re: /dangerouslySetInnerHTML|\.innerHTML\s*=|\.outerHTML\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(|v-html|\|\s*safe\b|\{\{\{/g },
+- `know-security/scaffold/scripts/locate.mjs:149` [ticketkey] — // codebase had 50 of these and zero `innerHTML`. The reviewer's job per XSS-01 is to check
+- `know-security/scaffold/scripts/locate.mjs:152` [ticketkey] — { category: 'html-template', check: 'XSS-01, XSS-04', re: /`(?=[^`]*<[a-zA-Z])(?=[^`]*\$\{)/g },
+- `know-security/scaffold/scripts/locate.mjs:153` [ticketkey] — { category: 'outbound', check: 'SSRF-01, PII-04', re: /\b(?:fetch|axios|got|request|urlopen|HttpClient)\s*\(|axios\.(?:get|post|put|patch|delete)\s*\(|requests\.(?:get|post|put|patch|delete)\s*\(/g },
+- `know-security/scaffold/scripts/locate.mjs:154` [ticketkey] — { category: 'llm', check: 'PII-04', re: /\b(?:anthropic|openai|bedrock|vertex|gemini|claude)\b[^\n]{0,40}\.(?:messages|chat|completions|generate|invoke)|\bmessages\s*:\s*\[/gi },
+- `know-security/scaffold/scripts/locate.mjs:155` [ticketkey] — { category: 'analytics', check: 'PII-04', re: /\b(?:analytics|segment|mixpanel|amplitude|posthog|datadog|sentry|rollbar|bugsnag)\b[^\n]{0,30}\.(?:track|capture|identify|event|log|captureException)/gi },
+- `know-security/scaffold/scripts/locate.mjs:156` [ticketkey] — { category: 'log', check: 'PII-02, SEC-04, LOG-03', re: /\b(?:log(?:ger)?|console)\s*\.\s*(?:log|info|warn|error|debug|trace|fatal)\s*\(|\bprint\s*\(|\bputs\s+/g },
+- `know-security/scaffold/scripts/locate.mjs:157` [ticketkey] — { category: 'crypto', check: 'CRYPTO-01..05, AUTHN-01, AUTHN-02', re: /\bcreate(?:Cipher|Decipher|Hash|Hmac|Sign|Verify)\w*\s*\(|\b(?:md5|sha1|createCipheriv?)\s*\(|\b(?:bcrypt|scrypt|argon2|pbkdf2)\w*\s*\(|hashlib\.\w+\s*\(/gi },
+- `know-security/scaffold/scripts/locate.mjs:163` [ticketkey] — { category: 'open-redirect', check: 'XSS-03', re: /\b(?:redirect|redirectTo|sendRedirect)\s*\(\s*(?!['"`])[A-Za-z_$({]|\blocation(?:\.href)?\s*=\s*(?!['"`])[A-Za-z_$({]/g },
+- `know-security/scaffold/scripts/locate.mjs:539` [personish] — const byCat = new Map();
+- `know-security/scaffold/scripts/locate.mjs:540` [personish] — for (const s of out.sinks) byCat.set(s.category, (byCat.get(s.category) ?? 0) + 1);
+- `know-security/scaffold/scripts/locate.mjs:541` [personish] — if (byCat.size) lines.push(`sinks: ${[...byCat].sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+- `know-security/scaffold/scripts/secrets.mjs:90` [hex7to40] — * — not entropy — is what distinguishes a secret from a hash. `const h = 'a94a8fe5...'` is a
+- `know-security/scaffold/scripts/secrets.mjs:91` [hex7to40] — * SHA-1; `const password = 'a94a8fe5...'` is a credential.
+- `know-security/scaffold/scripts/secrets.mjs:242` [ticketkey] — 'found here. Install gitleaks for history coverage (SEC-03).',
+- `know-security/scaffold/scripts/secrets.mjs:266` [personish] — const byBenign = new Map();
+- `know-security/scaffold/scripts/secrets.mjs:267` [personish] — for (const c of candidates) byBenign.set(c.benign ?? 'unlabelled', (byBenign.get(c.benign ?? 'unlabelled') ?? 0) + 1);
+- `know-security/scaffold/scripts/secrets.mjs:281` [personish] — counts: { candidates: candidates.length, by_context: Object.fromEntries(byBenign) },
+- `know-security/scaffold/scripts/staleness.mjs:33` [hex7to40] — *   { "path": "src/http", "commit": "a1b2c3d", "date": "2026-01-15", "lens": ["injection"] }
+- `know-security/scaffold/scripts/staleness.mjs:100` [personish] — const byPath = new Map();
+- `know-security/scaffold/scripts/staleness.mjs:103` [personish] — const prior = byPath.get(r.path);
+- `know-security/scaffold/scripts/staleness.mjs:104` [personish] — if (!prior || (r.date ?? '') > (prior.date ?? '')) byPath.set(r.path, r);
+- `know-security/scaffold/scripts/staleness.mjs:115` [personish] — const record = byPath.get(unit) ?? byPath.get(pathspec) ?? null;
+- `know-security/skills/security-audit/SKILL.md:57` [ticketkey] — 8. **What the scanners could not cover.** No history scan without gitleaks. No `DEP-01` without
+- `know-security/skills/security-review/SKILL.md:107` [ticketkey] — uninstalled auditor means the `DEP-01` category was not covered, and silence there reads
+- `know-photo-generator/.claude-plugin/plugin.json:7` [url] — "url": "https://github.com/knowbility"
+- `know-photo-generator/.claude-plugin/plugin.json:9` [url] — "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-photo-generator",
+- `know-photo-generator/.claude-plugin/plugin.json:10` [url] — "repository": "https://github.com/knowbility/knowbility-marketplace",
+- `know-photo-generator/README.md:18` [host,url] — Manual alternative: `export GEMINI_API_KEY='...'` in `~/.zshrc`, or paste the key into `~/.know-photo-generator/keys.env` yourself (get one at https://aistudio.google.com/apikey), plus `pip3 install google-genai`. Resolution order: environm
+- `know-photo-generator/README.md:77` [url] — Part of the [Knowbility marketplace](https://github.com/knowbility/knowbility-marketplace).
+- `know-photo-generator/reference/brand-styles.md:71` [personish] — **Aesthetic:** [To be defined — not yet documented by Knowbility]
+- `know-photo-generator/reference/cameras.md:156` [personish] — ## Quick Reference by Scene Type
+- `know-photo-generator/reference/lenses.md:173` [personish] — ## Quick Reference by Scene Type
+- `know-photo-generator/reference/lighting.md:226` [personish] — ## Quick Reference by Scene Type
+- `know-photo-generator/reference/post-processing.md:227` [keyshaped] — - **Description:** Soft, glowing, skin-perfecting
+- `know-photo-generator/reference/post-processing.md:289` [personish] — ## Quick Reference by Scene Type
+- `know-photo-generator/scripts/generate_image.py:72` [host,url] — print("Get your key from: https://aistudio.google.com/apikey")
+- `know-photo-generator/skills/photo-setup/SKILL.md:49` [host,url] — # Gemini — https://aistudio.google.com/apikey
+- `know-photo-generator/skills/photo-setup/SKILL.md:77` [host,url] — https://aistudio.google.com/apikey, paste it after `GEMINI_API_KEY=`, save.

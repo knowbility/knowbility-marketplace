@@ -1,0 +1,29 @@
+{
+  "description": "know-qa-agent: loads QA context (last report, monitor alerts, known issues) at session start; suggests a QA run at session end when relevant code changed.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \".know-qa\" ] && cat \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.md\" || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-gate.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

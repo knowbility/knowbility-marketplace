@@ -1,0 +1,33 @@
+{
+  "name": "know-qa-agent",
+  "version": "0.1.0",
+  "description": "v0.1.0 — Point it at any web app and it tests like a skeptical engineer, then reports what broke and why, with the evidence. A deterministic engine tracks the full test matrix so requested coverage can't silently disappear. Accessibility is first-class: a full axe-core ruleset pass and exact WCAG AA contrast math, each finding carrying the success criteria it maps to, with anything the tools cannot resolve reported as needs-review rather than guessed. Findings come back triaged, deduplicated, and ready to file, and a team can split the app into owned areas with roll-ups posted to Slack. Standalone.",
+  "author": {
+    "name": "Knowbility",
+    "url": "https://github.com/knowbility"
+  },
+  "keywords": [
+    "qa",
+    "web-testing",
+    "playwright",
+    "visual-testing",
+    "accessibility",
+    "paired-testing",
+    "regression"
+  ],
+  "settings": {
+    "defaults": {
+      "headless": true,
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "reportFormat": "markdown",
+      "slowThreshold": 1000,
+      "screenshotsEnabled": true
+    }
+  },
+  "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-qa-agent",
+  "repository": "https://github.com/knowbility/knowbility-marketplace",
+  "license": "MIT"
+}

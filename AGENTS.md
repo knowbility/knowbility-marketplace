@@ -26,10 +26,16 @@ organization and working git credentials. That is a real setup step, not an afte
 | `know-product-spec` | 0.1.0 | `/know-spec:*` | Interview to PRD, then grades its own draft by decomposing it into workstreams and tasks and reporting every decision it had to invent. Tracker-agnostic. | Ported, manifest validated. Not yet driven end to end. |
 | `know-security` | 0.1.0 | `/know-security:*` | Adversarial security and privacy reviewer that reads code the way someone trying to get at the data would. Never probes, never touches a network. | Ported, 66-case suite passing. |
 | `know-photo-generator` | 0.1.0 | `/know-photo:*` | Plain-language description to a physics-aware image prompt, optionally rendered via the Gemini API. Needs a Gemini key. | Ported, key check passing. **A Knowbility brand style is not yet defined**; the section is a template awaiting the organization's input, representation guidance included. |
+| `know-qa-agent` | 0.1.0 | `/know-qa:*` | Tests a web app like a skeptical engineer and reports what broke with the evidence. Two-tier accessibility suite: full axe-core ruleset and exact WCAG AA contrast math, every finding annotated with the success criteria it maps to. | Ported, engine and harness verified. **Not yet driven against a live site from a cold install here**; that and the adversarial de-branding sweep are the remaining gates. |
 
-One more is planned (`know-qa-agent`); see
-`dev/review/migration-plan.md` for the plan they arrive under and `dev/STATE.md` for where that
-work stands.
+All four planned plugins are in. See `dev/review/migration-plan.md` for the plan they arrived
+under and `dev/STATE.md` for where the work stands.
+
+**On accessibility output:** `know-qa-agent` annotates findings with WCAG success criteria. That
+is coverage, not conformance, and `know-qa-agent/reference/wcag-mapping.md` states why in detail.
+No plugin here may imply it produces a conformance evaluation, a VPAT, or an accessibility
+statement, and none may imply automated passes substitute for assistive-technology or
+keyboard-only testing by a person. This is the house rule the organization's own work depends on.
 
 ## Conventions (how every plugin here is shaped)
 

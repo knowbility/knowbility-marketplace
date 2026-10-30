@@ -1,0 +1,9 @@
+# Session secrets — never commit. Contains live auth cookies / JWTs.
+.auth/
+
+# Installed dependencies.
+node_modules/
+package-lock.json
+
+# Transient capture output (screenshots, reports). Copy keepers to ../assets/.
+runs/

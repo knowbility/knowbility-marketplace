@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowbility.org/know-qa-agent/result.schema.json",
+  "title": "know-qa-agent cell result",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "cell_id",
+    "started_at",
+    "completed_at",
+    "status",
+    "actions",
+    "assertions",
+    "observations",
+    "evidence",
+    "findings",
+    "surfaced_decisions",
+    "cleanup",
+    "runtime"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "run_id": { "type": "string" },
+    "cell_id": { "type": "string" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": ["string", "null"], "format": "date-time" },
+    "status": { "enum": ["running", "passed", "failed", "blocked", "skipped", "incomplete"] },
+    "actions": { "type": "array", "items": { "type": "object" } },
+    "assertions": { "type": "array", "items": { "type": "object" } },
+    "observations": { "type": "array", "items": { "type": "object" } },
+    "evidence": { "type": "array", "items": { "type": "object" } },
+    "findings": { "type": "array", "items": { "type": "object" } },
+    "surfaced_decisions": { "type": "array", "items": { "type": "object" } },
+    "cleanup": { "type": "array", "items": { "type": "object" } },
+    "runtime": { "type": "object" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,23 @@
+{
+  "name": "know-qa-agent-harness",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Playwright QA harness for paired and authenticated live testing. Deployed into a project's .know-qa/tools/ by /know-qa:init; see the know-qa-agent plugin's docs/HARNESS-GUIDE.md.",
+  "scripts": {
+    "login": "node login.mjs",
+    "open": "bash open-browser.sh",
+    "capture": "node capture.mjs",
+    "nav-timing": "node nav-timing.mjs",
+    "load-timing": "node load-timing.mjs",
+    "loading-state": "node capture-loading.mjs",
+    "contrast": "node contrast.mjs",
+    "axe": "node axe.mjs",
+    "record": "node record.mjs",
+    "record:selftest": "node record.mjs selftest"
+  },
+  "dependencies": {
+    "axe-core": "4.12.1",
+    "playwright": "1.60.0"
+  }
+}
