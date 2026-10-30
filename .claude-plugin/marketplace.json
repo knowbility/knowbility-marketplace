@@ -1,0 +1,22 @@
+{
+  "name": "knowbility",
+  "owner": {
+    "name": "Knowbility",
+    "url": "https://github.com/knowbility"
+  },
+  "metadata": {
+    "description": "Knowbility — plugins for accessible software delivery. Each one is small, focused, and standalone; none depends on another."
+  },
+  "plugins": [
+    {
+      "name": "know-product-spec",
+      "source": "./know-product-spec",
+      "description": "v0.1.0 — Interviews you and writes a product spec an engineer can build from. Starts by testing whether the thing is worth building at all, and will tell you when it isn't. Then asks how it behaves, drafts the document, and grades its own draft by breaking it into workstreams and tasks, reporting every decision it had to invent so you can close the gap before someone else guesses. Once the work is filed it keeps going: grooming works a list of tickets with you, resolving, sharpening, or routing each one to whoever owns the call, and a UI review opens every surface a story needs in a browser, exercises it, and returns a readiness verdict with every finding traced to a contract (it needs browser tools in the session). Built for software product teams, tracker-agnostic, with your local vocabulary and style in an optional profile. Standalone."
+    },
+    {
+      "name": "know-security",
+      "source": "./know-security",
+      "description": "v0.1.0 — Read the code the way someone trying to get at the data would read it. An adversarial security and privacy reviewer that runs alongside development, hunting the endpoint nobody remembered, the helper everyone uses except here, the log line that seemed harmless, and the personal data no deletion path reaches. Reports findings — severity, the attack path as read, the input that exercises it, the blast radius, the fix — across authorization, PII data flow, injection, authentication, secrets, XSS, SSRF, crypto, config, audit trails and dependencies. Confidence is welded to evidence type so it cannot claim exploitability without naming an input, and seven known-benign classes plus a read-before-classify rule keep it from crying wolf. Scripts locate candidates and say what they could not read; the agent judges. Never probes, never touches a network. Standalone."
+    }
+  ]
+}

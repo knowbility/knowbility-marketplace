@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift swap board, fixture states</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#666; --line:#ddd; --bg:#fff; --ok:#0a7d5a; --warn:#8a5a00; --stop:#a33; --chip:#f4f4f4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#eee; --muted:#aaa; --line:#3a3a3a; --bg:#151515; --ok:#4fd1a5; --warn:#e0a44a; --stop:#f08a8a; --chip:#242424; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px; background:var(--bg); color:var(--ink);
+         font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 28px; font-size:14px; }
+  section { border:1px solid var(--line); border-radius:4px; padding:16px; margin:0 0 20px; }
+  section > h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em;
+                 color:var(--muted); margin:0 0 4px; font-weight:600; }
+  .viewer { font-size:13px; color:var(--muted); margin:0 0 12px; }
+  .card { border:1px solid var(--line); border-radius:4px; padding:14px; background:var(--bg); }
+  .card + .card { margin-top:10px; }
+  .shift { font-weight:600; }
+  .meta { color:var(--muted); font-size:14px; margin-top:2px; }
+  .note { margin-top:8px; font-size:14px; }
+  .label { display:inline-block; font-size:13px; padding:2px 8px; border-radius:4px;
+           background:var(--chip); margin-top:10px; }
+  .label.ok { color:var(--ok); }
+  .label.warn { color:var(--warn); }
+  .label.stop { color:var(--stop); text-decoration:line-through var(--stop) 1px; }
+  .actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+  button { font:inherit; padding:6px 14px; border:1px solid var(--ink); border-radius:4px;
+           background:transparent; color:var(--ink); cursor:pointer; }
+  button[disabled] { opacity:.5; cursor:not-allowed; border-color:var(--line); color:var(--muted); }
+  .elig { margin-top:10px; font-size:14px; color:var(--ok); }
+  .elig.fail { color:var(--stop); }
+  .hint { margin-top:6px; font-size:13px; color:var(--muted); }
+  .empty { color:var(--muted); }
+</style>
+</head>
+<body>
+
+<h1>Shift swap board</h1>
+<p class="sub">Fixture. Each section is one state named in the exemplar PRD's section 5, keyed to by its acceptance criteria. Static markup, no behavior.</p>
+
+<section id="state-open" aria-labelledby="h-open">
+  <h2 id="h-open">state-open</h2>
+  <p class="viewer">Viewer: Marcus, eligible. Off Thursday, certified for Eastside.</p>
+  <div class="card">
+    <div class="shift">Thu 23 Jul, 07:00 to 15:00</div>
+    <div class="meta">Eastside · posted by Priya</div>
+    <p class="note">Family commitment, happy to swap back another week.</p>
+    <div class="actions"><button type="button">Claim</button></div>
+  </div>
+</section>
+
+<section id="state-open-ineligible" aria-labelledby="h-open-in">
+  <h2 id="h-open-in">state-open, ineligible viewer</h2>
+  <p class="viewer">Viewer: Joss, not certified for Eastside. The card is present, the action is not.</p>
+  <div class="card">
+    <div class="shift">Thu 23 Jul, 07:00 to 15:00</div>
+    <div class="meta">Eastside · posted by Priya</div>
+    <p class="note">Family commitment, happy to swap back another week.</p>
+  </div>
+</section>
+
+<section id="state-open-requester" aria-labelledby="h-open-req">
+  <h2 id="h-open-req">state-open, requester's own view</h2>
+  <p class="viewer">Viewer: Priya, who posted it. Withdraw is available, Claim is not.</p>
+  <div class="card">
+    <div class="shift">Thu 23 Jul, 07:00 to 15:00</div>
+    <div class="meta">Eastside &middot; posted by you</div>
+    <p class="note">Family commitment, happy to swap back another week.</p>
+    <div class="actions"><button type="button">Withdraw</button></div>
+  </div>
+</section>
+
+<section id="state-claimed" aria-labelledby="h-claimed">
+  <h2 id="h-claimed">state-claimed</h2>
+  <p class="viewer">Viewer: Dana, lead. Approve and decline available, with the passing eligibility line.</p>
+  <div class="card">
+    <div class="shift">Sat 25 Jul, 07:00 to 15:00</div>
+    <div class="meta">Westside · posted by Priya · claimed by Marcus</div>
+    <span class="label warn">Awaiting approval</span>
+    <p class="elig">Marcus is free Saturday and certified for Westside.</p>
+    <div class="actions">
+      <button type="button">Approve</button>
+      <button type="button">Decline</button>
+    </div>
+  </div>
+</section>
+
+<section id="state-claimed-ineligible" aria-labelledby="h-claimed-in">
+  <h2 id="h-claimed-in">state-claimed, no longer eligible</h2>
+  <p class="viewer">Viewer: Dana, lead. Eligibility passed at claim time and fails now. Approve is disabled, decline remains.</p>
+  <div class="card">
+    <div class="shift">Sat 25 Jul, 07:00 to 15:00</div>
+    <div class="meta">Westside · posted by Priya · claimed by Marcus</div>
+    <span class="label warn">Awaiting approval</span>
+    <p class="elig fail" id="elig-fail">Marcus is no longer eligible: already scheduled during these hours.</p>
+    <div class="actions">
+      <button type="button" disabled aria-describedby="elig-fail">Approve</button>
+      <button type="button">Decline</button>
+    </div>
+  </div>
+</section>
+
+<section id="state-approved" aria-labelledby="h-approved">
+  <h2 id="h-approved">state-approved</h2>
+  <p class="viewer">Viewer: anyone. Terminal, no actions.</p>
+  <div class="card">
+    <div class="shift">Wed 22 Jul, 15:00 to 23:00</div>
+    <div class="meta">Eastside · posted by Joss · covered by Marcus</div>
+    <span class="label ok">Approved 17 Jul</span>
+  </div>
+</section>
+
+<section id="state-declined" aria-labelledby="h-declined">
+  <h2 id="h-declined">state-declined</h2>
+  <p class="viewer">Viewer: Ade, requester. The request is back to open, with the reason attached.</p>
+  <div class="card">
+    <div class="shift">Sun 26 Jul, 23:00 to 07:00</div>
+    <div class="meta">Westside · overnight · posted by Ade</div>
+    <p class="note">Overnight, needs triage cover too.</p>
+    <span class="label">Open again, claim declined</span>
+    <p class="hint">Dana: You are on the late shift the night before, I would rather not stack them.</p>
+    <div class="actions"><button type="button">Withdraw</button></div>
+  </div>
+</section>
+
+<section id="state-withdrawn" aria-labelledby="h-withdrawn">
+  <h2 id="h-withdrawn">state-withdrawn</h2>
+  <p class="viewer">Viewer: anyone. Terminal, no actions.</p>
+  <div class="card">
+    <div class="shift">Fri 24 Jul, 07:00 to 15:00</div>
+    <div class="meta">Eastside &middot; posted by Priya</div>
+    <span class="label">Withdrawn by Priya</span>
+  </div>
+</section>
+
+<section id="state-expired" aria-labelledby="h-expired">
+  <h2 id="h-expired">state-expired</h2>
+  <p class="viewer">Viewer: anyone. Terminal, and visually distinct from approved because one is a failure.</p>
+  <div class="card">
+    <div class="shift">Mon 20 Jul, 07:00 to 15:00</div>
+    <div class="meta">Eastside · posted by Marcus</div>
+    <span class="label stop">Expired, not covered</span>
+  </div>
+</section>
+
+<section id="state-empty" aria-labelledby="h-empty">
+  <h2 id="h-empty">state-empty</h2>
+  <p class="viewer">Viewer: anyone. New request stays available.</p>
+  <p class="empty">No shifts need cover right now.</p>
+  <div class="actions"><button type="button">New request</button></div>
+</section>
+
+<section id="state-lead-post-refused" aria-labelledby="h-lead-ref">
+  <h2 id="h-lead-ref">Lead posting refused</h2>
+  <p class="viewer">Viewer: Dana, the lead, attempting to post her own shift. Nothing is created.</p>
+  <div class="card">
+    <div class="shift">Tue 21 Jul, 15:00 to 23:00</div>
+    <div class="meta">Westside &middot; your shift</div>
+    <p class="hint">There is only one lead, so a swap you post would have nobody to approve it. Use the group text for your own shifts.</p>
+  </div>
+</section>
+
+<section id="state-eligibility-unavailable" aria-labelledby="h-unavail">
+  <h2 id="h-unavail">state-open, eligibility unavailable</h2>
+  <p class="viewer">Viewer: Marcus. The roster cannot be read, so nothing is claimable. Fails closed.</p>
+  <div class="card">
+    <div class="shift">Thu 23 Jul, 07:00 to 15:00</div>
+    <div class="meta">Eastside · posted by Priya</div>
+    <div class="actions">
+      <button type="button" disabled aria-describedby="unavail-why">Claim</button>
+    </div>
+    <p class="hint" id="unavail-why">Checking eligibility is unavailable, try again shortly.</p>
+  </div>
+</section>
+
+</body>
+</html>

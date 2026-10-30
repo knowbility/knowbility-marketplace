@@ -1,0 +1,21 @@
+{
+  "name": "know-product-spec",
+  "version": "0.1.0",
+  "description": "v0.1.0 — Interviews you and writes a product spec an engineer can build from. Starts by testing whether the thing is worth building at all, and will tell you when it isn't. Then asks how it behaves, drafts the document, and grades its own draft by breaking it into workstreams and tasks, reporting every decision it had to invent so you can close the gap before someone else guesses. Once the work is filed it keeps going: grooming works a list of tickets with you, resolving, sharpening, or routing each one to whoever owns the call, and a UI review opens every surface a story needs in a browser, exercises it, and returns a readiness verdict with every finding traced to a contract (it needs browser tools in the session). Built for software product teams, tracker-agnostic, with your local vocabulary and style in an optional profile. Standalone.",
+  "author": {
+    "name": "Knowbility",
+    "url": "https://github.com/knowbility"
+  },
+  "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-product-spec",
+  "repository": "https://github.com/knowbility/knowbility-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "prd",
+    "product-spec",
+    "requirements",
+    "discovery-interview",
+    "decomposition",
+    "readiness-rubric",
+    "planning"
+  ]
+}

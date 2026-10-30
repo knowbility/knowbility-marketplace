@@ -1,0 +1,24 @@
+# Local Claude Code state for this repo — not for distribution
+.claude/settings.local.json
+
+# CLI advisor run artifacts — private review material, never distributed
+.team-runs/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Node
+node_modules/
+package-lock.json
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Generated plugin output that belongs to a user's project, not here
+*-workspace/

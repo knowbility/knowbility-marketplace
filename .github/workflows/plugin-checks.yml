@@ -1,0 +1,53 @@
+name: plugin checks
+
+# Two doors.
+#
+# version-prefix parity guards a specific drift: a plugin version bumped without
+# its description prefix updated to match in BOTH plugin.json and the marketplace
+# catalog. The browse cards render the catalog description, so a prefix fixed in
+# only one place shows the wrong version where people actually look. The release
+# loop in AGENTS.md documents the manual steps; this catches them regardless of
+# where the edit was made.
+#
+# validate-manifests is the cheap structural check. It proves manifests parse. It
+# proves nothing about whether a plugin runs — see AGENTS.md on functional gates.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  version-prefix:
+    name: version-prefix parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: check-version-prefix
+        run: node dev/scripts/check-version-prefix.mjs
+
+  validate-manifests:
+    name: validate manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Claude CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate marketplace manifest
+        run: claude plugin validate .
+      - name: Validate each plugin
+        run: |
+          set -e
+          for d in */; do
+            if [ -f "${d}.claude-plugin/plugin.json" ]; then
+              echo "== validating ${d} =="
+              claude plugin validate "./${d}"
+            fi
+          done

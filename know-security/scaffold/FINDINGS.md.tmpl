@@ -1,0 +1,25 @@
+# Findings Registry
+
+<!-- The durable register of security and privacy findings for this project.
+
+     One `##` block per finding, shaped per the plugin's reference/finding-contract.md:
+     S-YYYYMMDD-NN id, status, check, disposition, severity/confidence/reachability,
+     location, symptom, attack_path, concrete_input, blast_radius, root_cause_hypothesis,
+     remediation, duplicate_of/ticket_link, first_seen/last_seen.
+
+     NEW FINDINGS GO ABOVE THE `## Archive` HEADING. An entry below it is treated as
+     resolved history and is invisible to the gate — appending to the end of this file is
+     the natural mistake, so the gate blocks on any archived finding whose status is not
+     `resolved` rather than trusting the placement.
+
+     Deduplicate BY ROOT CAUSE, not by symptom text: four routes missing the same tenant
+     scope because they bypass the same helper are ONE finding with four locations.
+
+     This file is committable, and it is only safe to commit because of what it never
+     contains — no credential value, no personal record, no working exploit. A finding names
+     the location, the mechanism, and the fix. One that needs a payload to be understood is
+     written wrong. See reference/safety.md.
+
+     Resolved entries move to ## Archive. -->
+
+## Archive

@@ -1,0 +1,27 @@
+{
+  "_note": "Configuration for the security reviewer and its gate. Everything here is optional; the defaults are reasonable and every script states what it fell back to. Nothing in this file makes a claim — the reviewer reads code and produces findings, and the gate enforces only what a script can genuinely decide.",
+
+  "_globs": "Where the locator looks. Widen these before assuming a subsystem is clean — a path outside the globs is not reviewed, and locate.mjs reports a declared framework it could not reach through them.",
+  "source_globs": {{SOURCE_GLOBS}},
+  "migration_globs": {{MIGRATION_GLOBS}},
+
+  "_review_units": "The granularity at which review recency is tracked. Defaults to one level below src/, app/, lib/, server/, api/, packages/, apps/ — roughly 'the auth code', 'the billing code'. Per-file would be unreadable on any real repository; per-repository would be useless.",
+  "review_units": null,
+
+  "_gate": "ADVISORY by default: findings are reported and the build is not this script's call. The registry is human-editable and every field in it is written by the party the gate would be checking, so validating a self-assertion is not binding it — two independent reviews reached that conclusion. This tool exists to shrink the surface a human reviews and to keep closed problems closed, not to replace the human. Set mode to \"blocking\" where your process makes the registry trustworthy (protected branch, required reviewers on security/) — that is a decision about your controls, not about this script. One exception blocks in either mode: a staged credential of a known format, because a key that reaches a remote is rotated, not undone. block_at_severity is the lowest severity that counts: Critical, High, Medium, or Low.",
+  "gate": {
+    "mode": "advisory",
+    "block_at_severity": "High",
+    "block_on_never_reviewed": false,
+    "stale_at_commits": 20
+  },
+
+  "_declared_stores": "Caches, buckets, search indexes, queues, log sinks, and third-party processors — the places personal data lands that no static scan finds reliably, and exactly where deletion quietly fails to reach (PII-05). Declaring one puts it in front of the reviewer. An empty list is reported as undeclared, never read as 'there are none'.",
+  "declared_stores": [],
+
+  "_subject": "What a 'subject' is in this product — the unit personal data belongs to and isolation is scoped by. This is decision S-1. Left null, the reviewer asks rather than assuming.",
+  "subject": null,
+
+  "_sensitive_categories": "Categories in this product carrying obligations beyond ordinary personal data (PII-07): government identifiers, health, financial, biometric, precise location, data about minors. The reviewer flags findings by the category you name, so the reader knows which rules apply.",
+  "sensitive_categories": []
+}

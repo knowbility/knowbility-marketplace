@@ -1,0 +1,21 @@
+{
+  "name": "know-security",
+  "version": "0.1.0",
+  "description": "v0.1.0 — Read the code the way someone trying to get at the data would read it. An adversarial security and privacy reviewer that runs alongside development, hunting the endpoint nobody remembered, the helper everyone uses except here, the log line that seemed harmless, and the personal data no deletion path reaches. Reports findings — severity, the attack path as read, the input that exercises it, the blast radius, the fix — across authorization, PII data flow, injection, authentication, secrets, XSS, SSRF, crypto, config, audit trails and dependencies. Confidence is welded to evidence type so it cannot claim exploitability without naming an input, and seven known-benign classes plus a read-before-classify rule keep it from crying wolf. Scripts locate candidates and say what they could not read; the agent judges. Never probes, never touches a network. Standalone.",
+  "author": {
+    "name": "Knowbility",
+    "url": "https://github.com/knowbility"
+  },
+  "homepage": "https://github.com/knowbility/knowbility-marketplace/tree/main/know-security",
+  "repository": "https://github.com/knowbility/knowbility-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "vulnerability-review",
+    "pii",
+    "privacy",
+    "code-review",
+    "authorization",
+    "secrets"
+  ]
+}

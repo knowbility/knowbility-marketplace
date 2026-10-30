@@ -1,0 +1,34 @@
+# Security decisions — {{PROJECT_NAME}}
+
+<!-- security v{{VERSION}} -->
+
+The architecture decisions that are cheap now and expensive later.
+
+This is a separate file from `contracts/OPEN-DECISIONS.md` on purpose. It uses the same row
+grammar and its own checker, so the two ratchets stay independent — and security triggers
+have different semantics anyway. The real trigger for a tenant-isolation decision is *"a
+second subject's data now exists in the same table,"* which is a schema event, not a source
+glob.
+
+Nobody knows most of these on day one. The point is not to decide early; it is to be asked
+at the moment the answer stops being free.
+
+| Field | Meaning |
+|---|---|
+| Status | `UNDECIDED`, `DECIDED`, or `DEFERRED`. A deferral needs a dated reason in Answer. |
+| Trigger | Path globs, or `always`. Comma-separated; brace alternation is safe. |
+
+## Decisions
+
+| ID | Decision | Status | Trigger | Answer |
+|---|---|---|---|---|
+| S-1 | What is the isolation unit — tenant, organization, workspace, single user, or none? | {{ISOLATION_STATUS}} | `{{MIGRATION_TRIGGER}}` | {{ISOLATION_ANSWER}} |
+| S-2 | Which layer enforces isolation — the database (row-level security), the ORM, or application code? | UNDECIDED | `{{MIGRATION_TRIGGER}}` | |
+| S-3 | What is the principal model, and what is the stable internal identity that credentials link to? | UNDECIDED | `**/auth*`, `**/session*`, `**/identity*`, `**/user*` | |
+| S-4 | Can an active session be revoked immediately? A long-lived stateless token makes this impossible to retrofit. | UNDECIDED | `**/auth*`, `**/session*`, `**/token*` | |
+| S-5 | Is deletion soft or hard, and what is the backup horizon a purge cannot reach? | UNDECIDED | `{{MIGRATION_TRIGGER}}` | |
+| S-6 | Where do audit events go, how long are they kept, and what makes them tamper-evident? | UNDECIDED | `**/audit*`, `**/*log*`, `**/admin*` | |
+
+<!-- Add a row whenever a decision would be expensive to revisit. Write the trigger wider
+     than feels necessary — a trigger that never matches is a decision that will surprise
+     you, and a trigger that fires slightly early costs one conversation. -->
