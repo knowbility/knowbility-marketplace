@@ -25,8 +25,9 @@ organization and working git credentials. That is a real setup step, not an afte
 |---|---|---|---|---|
 | `know-product-spec` | 0.1.0 | `/know-spec:*` | Interview to PRD, then grades its own draft by decomposing it into workstreams and tasks and reporting every decision it had to invent. Tracker-agnostic. | Ported, manifest validated. Not yet driven end to end. |
 | `know-security` | 0.1.0 | `/know-security:*` | Adversarial security and privacy reviewer that reads code the way someone trying to get at the data would. Never probes, never touches a network. | Ported, 66-case suite passing. |
+| `know-photo-generator` | 0.1.0 | `/know-photo:*` | Plain-language description to a physics-aware image prompt, optionally rendered via the Gemini API. Needs a Gemini key. | Ported, key check passing. **A Knowbility brand style is not yet defined**; the section is a template awaiting the organization's input, representation guidance included. |
 
-Two more are planned (`know-photo-generator`, `know-qa-agent`); see
+One more is planned (`know-qa-agent`); see
 `dev/review/migration-plan.md` for the plan they arrive under and `dev/STATE.md` for where that
 work stands.
 

@@ -17,6 +17,11 @@
       "name": "know-security",
       "source": "./know-security",
       "description": "v0.1.0 — Read the code the way someone trying to get at the data would read it. An adversarial security and privacy reviewer that runs alongside development, hunting the endpoint nobody remembered, the helper everyone uses except here, the log line that seemed harmless, and the personal data no deletion path reaches. Reports findings — severity, the attack path as read, the input that exercises it, the blast radius, the fix — across authorization, PII data flow, injection, authentication, secrets, XSS, SSRF, crypto, config, audit trails and dependencies. Confidence is welded to evidence type so it cannot claim exploitability without naming an input, and seven known-benign classes plus a read-before-classify rule keep it from crying wolf. Scripts locate candidates and say what they could not read; the agent judges. Never probes, never touches a network. Standalone."
+    },
+    {
+      "name": "know-photo-generator",
+      "source": "./know-photo-generator",
+      "description": "v0.1.0 — Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is. A guided workflow turns your scene into a physics-aware Nano Banana Pro prompt — camera body, lens, lighting setup, and color grade chosen from a curated reference library — then generates the image directly via the Gemini API at the right aspect ratio for print, social, or hero-banner use. /photo-setup handles the API key (pasted into a local keys.env, never the chat) and an optional default house style; batch and variations modes cover shot lists and multiple takes. Standalone; runs on its own."
     }
   ]
 }

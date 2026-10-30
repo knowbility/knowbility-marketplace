@@ -4,10 +4,12 @@
 
 ## Where things stand
 
-**Phases 0 and 1 complete (unpushed).** The repository is scaffolded and two plugins are ported
-and registered: `know-product-spec` and `know-security`, both at 0.1.0. All four gates pass:
-version-prefix parity, marketplace manifest, both plugin manifests, and `know-security`'s 66-case
-functional suite. Nothing has been committed or pushed to `knowbility/knowbility-marketplace`.
+**Phases 0 through 2 complete.** Phases 0 and 1 are committed locally (`6914684`, 76 files);
+Phase 2 is uncommitted. Three plugins are ported and registered at 0.1.0:
+`know-product-spec`, `know-security`, `know-photo-generator`. All gates pass: version-prefix
+parity 6/6, marketplace manifest, three plugin manifests, `know-security`'s 66-case suite, and
+`know-photo-generator`'s key check. **Nothing has been pushed** to
+`knowbility/knowbility-marketplace`.
 
 ## The work
 
@@ -18,9 +20,9 @@ revised it is in `.team-runs/20261030T135852Z-8b0bac54/`.
 | Phase | Work | State |
 |---|---|---|
 | 0 | Scaffold | **Done, unpushed** |
-| 1 | `know-product-spec` + `know-security` | **Done, unpushed** |
-| 2 | `know-photo-generator` | Next |
-| 3 | `know-qa-agent` | Pending |
+| 1 | `know-product-spec` + `know-security` | **Done, committed** |
+| 2 | `know-photo-generator` | **Done, uncommitted** |
+| 3 | `know-qa-agent` | Next |
 | 4 | Accessibility report presentation and conformance verdicts | Deferred, needs auditor input |
 | 5 | Conformance-reporting plugin | Unscoped, requirements first |
 
@@ -69,6 +71,31 @@ revised it is in `.team-runs/20261030T135852Z-8b0bac54/`.
   namespace rename did not break the scanners.
 - **`S-YYYYMMDD-NN` strings stay.** Those are the security plugin's own finding-ID format
   examples in docs and one regex comment. They carry no organization content.
+
+## Phase 2 notes
+
+- **The identifier scan found nothing in `photo-generator`.** No shas, no internal IDs, no
+  hostnames beyond public ones. So this one genuinely was the light port the original estimate
+  claimed, and the revised scanning method is what establishes that rather than asserting it.
+- **No Knowbility brand style was written.** Their `visual-identity.md` lists logo, colors,
+  typography and photography as open items and names disability representation guidelines among
+  them. A photographic house style for an accessibility organization is not inferable from a
+  website, so the section ships as a template with its fields unfilled, a note saying why, and a
+  **Representation** rule marked as having to come from Knowbility. `/know-photo:generate` was
+  also changed to refuse to fill in a `[TBD]` style, on the reasoning that a template is an
+  unanswered question rather than a default; it offers setup or `--style none` instead.
+- **The brand-style library went 264 lines to 143.** Both source house styles and an undefined
+  placeholder removed; the brand-neutral Design-Ready Headshot and the style-authoring guide kept.
+- **The config directory was renamed, and this is inconsistent with a judgment worth recording.**
+  `.photo-generator/` became `.know-photo-generator/` across all 40 references, which covers
+  `keys.env` alongside `config.json` and `photo-styles.md`. The key file is a shareable
+  third-party credential and sharing it would have been a convenience; the other two are state
+  that would diverge between the two plugins. Splitting the resolution path was rejected as
+  disproportionate complexity in a plugin whose key-hygiene rules are deliberately simple, so
+  everything moved. The cost falls only on someone running both plugins, and
+  `GEMINI_API_KEY` in the environment is checked first and serves both.
+- **Image generation itself is unverified.** The `--check-keys` path runs and validated against
+  the live API, but no image was rendered, because that bills a real generation.
 
 ## Open questions
 
