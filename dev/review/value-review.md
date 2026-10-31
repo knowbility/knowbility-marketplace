@@ -99,13 +99,31 @@ metadata), the maintenance cost would be significantly reduced." That is what th
 does, and the measurement above closes the question. Its objection costs the proposal one static
 table, not a standards-tracking programme.
 
-**Codex declined to propose anything here, on grounds that are a sequencing constraint rather than
-a refusal.** It held that QA's "pairing, evidence capture, deduplication, and reporting already
-exist" and that criterion presentation is already scoped — a reasonable reading of the brief, but
-Phase 4 presents what was found and Phase 5 consumes human evidence; neither names what was never
-tested. Its stronger point stands: `know-qa-agent` has never been driven against a live site from
-a cold install (`dev/review/install-walk.md`), and capability added to an unexercised plugin is
-built on unverified ground. **So the order is: exercise the plugin first, then add this.**
+**Codex declined to propose anything here.** It held that QA's "pairing, evidence capture,
+deduplication, and reporting already exist" and that criterion presentation is already scoped — a
+reasonable reading of the brief, but Phase 4 presents what was found and Phase 5 consumes human
+evidence; neither names what was never tested.
+
+Its second reason, quoted exactly, was: *"Its documented unverified cold-install journey deserves
+validation before another capability is added (`know-qa-agent/README.md:299–303`)."* That is a
+careful statement about what the document says about itself, and it is accurate.
+
+**An earlier draft of this review turned that into "`know-qa-agent` has never been driven against a
+live site from a cold install," and that claim is not supportable by anyone — Codex, this review, or
+the repository.** What the repository records is narrower and carries a qualifier that got dropped:
+`know-qa-agent/README.md` says "it has not yet been driven against a live site from a cold install
+**here**," and `AGENTS.md:29` says "Not yet driven against a live site from a cold install **here**."
+Both are claims about this port and this repository's verification log. Neither is a claim about
+whether the software works, and **`know-qa-agent` is a port of a plugin that was already in regular
+use before the migration** — the port changed the namespace and the branding, not how it runs. The
+record being empty here is not evidence of anything about the tool.
+
+**Consequence: this weakens the sequencing argument rather than strengthening it.** What is
+genuinely unverified is the *packaging* of the port — that `/know-qa:init` installs the harness and
+a run completes under the new namespace from a clean install. The port was already checked by
+manifest validation, module resolution across every harness tool, an engine spec compile, and a
+dynamic-reference sweep. So a live-site run is a cheap sanity check worth doing, not a precondition
+that gates the recommendation.
 
 Codex also kept proposal discipline tightly: it refused to assert a value case without a named
 operator, a frequency, and a measured cost, and said so rather than filling the gap with a
@@ -139,9 +157,10 @@ images missing alt, icon buttons with no accessible name, duplicate IDs, heading
 
 ## Ranked
 
-1. **Report untested criteria in `know-qa-agent`** — after the plugin has been exercised against a
-   live site from a cold install. Highest value to the organization's core work, bounded cost,
-   strengthens the house rule rather than straining it.
+1. **Report untested criteria in `know-qa-agent`.** Highest value to the organization's core work,
+   bounded cost, strengthens the house rule rather than straining it. Worth pairing with a
+   live-site run under the new namespace, to confirm the port's packaging — but that is a sanity
+   check alongside, not a gate in front.
 2. **Fill the `know-photo-generator` house style**, including disability representation. Not
    engineering; a decision and a content pass, already Knowbility's to make.
 3. **Correct `pair/SKILL.md:97`** so the chat-specific tools are described as what they are, or

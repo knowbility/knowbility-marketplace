@@ -59,8 +59,16 @@ mechanism is the same one verified here, so the risk is label accuracy rather th
 
 **The other four plugins' first-run paths.** `know-security:init`, `know-qa:init` (which installs a
 browser harness and needs Node 18+ and Chrome), `know-photo:setup` (needs a Gemini key), and
-`know-spec:start`. None has been run from a cold install. An actual image render through
-`know-photo-generator` bills a real generation and has never been done.
+`know-spec:start`. **None has been run from a cold install of the `know-` port.** An actual image
+render through `know-photo-generator` bills a real generation and has not been done here either.
+
+**That qualifier is the whole claim, and dropping it has already caused one wrong conclusion.**
+Every plugin here is a port of something that was in use before the migration, and the ports
+changed namespaces and branding rather than behavior. "Not run here" is a statement about this
+repository's verification log. It is not evidence that a path is broken, untested in any absolute
+sense, or risky — and a review that reads it that way will invent a precondition that does not
+exist. What these runs would actually establish is that the *packaging* survived the port: the new
+namespace resolves, the installers fetch what they should, and a run completes from a clean cache.
 
 ## Two methodology traps, recorded so nobody loses an hour to them
 
