@@ -355,8 +355,14 @@ tool.
 /plugin update know-product-spec
 /plugin update know-security
 /plugin update know-photo-generator
+/plugin update know-blueprint
+/plugin update know-researcher
 /reload-plugins
 ```
+
+Update only the tools you installed. The first line refreshes the catalog, which is also what makes
+a newly added tool appear — if a tool you expect is not in the list, refresh the marketplace before
+concluding it is missing.
 
 If a version will not change, your local catalog is cached. Uninstall and reinstall that tool to
 force a clean pull.

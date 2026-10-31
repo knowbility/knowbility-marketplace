@@ -183,6 +183,7 @@ Steps 3 and 4 are the ones that get forgotten, which is exactly what the CI chec
 ```
 node dev/scripts/check-version-prefix.mjs
 node dev/scripts/check-described-commands.mjs
+node dev/scripts/check-namespace.mjs
 claude plugin validate .
 claude plugin validate ./<plugin>
 ```
@@ -191,6 +192,8 @@ claude plugin validate ./<plugin>
 exist, in the one piece of text shown in the install UI, and two other gates passed it — one
 compares only the version prefix, the other compares the manifest description to the catalog
 description, which agreed because both carried the same wrong name. Neither looked inside the prose.
+
+`check-namespace.mjs` enforces convention 1 — it exists because an adversarial review pointed out that the convention was written as a rule and mapped to no gate, so a new plugin could drift without anything noticing. A rule nothing enforces is a rule that quietly stops being true.
 
 Two more are worth running when the relevant thing changed:
 
@@ -204,7 +207,32 @@ so redirect it — running it without redirecting leaves the file stale while lo
 
 A plugin that ships executable code or drives a browser needs a functional check too, not just
 manifest validation. Validating a manifest proves the manifest parses; it proves nothing about
-whether the thing runs. Where a plugin carries its own test or self-test, that is the functional
+whether the thing runs.
+
+**When a plugin has no test of its own, the minimum functional check is this.** Two reviewers
+flagged that the rule above says a functional check is required without saying what passing one
+looks like, which leaves each maintainer to decide and lets two releases claim the same rule at
+different standards. So:
+
+1. **Install it from the marketplace**, not from the working tree — `claude plugin install
+   <plugin>@knowbility` after a `marketplace update`. A plugin that works in the repository and
+   not from a cold install is the failure this catches, and it is the common one.
+2. **Run its own entry point and look at what it produced.** Not "it did not error" — open the
+   file, read the output, confirm it says what the README promised it would say.
+3. **Exercise one refusal.** Every plugin here has something it declines to do: a gate, an unfilled
+   template it will not invent values for, a determination it leaves to a person. Trigger that
+   path and confirm it refuses. A plugin whose guardrail has never been observed working does not
+   have a guardrail, it has a comment.
+4. **Record what you ran and what you saw**, in `dev/review/install-walk.md`, including what you
+   did not cover.
+
+A release may ship with a functional check still outstanding, but only if the plugin's row in the
+table above says so in plain words. "Ported, manifest validated" is an honest status; silence is
+not.
+
+The browser-driving case is the expensive one and is named rather than hidden: `know-qa-agent`
+needs Node 18+, Chrome, and a real target before step 2 means anything, which is why its row says
+it has never been driven against a live site. Where a plugin carries its own test or self-test, that is the functional
 gate: `node dev/know-security/tests/finder.test.mjs` (66 cases) and
 `python3 know-researcher/reference/validate-corpus-review.py self-test` (74 cases). The latter also
 has `hash-self`, whose output must match `validator_sha256` in

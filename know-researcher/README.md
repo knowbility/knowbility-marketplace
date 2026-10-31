@@ -162,8 +162,20 @@ queries are derived from your research topic, and they go out over the network.
 
 | **Codex CLI** (optional) | Tier-1 reviewer for `review-corpus` | `codex` CLI, an OpenAI account |
 
-For everything above the last row, what goes out is a **search query derived from your topic**.
-Every call goes through Bash, so you can see what was requested.
+What goes out above the last row is mostly a **search query derived from your topic** — but not
+only that, and the difference matters if the topic is sensitive:
+
+- **Extraction sends a URL and pulls the page back.** Tavily's and Firecrawl's extract modes, and
+  the built-in `WebFetch`, fetch a specific address you have already seen in search results.
+- **Three services get an identifier.** OpenAlex takes a `mailto` parameter and Unpaywall an email,
+  both for polite-pool access; SEC EDGAR requires a `User-Agent` that identifies the tool.
+- **The floor tier does not go through Bash.** `WebSearch` and `WebFetch` are Claude's own tools, so
+  when no search CLI is installed — the default — those calls are not visible as shell commands.
+  Everything else is a CLI or `curl` invocation through Bash, where you can read exactly what was
+  requested.
+
+No file from your project is uploaded by any of it. What leaves is queries, URLs, and the
+identifiers above.
 
 **The last row is different, and it is the one to think about.** The corpus review runs two
 independent reviewers. Tier 2 is this plugin's own reviewer agent, running on Claude like the rest
