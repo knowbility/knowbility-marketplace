@@ -107,6 +107,20 @@ its prerequisites before, rather than after, you hit them.
 
 Each version matches that plugin's `plugin.json`, which is the source of truth.
 
+**Every plugin you install costs a little context on every session**, used or not, because its skill
+descriptions have to be loaded for Claude to know the plugin is there. If you want the number for a
+particular one, ask:
+
+```bash
+claude plugin details know-blueprint@knowbility
+```
+
+That reports its always-on cost, its cost each time a skill runs, and its full component list. The
+figures are not printed here on purpose — they shift with every plugin update and every Claude Code
+release, and a stale number in a README is worse than no number. For scale: all six together come to
+roughly four percent of a standard context window, which is a real cost and not usually a reason to
+install fewer.
+
 ## Which one should I start with?
 
 - **You want to see what this is good for in ten minutes** → `know-security`, if you already have

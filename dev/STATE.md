@@ -685,23 +685,36 @@ That last row is the one worth having. The gate is this plugin's central guarant
 how it behaves when `jq` is missing, and it now has an end-to-end test from the installed path
 rather than only a local one.
 
-### A token cost nobody has documented
+### Token cost: measured, judged, and documented as a pointer rather than a table
 
-`claude plugin details` reports **always-on** cost, paid on every session whether or not the plugin
-is used:
+`claude plugin details` reports an **always-on** cost paid on every session whether the plugin is
+used or not — the skill and agent descriptions that have to be in context for Claude to know the
+plugin exists. Measured: `know-blueprint` **~790**, `know-researcher` **~2,771**. On invoke,
+`research-audit-claims` is ~37k and `research-init` ~30.2k.
 
-- `know-blueprint` — **~790 tokens**
-- `know-researcher` — **~2,771 tokens**
+Measuring the other four needed them installed, and auto mode correctly refused that as
+self-modification. Estimated instead from frontmatter size, calibrated against the two measured
+values at 3.36 chars per always-on token:
 
-And on-invoke, paid each time a skill fires: `research-audit-claims` ~37k, `research-init` ~30.2k,
-`research-summarize-section` ~19.1k. The other four plugins could not be measured because the CLI
-needs a plugin installed to report on it.
+| Plugin | Skills | Agents | Always-on | |
+|---|---|---|---|---|
+| `know-product-spec` | 10 | 0 | ~1,970 | estimated |
+| `know-qa-agent` | 10 | 1 | ~1,090 | estimated |
+| `know-security` | 4 | 1 | ~1,230 | estimated |
+| `know-photo-generator` | 2 | 0 | ~320 | estimated |
+| `know-blueprint` | 4 | 0 | 790 | **measured** |
+| `know-researcher` | 12 | 2 | 2,771 | **measured** |
+| **all six** | **42** | **4** | **~8,200** | ~4% of a 200k context |
 
-No README in this repository mentions token cost. For a reader deciding whether to install all six
-this is real information, and ~2.8k always-on for a plugin you are not using that day is the kind of
-thing someone notices later and resents. **Not acted on** — the honest numbers need all six measured
-first, which means installing all six, and that is a decision about this machine rather than a
-documentation task.
+A two-point calibration is rough and the estimates should be treated as order-of-magnitude.
+
+**The judgment, which is the part that matters.** Four percent for all six is a real cost and not a
+reason to install fewer, so a per-plugin table in the README would invite optimizing something that
+does not need optimizing. Worse, those numbers shift with every plugin edit and every Claude Code
+release, so a table is stale the week after it is written — the exact defect class this project spent
+two review rounds removing. **Documented as a pointer instead:** the README now says the cost exists,
+gives the one command that reports it accurately on demand, says plainly why no figures are printed,
+and gives the four-percent figure for scale only. A pointer cannot go stale.
 
 ### A fifth phantom finding, caught before it was written down
 
