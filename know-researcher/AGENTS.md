@@ -105,7 +105,9 @@ These were decided during the port into this marketplace. Change them deliberate
   the README "Plugins at a glance" row, and the root `AGENTS.md` plugin list; add a `CHANGELOG.md`
   entry; then `node dev/scripts/check-version-prefix.mjs`,
   `node dev/scripts/check-described-commands.mjs`, and `claude plugin validate ./know-researcher`
-  + `claude plugin validate .`; commit, tag **`know-researcher-v<X.Y.Z>`**, push.
+  + `claude plugin validate .`; commit, then `claude plugin tag ./know-researcher --push`, which
+  writes **`know-researcher--v<X.Y.Z>`** (double dash) after checking the manifest and the catalog
+  entry agree.
 - **Editing cautions specific to this plugin:**
   - The `outputs/` gate is the hard backstop. Don't add another writer to `outputs/`, and don't
     loosen the hook without preserving both the structural rule and the fail-closed behavior.

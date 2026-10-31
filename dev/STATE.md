@@ -47,23 +47,34 @@ Per-plugin detail lives in each `CHANGELOG.md`. Install verification lives in
 
 ## Next steps (in order)
 
-1. **Tag the six current releases.** `AGENTS.md` step 7 specifies `<plugin>-v<X.Y.Z>` and no tags
-   exist, because all six arrived in bulk rather than through the release loop. `claude plugin tag`
-   validates that the manifest and the catalog entry agree, so it is the right tool. Six tags:
-   `know-product-spec-v0.1.0`, `know-security-v0.1.0`, `know-photo-generator-v0.1.0`,
-   `know-qa-agent-v0.1.0`, `know-blueprint-v0.1.0`, `know-researcher-v1.18.0`.
-2. **Run `/know-research:init` on a real topic.** The last unwalked path and the only one that needs
+1. **Run `/know-research:init` on a real topic.** The last unwalked path and the only one that needs
    something from Kelsey: an actual research subject. Four questions, ~20 minutes of live web
    research, then a phased plan. A fake topic tests the plumbing and says nothing about whether the
    plan is any good. What else it proves is listed in `dev/review/install-walk.md`.
-3. **One auditor conversation unblocks both Phase 4 and Phase 5.** Phase 5's eleven questions are in
+2. **One auditor conversation unblocks both Phase 4 and Phase 5.** Phase 5's eleven questions are in
    `dev/phase-5/REQUIREMENTS.md` and are about current practice, not about the tool; its eleventh
    question decides whether this is a plugin at all. Phase 4 needs real `know-qa-agent` output in
    front of the same person — the grounding is in `dev/review/migration-plan.md` under "The deferred
    accessibility work".
-4. **Walk the remaining four plugins' first-run paths** when there is a reason to. `know-qa-agent`
+3. **Walk the remaining four plugins' first-run paths** when there is a reason to. `know-qa-agent`
    against a live site is the most valuable and the most expensive (Node 18+, Chrome, a real
    target). An actual image render through `know-photo-generator` bills a generation.
+
+## Also done, after the checkpoint
+
+- **All six releases tagged**, `<plugin>--v<X.Y.Z>`, via `claude plugin tag` which validates that
+  each manifest and its catalog entry agree. The **double dash is the convention here** — it is
+  what the tool produces, and a single dash is ambiguous about where a hyphenated plugin name ends.
+  `AGENTS.md` said single dash and was corrected. All six point at `98e61f6` because they arrived
+  in bulk; later releases will not share a commit.
+- **A source organization's internal identifiers were found and removed from
+  `dev/know-researcher/ARCHITECTURE.md`.** It used a named company's product as an extended
+  teaching comparison and described its internals — the product name, an internal content system,
+  and an internal runtime service. **The adversarial de-branding sweep ran after Phase 3, so
+  nothing brought in during Phases 6 and 7 was ever swept.** The passage's argument is good and was
+  kept; it now describes a generic productized guided-session agent. The identifier sweep's
+  patterns would not have caught these — they are product and service names, not hostnames or keys.
+  **Any future port must sweep its `dev/` imports, not just the plugin directory.**
 
 ## Open questions / decisions pending
 

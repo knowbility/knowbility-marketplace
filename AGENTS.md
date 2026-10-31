@@ -156,9 +156,11 @@ assumed.
   because nothing about the research system was rebuilt and 0.1.0 would misrepresent its maturity.
   Both are explained in their own changelogs; `dev/PROVENANCE.md` has the comparison so the
   inconsistency reads as deliberate.
-- **No releases are tagged yet.** Step 7 of the release loop specifies `<plugin>-v<X.Y.Z>` and no
-  tags exist, because all six plugins arrived in bulk rather than through the loop. Tagging the
-  current six retroactively is an open task, not a decision — see `dev/STATE.md`.
+- **The tag format is `<plugin>--v<X.Y.Z>`, double dash**, because that is what
+  `claude plugin tag` produces and a documented convention that fights its own tooling is how
+  drift starts. All six plugins were tagged retroactively at `98e61f6`, the checkpoint commit,
+  since they arrived in bulk rather than through the release loop — so the six tags share a commit
+  and later releases will not.
 
 ## Release & versioning
 
@@ -168,7 +170,11 @@ assumed.
 4. Update the same prefix in the plugin's entry in `.claude-plugin/marketplace.json`.
 5. Add a `CHANGELOG.md` entry in the plugin.
 6. Run the gates below. All three must pass.
-7. Commit, and tag `<plugin>-v<X.Y.Z>`.
+7. Commit, then tag with `claude plugin tag ./<plugin>`, which validates that the manifest and the
+   catalog entry agree before writing anything. It produces `<plugin>--v<X.Y.Z>` with a **double**
+   dash, and that is the convention here: a single dash is ambiguous about where a hyphenated
+   plugin name ends (`know-photo-generator-v0.1.0`), while the double dash is not. Add `--push`
+   to push the tag.
 
 Steps 3 and 4 are the ones that get forgotten, which is exactly what the CI check exists to catch.
 

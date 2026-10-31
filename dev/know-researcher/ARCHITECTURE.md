@@ -6,8 +6,8 @@ wants to understand the system, not to be searched by someone who already does.
 
 Two sections are useful even if you never run the plugin. **The idea underneath this** covers
 what an agent harness and an agent loop actually are, since researcher is a worked example of
-both. **Two shapes of agent** sets it against a productized system like the Hello Alice AI
-Advisor, and works out what actually differs between them.
+both. **Two shapes of agent** sets it against a productized guided-session agent and works
+out what actually differs between them.
 
 If you maintain the plugin and need exact write-ownership, the current status of every known
 limit, or the version each piece landed in, that lives in
@@ -581,12 +581,12 @@ remove a file will fail.
 researcher is one shape of built agent. It is not the only one, and the contrast is worth
 drawing, because the choice between them is usually made by accident.
 
-Set researcher beside a productized agent like the Hello Alice AI Advisor. That system runs a
-guided session with a business owner: a named advisor works through a structured conversation
-about their business. What drives it is a **playbook config**, a single JSON file validated
-against a schema engineering owns, stored in White Rabbit and executed by alice-ai's LangGraph
-runtime. The people who shape its behavior do so by authoring that config, chiefly through the
-system prompt override and the input and output contracts the schema leaves open.
+Set researcher beside a productized guided-session agent — the shape where a customer is
+walked through a structured conversation by a persona the product supplies. Call it **the
+advisor**. What drives one of these is typically a single configuration document validated
+against a schema the engineering team owns, stored in a content system and executed by a hosted
+graph runtime. The people who shape its behavior do so by authoring that configuration, chiefly
+through a system-prompt override and whatever input and output contracts the schema leaves open.
 
 Both are agents. Both have a loop, tools, context, rules, and a quality bar. The architectural
 difference is one thing, and everything else follows from it:
@@ -605,7 +605,7 @@ anyone runs it.
 
 That single difference propagates through the whole design.
 
-| | Plugin shape (researcher) | Product shape (the AI Advisor) |
+| | Plugin shape (researcher) | Product shape (the advisor) |
 |---|---|---|
 | **Who owns the base harness** | Somebody else's. Claude Code and Cowork supply the loop, tools, and permissions. | Built in-house. The team owns the runtime as well as the behavior. |
 | **Who is in the session** | The operator, who is also accountable for the output | A customer, who is the person being served |
@@ -628,9 +628,10 @@ built by different people for different users, drew the same line in the same pl
 is not a limitation of either architecture. It is the thing both were built to protect.
 
 **One clarification, because the shorthand misleads.** This is not a difference between
-organizations or repositories. Hello Alice's own marketplace carries plenty of plugin-shaped
-agents built exactly like researcher, with the same structure and the same stop-and-ask
-behavior. The distinction here is between two shapes an agent can take, and the question that
+organizations or repositories. The same team that builds a product-shaped advisor will also
+have plugin-shaped agents built exactly like researcher, with the same structure and the same
+stop-and-ask behavior. The distinction here is between two shapes an agent can take, and the
+question that
 picks between them is always the same: **when this thing hits a judgment call, is the person who
 should make it going to be in the room?**
 
