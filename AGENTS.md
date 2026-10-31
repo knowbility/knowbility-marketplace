@@ -132,6 +132,34 @@ actually checked? Then close that off where the output is produced, not only in 
 - **`dev/STATE.md`** is the handoff point between working sessions. Write it before clearing
   context so nothing important lives only in a conversation.
 
+## Decisions of record
+
+Settled calls that a fresh session should not reopen. Each was asked and answered rather than
+assumed.
+
+- **Repository visibility: private.** Installing requires `knowbility` org read access plus git
+  credentials on the installer's machine, which is what the README documents. Verified working
+  against the private repository — see `dev/review/install-walk.md`.
+- **Maintenance model: it does not matter who maintains these.** Kelsey Ruger is on Knowbility's
+  board and can support them either way. **The instruction that follows is the operative part: the
+  documentation is written to be solid regardless.** Nothing is trimmed on the assumption that the
+  original author will be around to answer questions. This was raised five times during the
+  migration before being closed; do not raise it again.
+- **Provenance is recorded, under `dev/`.** `dev/PROVENANCE.md` names the source marketplaces, the
+  per-plugin licensing, and the reasoning behind the root `LICENSE`. It never ships to a plugin
+  user. Kept on maintainability grounds: six plugins from two sources with two different version
+  decisions, and without the table those answers live only in one person's memory.
+- **The MIT notice is a single Knowbility copyright**, with no retained third-party notice. The
+  reasoning is in `dev/PROVENANCE.md`. It is a drafting judgment, not legal advice.
+- **Two version decisions, deliberately inconsistent.** `know-photo-generator` reset from 1.2.0 to
+  0.1.0 because its brand-style library was genuinely rebuilt. `know-researcher` kept **1.18.0**
+  because nothing about the research system was rebuilt and 0.1.0 would misrepresent its maturity.
+  Both are explained in their own changelogs; `dev/PROVENANCE.md` has the comparison so the
+  inconsistency reads as deliberate.
+- **No releases are tagged yet.** Step 7 of the release loop specifies `<plugin>-v<X.Y.Z>` and no
+  tags exist, because all six plugins arrived in bulk rather than through the loop. Tagging the
+  current six retroactively is an open task, not a decision — see `dev/STATE.md`.
+
 ## Release & versioning
 
 1. Make the change in the plugin directory.
@@ -148,13 +176,34 @@ Steps 3 and 4 are the ones that get forgotten, which is exactly what the CI chec
 
 ```
 node dev/scripts/check-version-prefix.mjs
+node dev/scripts/check-described-commands.mjs
 claude plugin validate .
 claude plugin validate ./<plugin>
 ```
 
+`check-described-commands.mjs` exists because a manifest description named a command that did not
+exist, in the one piece of text shown in the install UI, and two other gates passed it — one
+compares only the version prefix, the other compares the manifest description to the catalog
+description, which agreed because both carried the same wrong name. Neither looked inside the prose.
+
+Two more are worth running when the relevant thing changed:
+
+```
+node dev/scripts/identifier-sweep.mjs <plugin> [<dir> ...]   # after any port or de-branding
+node dev/scripts/ground-truth.mjs > dev/review/readiness/ground-truth.md
+```
+
+The sweep returns candidates, not findings; read every line. `ground-truth.mjs` writes to stdout,
+so redirect it — running it without redirecting leaves the file stale while looking like it worked.
+
 A plugin that ships executable code or drives a browser needs a functional check too, not just
 manifest validation. Validating a manifest proves the manifest parses; it proves nothing about
-whether the thing runs.
+whether the thing runs. Where a plugin carries its own test or self-test, that is the functional
+gate: `node dev/know-security/tests/finder.test.mjs` (66 cases) and
+`python3 know-researcher/reference/validate-corpus-review.py self-test` (74 cases). The latter also
+has `hash-self`, whose output must match `validator_sha256` in
+`know-researcher/reference/review-protocol-contract.json` — a cheap way to prove a text pass did not
+corrupt the validator.
 
 ## Adding a plugin
 
