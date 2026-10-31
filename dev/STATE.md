@@ -587,27 +587,37 @@ still unwalked. Everything below is `know-blueprint`, chosen because it needs no
 **This independently confirms the private-repository question is closed.** The repo is private, the
 add and install both succeeded, and nothing was done by hand beyond the two documented commands.
 
-### The one thing the walk could not settle
+### Closed: the command strings are right, and I had misread the listing
 
-**Whether the exact short command strings the README documents resolve when typed.** The README
-tells users to type `/know-blueprint:capture`. The commands exist on disk at
-`commands/know-blueprint/capture.md`, and a fresh session's own listing reports the invocations as
-`/know-blueprint:know-blueprint:capture` (plugin, then command namespace, then command) and
-`/know-blueprint:blueprint-capture` (plugin, then skill) — the shortened `/know-blueprint:capture`
-did not appear in that listing.
+Kelsey ran `/know-blueprint:blueprint-guide` in a normal interactive session. It resolved and
+executed, from `~/.claude/plugins/cache/knowbility/know-blueprint/0.1.0/`, a directory created at
+18:52:47 by the install above — the cold install's own copy, byte-identical to the repository. The
+walk is therefore complete through the step that matters most: a user typing an invocation and
+getting the real thing.
 
-It probably works, because dropping a redundant prefix is the normal affordance, and
-`dev/scripts/ground-truth.mjs` records the two-part form as the resolvable one. But "probably" is
-not verified, and this applies to the four plugins that ship a `commands/` directory:
-`know-security` (`/know-security:*`), `know-photo-generator` (`/know-photo:*`), `know-blueprint`
-(`/know-blueprint:*`), and `know-researcher` (`/know-research:*`). `know-product-spec` and
-`know-qa-agent` are unaffected — they ship no commands, so their colon-form skill names *are* the
-typed names, and those resolve.
+**My doubt about the README's command strings was a misreading, now corrected.** A fresh session
+lists the command as `know-blueprint:know-blueprint:guide`, and I read that as the typed form,
+concluding the documented `/know-blueprint:guide` was missing. It is not missing. The first segment
+is the **plugin** prefix, which drops when unambiguous; the remainder is the command's own
+`<namespace>:<name>`. So:
 
-**Nothing was changed in the documentation on this.** Editing the README to a different form on
-unverified evidence risks replacing a string that works with one that does not. **This needs
-Kelsey to type one command in a normal interactive session** — `/know-blueprint:guide`, which is
-read-only and takes five seconds — and say whether it ran.
+| Registered name | What a user types |
+|---|---|
+| `know-blueprint:know-blueprint:guide` | `/know-blueprint:guide` — the command |
+| `know-blueprint:blueprint-guide` | `/know-blueprint:blueprint-guide` — the skill |
+
+Both are real, both resolve, and the README documents the first. `dev/scripts/ground-truth.mjs` had
+it right all along; I second-guessed a correct gate against a listing I had parsed wrong. The same
+reading applies to the other three command-shipping plugins, so `/know-security:sweep`,
+`/know-photo:setup`, and `/know-research:init` are correct as documented. **No documentation change
+was needed and none was made.**
+
+**The pattern across this session, worth one line.** Three times I turned an untested assumption
+about host behavior into an open issue: Desktop private-repo install, skill-name collisions, and
+this. Each dissolved on contact with the machine, and each check cost under a minute. The lesson is
+not "be less cautious" — the gate findings were real. It is that *unverified* and *broken* are
+different claims, and writing the second when I had only established the first created work that did
+not exist.
 
 ### Why I could not test it myself, recorded so nobody repeats the attempt
 
@@ -634,27 +644,21 @@ which is the normal state for a returning user and a reasonable thing to test.
 
 ## Next step
 
-**One thing needs Kelsey: type `/know-blueprint:guide` in a normal session and say whether it ran.**
-It is read-only and takes five seconds. It settles whether the README's command strings are right
-for four of the six plugins, and it is the only question the cold-install walk could not answer
-itself.
+**Push the four local commits.** Nothing is blocked, nothing waits on Kelsey, and the migration's
+own gates are all closed: six plugins validated, the install path verified end to end against the
+private repository, and a skill from a cold install running in a real session.
 
-Everything else about the install path is verified: adding a private marketplace works, installing
-works, the files land, and the skill loads and runs its real content.
+Pushing also makes `know-researcher` installable, which is the one remaining walk. It matters more
+than `know-blueprint`'s did, because it is the long path — a research project runs over days, and
+resumability and the `STATE.md` handoff either work or don't. That walk starts from a machine that
+already has the marketplace added, which is the normal state for a returning user.
 
-**Then push the three local commits**, which also makes `know-researcher` installable so its own
-first-run path can be walked. That walk matters more than `know-blueprint`'s did, because it is the
-long one — a research project runs over days, and resumability and the `STATE.md` handoff either
-work or don't.
+**Then Phase 4**, which needs real output from a live run in front of one of Knowbility's auditors
+before any of it can be designed. **Phase 5** depends on nothing and needs a requirements pass
+first: what document, to which standard, for whose signature, carrying what evidence. It is the one
+remaining piece that is a project rather than a task.
 
-**Then Phase 4 becomes possible**: it needs real output from a live run in front of one of
-Knowbility's auditors before any of it can be designed.
-
-**Phase 5 depends on nothing** and is the one remaining piece that is a project rather than a task.
-It needs a requirements pass first: what document, to which standard, for whose signature, carrying
-what evidence.
-
-**Still unaddressed, Kelsey's call:** two Knowbility marketplace repositories exist —
+**Kelsey's call, no action taken:** two Knowbility marketplace repositories exist —
 `knowbility/knowbility-marketplace` (this one, everything is here) and
 `knowbility/knowbility-plugin-marketplace` (private, created 2026-08-14, 2 KB, effectively empty).
 Near-identical names are a way for someone to add the wrong one.
