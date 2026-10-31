@@ -22,18 +22,43 @@ never looked at, and that is the number an accessibility auditor needs most.
 
 ### The measurement
 
-axe-core 4.12.1 — the version pinned in `know-qa-agent/harness/tools/package.json` — ships **105
-rules**, carrying tags for **29 distinct success criteria**. Of those 29: one is 4.1.1 Parsing,
-which WCAG 2.2 marks obsolete and removed; five are AAA; and **23 are at level A or AA**.
+axe-core 4.12.1 — the version pinned in `know-qa-agent/harness/tools/package.json` — ships 105
+rules, but **9 are disabled by default** and `axe.mjs:62` runs `axe.run(document, { resultTypes: … })`
+with no `rules` or `runOnly` option, so those 9 stay off. **96 rules actually run.**
 
-WCAG 2.2 lists 87 success criteria, of which 86 are live and carry a conformance level: **31 at A,
-24 at AA, 31 at AAA**. So A and AA together are **55** criteria.
+Those 96 carry tags for 22 distinct success criteria, of which **21 are at level A or AA** in
+WCAG 2.2.
 
-> **axe-core 4.12.1 has at least one rule touching 23 of the 55 live A/AA success criteria in
-> WCAG 2.2.** Thirty-two have no automated rule at all — and "has a rule" is not "fully tests,"
-> since several of the 23 are only partly machine-decidable.
+WCAG 2.2 lists 87 success criteria. 86 are live and carry a conformance level — **31 at A, 24 at AA,
+31 at AAA** — and the 87th, 4.1.1 Parsing, is marked obsolete and removed. So A and AA together are
+**55** criteria.
 
-Those 32 criteria are the list an auditor needs and cannot currently get.
+> **The deep tier's axe pass has at least one rule for 21 of the 55 live A/AA success criteria in
+> WCAG 2.2. Thirty-four have none** — and "has a rule" is not "fully tests," since several of the
+> 21 are only partly machine-decidable.
+
+The 34 with no enabled rule: 1.2.1, 1.2.3, 1.2.4, 1.2.5, 1.3.2, 1.3.3, 1.4.5, 1.4.10, 1.4.11,
+1.4.13, 2.1.2, 2.1.4, 2.3.1, 2.4.3, 2.4.5, 2.4.6, 2.4.7, 2.4.11, 2.5.1, 2.5.2, 2.5.4, 2.5.7, 2.5.8,
+3.2.1, 3.2.2, 3.2.3, 3.2.4, 3.2.6, 3.3.1, 3.3.3, 3.3.4, 3.3.7, 3.3.8, 4.1.3. That list includes
+1.4.11 Non-text Contrast, 2.4.3 Focus Order, 2.4.7 Focus Visible, 2.1.2 No Keyboard Trap, and
+3.3.1 Error Identification — core auditor concerns, every one.
+
+**One scope limit that must travel with this number: 21 of 55 is axe's coverage, not the plugin's.**
+The baseline tier has the agent check keyboard reachability, visible focus, alt text, and form
+labels heuristically; `contrast.mjs` decides 1.4.3 deterministically; and the `aria-widgets` focus
+area adds keyboard-conformance checks of composite widgets against the ARIA Authoring Practices.
+So a criterion on the list of 34 may still have been looked at — just not by a deterministic rule.
+**That distinction is the feature, not a caveat to it:** the useful report separates "a rule failed,"
+"a rule passed," "an agent looked heuristically," and "nothing touched this," because those are four
+different grades of evidence and today they arrive looking alike.
+
+### A one-line win found while measuring
+
+Of the 9 rules axe ships disabled, five are deprecated and three are AAA. **The ninth is
+`target-size` — WCAG 2.2 AA, criterion 2.5.8 Target Size (Minimum) — and it is not deprecated.**
+Enabling it is one rule id in the run options and takes A/AA coverage from 21 to 22. Worth doing
+with the caveat stated: axe ships it off, so it should be enabled deliberately and its results read
+knowing the vendor holds it back.
 
 **How both figures were obtained.** The axe side by calling `axe.getRules()` against a clean
 install of the pinned version — no browser, no page, no network. The WCAG side by counting the
@@ -57,15 +82,16 @@ reads like a clean bill of health. Printing the untested set turns the caveat in
 **It is the missing upstream of work already scoped.** Phase 4 annotates findings with the criteria
 they map to. Phase 5 consumes human evidence per criterion to assemble a conformance report.
 Neither produces the list of criteria a person still has to go test — which is Phase 5's input
-contract, and nothing in the marketplace generates it.
+contract, and no plugin here advertises producing it.
 
-**Two of its three tiers need no maintained table at all:**
+**Three of its four grades need no maintained table at all:**
 
-| Tier | What it says | Where the data comes from |
+| Grade | What it says | Where the data comes from |
 |---|---|---|
-| Criteria with a failing rule | "Automation found a problem here." | Already computed today |
-| Criteria with a rule that found nothing | "A rule ran and passed. Necessary, not sufficient." | Derivable now from axe metadata — **no table** |
-| Criteria with no axe rule at all | "Nothing automated has told you anything. Go test this." | The complement against a WCAG criteria list — **the only table** |
+| A rule failed | "Automation found a problem here." | Already computed today |
+| A rule ran and passed | "Necessary, not sufficient — a person still decides." | Derivable now from axe metadata — **no table** |
+| An agent looked heuristically | "Someone's judgment, not a deterministic result." | The baseline tier and the `aria-widgets` checks already run; they are just not attributed per criterion |
+| Nothing touched it | "No evidence of any kind. Go test this." | The complement against a WCAG criteria list — **the only table** |
 
 That last table is the whole maintenance obligation: criterion number, title, and level — 55 rows
 for A/AA, 86 if AAA is included. It carries no mapping logic, only the criteria list itself, and
@@ -155,21 +181,138 @@ images missing alt, icon buttons with no accessible name, duplicate IDs, heading
 
 ---
 
-## Ranked
+## The proposals, ranked
 
-1. **Report untested criteria in `know-qa-agent`.** Highest value to the organization's core work,
-   bounded cost, strengthens the house rule rather than straining it. Worth pairing with a
-   live-site run under the new namespace, to confirm the port's packaging — but that is a sanity
-   check alongside, not a gate in front.
-2. **Fill the `know-photo-generator` house style**, including disability representation. Not
-   engineering; a decision and a content pass, already Knowbility's to make.
-3. **Correct `pair/SKILL.md:97`** so the chat-specific tools are described as what they are, or
-   dropped from that list. Small, and it misleads exactly the user this marketplace exists for.
+### 1. `know-qa-agent`: report the coverage, not just the findings
 
-**Plugins to leave alone:** `know-researcher` (most mature, internals not reviewed, no unmet task
-identified), `know-security` and `know-product-spec` (purposeful and bounded as supplied),
-`know-blueprint` (capture already covers exceptions, authority, and revalidation, and its
-accessibility default is already correct).
+As above. Four grades of evidence named separately — rule failed, rule passed, agent looked
+heuristically, nothing touched it — and the list of 34 A/AA criteria no enabled rule reaches.
+Enable `target-size` in the same change. Pair it with a live-site run under the new namespace to
+confirm the port's packaging, alongside rather than in front.
+
+**Cost:** a script reading `axe.getRules()`, one 55-row criteria table, a report section, one rule
+id in the run options. **Known by:** an auditor can say what they still have to go test without
+reading the axe docs.
+
+### 2. `know-product-spec`: the interview never asks an accessibility question
+
+**This is the finding I would not have had if I had trusted the advisory report.** It said the
+plugin was "purposeful and bounded as supplied." Reading it shows a structural asymmetry:
+
+| | Security | Accessibility |
+|---|---|---|
+| Elicited by `interview`? | Yes — "what this changes about the runtime surface" | **No question at all** |
+| Section in the PRD skeleton? | §20, dedicated | None |
+| Mandatory explicit "no change"? | Yes — "so review never has to infer it" | No |
+| Scored by `decompose`? | Within scope | **No dimension covers it** |
+| Checklist available? | — | Yes, 11 items — used only *after* the spec exists |
+
+The eight question areas in `interview/SKILL.md:48-55` cover every state, every action and its
+write target, every failure, reachability, data, copy, measures, and runtime surface. None asks
+the keyboard path, the focus order, what an error announces, or what a screen reader conveys.
+`skeleton.md:77` bolts three generic items onto acceptance criteria ("focusable named controls,
+correct roles, correct heading level"). Meanwhile `reference/surface-review.md:36` already carries
+the full list — keyboard access, focus order and visibility, accessible names, semantic structure,
+form labeling, error identification and recovery, status announcements, contrast, resizing, reduced
+motion, touch targets — and only `ui-review` reads it, against work already filed.
+
+**The sharp edge: a PRD with no accessibility content can score 3 — "explicit and testable" — on
+all seven `rubric.md` dimensions.** Dimension 4, Behavior contract, covers states, actions,
+failures, and reachability, and stops there. So the grader endorses the omission, and accessibility
+arrives later as a review finding against a spec that never required it. In the organization whose
+work this is, that is the wrong way round.
+
+**The change:** add an accessibility contract question area to `interview`'s "What to ask", pointed
+at the list already in `surface-review.md`; widen `skeleton.md:77`'s standing criteria to match it;
+and give dimension 4 an accessibility clause so `decompose` can score its absence.
+**Cost:** near zero maintenance — it cross-references a list the plugin already ships, rather than
+introducing a second copy of the standard. **Known by:** a spec written here produces accessibility
+tasks at decompose time instead of accessibility findings at review time.
+**House rule:** eliciting a requirement is not determining conformance, but the wording must keep
+that straight — "the spec requires keyboard operability" is a requirement; it says nothing about
+whether the built thing has it.
+
+### 3. `know-qa-agent`: let `pair` capture the human evidence, not just the defects
+
+`pair` is already built the right way round for this and I did not notice until I read it. A human
+directs a visible browser, their judgment becomes a first-class finding placed "on top of the
+evidence underneath it," it handles SSO-gated real deployments, and it writes a resumable session
+state and a report. That is the shape of a manual accessibility pass: the person decides, the tool
+records.
+
+What it cannot record is the thing that makes the record useful: a finding carries no success
+criterion, no method (screen reader, keyboard-only, magnification, reduced motion), and no declared
+page set. And a person *can* assert what no automated pass may — that a criterion is satisfied —
+but there is nowhere to put it.
+
+That matters because **Phase 5's input contract is exactly this evidence, and no plugin here
+advertises producing it.** Phase 4 annotates what automation found. Phase 5 assembles human
+evidence into a report. The step in between — a person testing with a screen reader and the result
+being recorded in a form a document can consume — has no home.
+
+**Cost:** fields on the finding contract and the session state, plus the page-set declaration.
+Higher than proposals 1 and 2 and it should follow Phase 5's requirements conversation, since the
+shape of the evidence depends on what the report needs. **House rule:** safe by construction —
+every determination comes from the person at the keyboard, and the tool's job is to write down who
+decided what, how, and on which pages.
+
+### 4. `know-qa-agent`: replace the two chat-app leftovers in `pair`'s tool list
+
+`pair/SKILL.md:97` offers `inspect-chat.mjs` and `inspect-labels.mjs` as general corroboration
+tools. They are not: `inspect-labels.mjs` finds avatar initials and tinted message bubbles with
+hardcoded colour defaults, `inspect-chat.mjs` compares chat message styling to a mockup. Both are
+leftovers from one worked example.
+
+The better fix than deleting the mention is **a real `inspect-a11y.mjs`** — accessible name, role,
+and state for a selector or the focused element, which Playwright can report directly. That is what
+an auditor reaches for mid-session, it is what the misleading name already promises, and it is the
+corroborating-fact tool `pair` is missing.
+
+### 5. Fill the `know-photo-generator` house style
+
+Including disability representation. Not engineering; a decision and a content pass, already
+Knowbility's to make. Both advisors ranked this first — see the anchoring note above for why I do
+not.
+
+**Plugins to leave alone:**
+
+- **`know-blueprint`** — the one "leave alone" verdict here that is checked rather than assumed.
+  `skills/blueprint-capture/SKILL.md:152-162` rates accessibility judgment Human by default and
+  covers decorative images, alt text, reading order, accessible names, caption and transcript
+  adequacy, and conformance determinations, with an overrule recorded alongside the rating it would
+  otherwise have carried. (That it also covers exceptions, approval authority, and revalidation is
+  still the advisory report's citation of lines 226-271, which I have not read.)
+- **`know-researcher`** — most mature, internals deliberately outside the packet, no unmet task
+  identified. "Leave alone" here means "not examined," not "examined and found complete."
+- **`know-security`** — same status, and it should be stated as such: I read its skill descriptions
+  and nothing else. Its scope looks deliberate and no accessibility surface suggests itself, but
+  that is a judgment from the outside.
+
+`know-product-spec` was on this list in the first draft, carried over from the advisory report.
+Reading it moved it off. See proposal 2 — which is the argument for not writing a verdict you have
+not checked.
+
+## Self-audit of this review's own claims
+
+Prompted by a correction: one claim here rested on an assumption, so every other load-bearing claim
+got checked the same way. Four were wrong or unsupported.
+
+| Claim as first written | Verdict |
+|---|---|
+| "`know-qa-agent` has never been driven against a live site from a cold install" | **Wrong.** Sources say "not yet … **here**." Dropped qualifier; corrected in the previous commit. |
+| "axe-core ships 105 rules … 23 of 56 A/AA criteria" | **Wrong, and it overstated coverage.** 9 rules are disabled by default and `axe.mjs` does not re-enable them. 96 run, covering **21 of 55**. |
+| "`know-product-spec`: purposeful and bounded as supplied" | **Wrong.** Relayed from the advisory report without reading the plugin. It has a real gap — proposal 2. |
+| "a port of a plugin that was already in regular use" (my own correction) | **Unsupported.** It is a port, and the predecessor is installed on this machine. Frequency of use is not mine to assert, and the argument does not need it. |
+| "`know-blueprint`: accessibility default is already correct" | **Holds, now verified** at `blueprint-capture/SKILL.md:152-162`. Was a relay when written. |
+| "WCAG 2.2: 86 live criteria, 55 at A/AA" | **Holds.** Counted from the conformance-level markers in the W3C Recommendation, two ways, agreeing; 4.1.1's obsolete status read directly. |
+| "`inspect-labels.mjs` is chat-app-specific" | **Holds** — read the file. But "leftover from the source product" is inference; its header says only "from one worked example." |
+| "nothing in the marketplace generates Phase 5's input" | **Narrowed.** Checked `know-qa-agent`'s skills and spec format. 42 skills exist across six plugins and I have read perhaps a third, so the honest claim is that no plugin advertises it and `know-qa-agent` does not produce it. |
+
+**The pattern in all four misses is the same:** a secondary source read as a primary one. A
+repository's status note read as a fact about the software, a documented rule count read as the
+count that runs, an advisor's summary read as a reading of the plugin. The two figures that survived
+unscathed are the two I obtained by running the thing — `axe.getRules()` and a tally of the W3C
+document — which is the whole argument for doing that first.
 
 ## What nobody has established
 
