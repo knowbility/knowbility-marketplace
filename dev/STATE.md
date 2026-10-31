@@ -665,23 +665,88 @@ but it does mean this machine is no longer a cold environment for a second walk.
 `know-researcher`, after the push, starts from a machine that already has the marketplace added,
 which is the normal state for a returning user and a reasonable thing to test.
 
+## The cold-install walk — `know-researcher`, 2026-10-30
+
+Run after the push, so all six plugins were installable. This machine already had the `knowbility`
+marketplace added from the `know-blueprint` walk, which is the normal state for a returning user and
+the right thing to test.
+
+### Verified
+
+| Step | Result |
+|---|---|
+| `marketplace update knowbility` picks up a plugin added after the marketplace was first added | **Yes.** The cached clone held 5 plugins; after the update it holds 6. A returning user does get new plugins, and needs the update to see them. |
+| `plugin install know-researcher@knowbility` | **Works**, user scope |
+| Components registered | **12 skills, 2 agents, 3 hooks** (SessionStart, PreToolUse, PreCompact), reported as harness-only with no model context cost |
+| The installed hooks carry the port's fixes | **Yes.** All three quote `"${CLAUDE_PLUGIN_ROOT}"`, and `gate-outputs.sh` carries the fail-closed branch. The installed script is byte-identical to the repository's, confirmed by SHA-256. |
+| **The output gate fires in a real session and blocks an unaudited write** | **Yes.** A fresh session told to write `research/outputs/final-report.md` in a project with no gate log was blocked by the hook, and `research/outputs/` was still empty afterwards — confirmed on the filesystem, not from the session's narration. |
+
+That last row is the one worth having. The gate is this plugin's central guarantee, the port changed
+how it behaves when `jq` is missing, and it now has an end-to-end test from the installed path
+rather than only a local one.
+
+### A token cost nobody has documented
+
+`claude plugin details` reports **always-on** cost, paid on every session whether or not the plugin
+is used:
+
+- `know-blueprint` — **~790 tokens**
+- `know-researcher` — **~2,771 tokens**
+
+And on-invoke, paid each time a skill fires: `research-audit-claims` ~37k, `research-init` ~30.2k,
+`research-summarize-section` ~19.1k. The other four plugins could not be measured because the CLI
+needs a plugin installed to report on it.
+
+No README in this repository mentions token cost. For a reader deciding whether to install all six
+this is real information, and ~2.8k always-on for a plugin you are not using that day is the kind of
+thing someone notices later and resents. **Not acted on** — the honest numbers need all six measured
+first, which means installing all six, and that is a decision about this machine rather than a
+documentation task.
+
+### A fifth phantom finding, caught before it was written down
+
+The live gate test returned a block message naming `/research-audit-claims` — the pre-rename
+command — which read as a missed reference in the port's user-facing hook text. It was not. The
+repository and installed copies are byte-identical and both say `/know-research:audit-claims`;
+reading the hook's output directly confirms it. **The session had paraphrased the message instead of
+quoting it**, despite being asked for it verbatim.
+
+That is the fourth time in this session that asking a model to report a fact produced a plausible
+wrong answer, after the two `-p` traps and the skill-listing misreading. Written up as a standing
+rule outside this repository: establish tool, file, and host facts by reading, hashing, diffing, or
+running the thing and checking the filesystem — use a sub-session to *do* work, never to *report
+state*.
+
+### Not walked
+
+**`/know-research:init` has not been run.** It is the real first-run path: four questions, then
+roughly twenty minutes of live preliminary web research, then a phased plan. It needs an actual
+research subject to produce a meaningful result — a fake topic would exercise the mechanics while
+telling nobody whether the plan it writes is any good, which is the part that matters. It also makes
+real external calls. Waiting on a topic from Kelsey.
+
+What that run would additionally prove, none of which is covered above: the project scaffold, the
+`.claude/settings.json` pre-allow merge, the validator being installed into `research/bin/`, the
+`STATE.md` handoff across a context clear, and the discovery tier recording when no search CLIs are
+present.
+
 ## Next step
 
-**Phase 5 is waiting on an auditor, not on work here.** `dev/phase-5/REQUIREMENTS.md` is written to
-be handed to one. Eleven questions, all about how Knowbility already audits; the eleventh decides
-whether this is a plugin or a template.
+**`/know-research:init` on a real topic is the last unwalked path**, and it needs a research subject
+from Kelsey. Everything mechanical about `know-researcher` is verified from the installed plugin,
+including the output gate blocking an unaudited write in a live session. What init would add is the
+project scaffold, the settings pre-allow merge, the validator landing in `research/bin/`, and the
+`STATE.md` handoff across a context clear — none of which a fake topic would test honestly, because
+the thing worth judging is whether the plan it writes is any good.
 
-**The `know-researcher` walk is the open task on this side**, now that all six plugins are on the
-remote. It is the long path: a research project runs over days and several sessions, so it tests
-resumability and the `STATE.md` handoff in a way `know-blueprint`'s single sitting could not. It
-starts from a machine that already has the marketplace added, which is the normal state for a
-returning user.
+**Phase 4 and Phase 5 both wait on one auditor conversation.** Phase 5's brief is
+`dev/phase-5/REQUIREMENTS.md`, eleven questions about current practice. Phase 4 needs real
+`know-qa-agent` output in front of the same person. Worth asking for both at once.
 
-**Phase 4 still needs real `know-qa-agent` output in front of an auditor** before any of it can be
-designed. Same dependency as Phase 5, different artifact — worth asking for both in one
-conversation.
+**Open and undecided: whether to document token cost.** `know-blueprint` adds ~790 always-on tokens
+to every session and `know-researcher` ~2,771. No README here mentions it. Measuring the other four
+means installing all four on this machine.
 
 **Kelsey's call, no action taken:** two Knowbility marketplace repositories exist —
-`knowbility/knowbility-marketplace` (this one, everything is here) and
-`knowbility/knowbility-plugin-marketplace` (private, created 2026-08-14, 2 KB, effectively empty).
-Near-identical names are a way for someone to add the wrong one.
+`knowbility/knowbility-marketplace` (this one) and `knowbility/knowbility-plugin-marketplace`
+(private, created 2026-08-14, 2 KB, effectively empty).
