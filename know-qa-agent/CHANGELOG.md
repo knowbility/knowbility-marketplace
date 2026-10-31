@@ -1,7 +1,32 @@
 # Changelog — know-qa-agent
 
 All notable changes to the know-qa-agent plugin. Per-plugin semver; tags are plugin-scoped
-(`know-qa-agent-vX.Y.Z`).
+(`know-qa-agent--vX.Y.Z`).
+
+## 0.1.1 — 2026-10-31
+
+**The install-UI description claimed the deep accessibility tier as if it were the default.**
+
+The manifest and catalog descriptions read "Accessibility is first-class: a full axe-core ruleset
+pass and exact WCAG AA contrast math." Both are real, and both belong to the **opt-in** tier — the
+one turned on per test with an `## Accessibility Focus` section in the spec or `--a11y-depth deep`
+when generating one. Baseline accessibility rides along in every test, but it is the narrower set:
+keyboard reachability, visible focus, alt text, form labels, obvious contrast problems.
+
+The catalog description is the text the browse card renders, so a reader choosing this plugin could
+reasonably conclude that an ordinary test run gives them the full ruleset and computed contrast
+ratios. It does not. For an organization whose credibility rests on how accessibility findings are
+described, an overstatement of coverage in the one piece of text people read *before* installing
+anything is the house rule being broken at the front door.
+
+The description now names both tiers, says the deeper one is turned on per test, and states that
+none of it is a conformance evaluation or a substitute for testing by a person. No behavior
+changed; the plugin always worked this way. What changed is that the description now says so.
+
+Found by an independent adversarial review (Codex), which compared the catalog text against the
+README's own account of the two tiers. Two existing gates passed it: one checks only the version
+prefix, the other checks that command names inside descriptions resolve. Neither reads a
+description against the behavior it claims, and no script can — that comparison needs a reader.
 
 ## 0.1.0 — 2026-10-30
 

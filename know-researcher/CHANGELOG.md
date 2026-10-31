@@ -1,7 +1,34 @@
 # Changelog — know-researcher
 
 All notable changes to the know-researcher plugin. Per-plugin semver; tags are plugin-scoped
-(`know-researcher-vX.Y.Z`).
+(`know-researcher--vX.Y.Z`).
+
+## 1.18.1 — 2026-10-31
+
+**The "What leaves your machine" section contradicted its own table.**
+
+It said that for every service except the Codex CLI, what goes out is "a search query derived from
+your topic," and that "every call goes through Bash, so you can see what was requested." Its own
+table, directly above, listed content extraction, a filing lookup by CIK, `mailto` and email
+parameters, an identifying `User-Agent`, and the built-in `WebSearch`/`WebFetch` floor. Three ways
+the blanket claim was wrong:
+
+- **Extraction sends a URL and pulls the page back.** Tavily's and Firecrawl's extract modes and
+  the built-in `WebFetch` fetch a specific address, which is not a search query.
+- **Three services receive an identifier.** OpenAlex takes a `mailto` and Unpaywall an email for
+  polite-pool access; SEC EDGAR requires a `User-Agent` identifying the tool.
+- **The default path does not go through Bash.** `WebSearch` and `WebFetch` are Claude's own tools.
+  With no search CLI installed — which is the documented starting state — those calls are not
+  visible as shell commands at all.
+
+This is the section a user reads to decide whether a research topic is safe to point this at, so a
+claim that narrows the described traffic is the wrong error to make there. Rewritten with the three
+cases named, and with what remains true stated plainly: no file from the project is uploaded, and
+what leaves is queries, URLs, and those identifiers.
+
+`AGENTS.md` also now records the release procedure's corrected tag format.
+
+Found by an independent adversarial review (Codex). No behavior changed.
 
 ## Arrival in the Knowbility marketplace — 2026-10-30
 

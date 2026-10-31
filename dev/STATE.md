@@ -17,9 +17,9 @@ installable from the private repository. `main` is at `cceef40`, 16 commits, pus
 | `know-product-spec` | 0.1.0 | `/know-spec:*` | Ported, manifest validated. Never driven end to end. |
 | `know-security` | 0.1.0 | `/know-security:*` | Ported, 66-case suite passing. `init` never run from a cold install. |
 | `know-photo-generator` | 0.1.0 | `/know-photo:*` | Ported, key check passing. **No image has ever been rendered** (bills a real generation). **A Knowbility brand style is undefined** — the section is a template awaiting the organization's input, representation guidance included. |
-| `know-qa-agent` | 0.1.0 | `/know-qa:*` | Ported, engine and harness verified. **Never driven against a live site.** Needs Node 18+ and Chrome. |
+| `know-qa-agent` | 0.1.1 | `/know-qa:*` | Ported, engine and harness verified. **Never driven against a live site.** Needs Node 18+ and Chrome. |
 | `know-blueprint` | 0.1.0 | `/know-blueprint:*` | Ported and installed from the marketplace; a skill verified running from the installed copy. No interview run end to end. |
-| `know-researcher` | **1.18.0** | `/know-research:*` | Ported and installed. Validator self-test 74/74, and **its output gate verified blocking an unaudited write in a live session**. `init` not run. |
+| `know-researcher` | **1.18.1** | `/know-research:*` | Ported and installed. Validator self-test 74/74, and **its output gate verified blocking an unaudited write in a live session**. `init` not run. |
 
 Per-plugin detail lives in each `CHANGELOG.md`. Install verification lives in
 `dev/review/install-walk.md`. Provenance and licensing live in `dev/PROVENANCE.md`.

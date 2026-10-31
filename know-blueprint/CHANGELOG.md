@@ -1,7 +1,7 @@
 # Changelog — know-blueprint
 
 All notable changes to the know-blueprint plugin. Per-plugin semver; tags are plugin-scoped
-(`know-blueprint-vX.Y.Z`).
+(`know-blueprint--vX.Y.Z`).
 
 ## 0.1.0 — 2026-10-30
 

@@ -1,7 +1,7 @@
 # Changelog — know-security
 
 All notable changes to the know-security plugin. Per-plugin semver; tags are plugin-scoped
-(`know-security-vX.Y.Z`).
+(`know-security--vX.Y.Z`).
 
 ## 0.1.0 — 2026-10-30
 

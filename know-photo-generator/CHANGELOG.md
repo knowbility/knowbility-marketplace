@@ -1,7 +1,7 @@
 # Changelog — know-photo-generator
 
 All notable changes to the know-photo-generator plugin. Per-plugin semver; tags are
-plugin-scoped (`know-photo-generator-vX.Y.Z`).
+plugin-scoped (`know-photo-generator--vX.Y.Z`).
 
 ## 0.1.0 — 2026-10-30
 
