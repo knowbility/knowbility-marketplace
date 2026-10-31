@@ -685,36 +685,27 @@ That last row is the one worth having. The gate is this plugin's central guarant
 how it behaves when `jq` is missing, and it now has an end-to-end test from the installed path
 rather than only a local one.
 
-### Token cost: measured, judged, and documented as a pointer rather than a table
+### Token cost: looked at, nothing to do
 
-`claude plugin details` reports an **always-on** cost paid on every session whether the plugin is
-used or not — the skill and agent descriptions that have to be in context for Claude to know the
-plugin exists. Measured: `know-blueprint` **~790**, `know-researcher` **~2,771**. On invoke,
-`research-audit-claims` is ~37k and `research-init` ~30.2k.
+`claude plugin details` reports an always-on cost paid every session whether a plugin is used or
+not — the skill and agent descriptions that must be in context for Claude to know the plugin
+exists. Measured: `know-blueprint` ~790 tokens, `know-researcher` ~2,771. Estimated for the other
+four from frontmatter size, calibrated on those two; all six come to roughly 8,200 tokens, about
+four percent of a 200k context.
 
-Measuring the other four needed them installed, and auto mode correctly refused that as
-self-modification. Estimated instead from frontmatter size, calibrated against the two measured
-values at 3.36 chars per always-on token:
+**No action follows from this and none was taken.** Always-on cost is what a plugin is; four percent
+for six plugins is ordinary, unavoidable, and does not change which ones anyone should install.
 
-| Plugin | Skills | Agents | Always-on | |
-|---|---|---|---|---|
-| `know-product-spec` | 10 | 0 | ~1,970 | estimated |
-| `know-qa-agent` | 10 | 1 | ~1,090 | estimated |
-| `know-security` | 4 | 1 | ~1,230 | estimated |
-| `know-photo-generator` | 2 | 0 | ~320 | estimated |
-| `know-blueprint` | 4 | 0 | 790 | **measured** |
-| `know-researcher` | 12 | 2 | 2,771 | **measured** |
-| **all six** | **42** | **4** | **~8,200** | ~4% of a 200k context |
+Recorded because I got it wrong and the way I got it wrong is worth not repeating. I surfaced the
+number as a finding, called it something "nobody has documented," wrote a README paragraph and a
+longer version of this section arguing for how to document it, and put the question to Kelsey as
+though a decision were waiting. His answer: *"It is what it is... what are you saying needs to be
+solved?"* Nothing. The README paragraph was reverted.
 
-A two-point calibration is rough and the estimates should be treated as order-of-magnitude.
-
-**The judgment, which is the part that matters.** Four percent for all six is a real cost and not a
-reason to install fewer, so a per-plugin table in the README would invite optimizing something that
-does not need optimizing. Worse, those numbers shift with every plugin edit and every Claude Code
-release, so a table is stale the week after it is written — the exact defect class this project spent
-two review rounds removing. **Documented as a pointer instead:** the README now says the cost exists,
-gives the one command that reports it accurately on demand, says plainly why no figures are printed,
-and gives the four-percent figure for scale only. A pointer cannot go stale.
+**The test this failed:** a fact is only a finding if some decision changes depending on it. This one
+changed nothing. Measuring was cheap and fine; publishing it, and escalating it to the user, was
+inventing work. Sixth time in this session that an inert observation got dressed up as a problem —
+see the phantom findings below and in the Phase 7 notes.
 
 ### A fifth phantom finding, caught before it was written down
 
