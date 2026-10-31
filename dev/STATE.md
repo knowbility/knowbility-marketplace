@@ -559,14 +559,37 @@ for, and checking the machine closed both.
   the cold-install walk producing real output first. The boundary statement already in the README
   stays either way: these passes catch a deterministic subset, do not produce a formal conformance
   report, and do not replace screen-reader or keyboard-only testing.
-- **Phase 5 — a separate conformance/VPAT reporting plugin.** Kelsey wants it, and he flagged it
-  himself early as the one genuinely missing piece. It is separate from Phase 4 on purpose: criterion
-  mapping annotates output `know-qa-agent` already produces, while a conformance document must merge
-  manual and assistive-technology evidence that plugin cannot produce, and its output is
-  quasi-legal. **What it needs to start:** its own requirements pass — what document, to which
-  standard, for whose signature, carrying what evidence. Nothing about it has been scoped. This is
-  the one piece of remaining work that is a project rather than a task, and it does not depend on
-  the walk.
+- **Phase 5 — a separate conformance/VPAT reporting plugin.** Scoping started 2026-10-30;
+  **`dev/phase-5/REQUIREMENTS.md` is the brief.** Nothing is being built.
+
+  Settled with Kelsey: it serves **a Knowbility auditor assembling an ACR for a client they
+  audited**, so the output carries Knowbility's determination and a named auditor — which means a
+  wrong "Supports" is Knowbility's liability, and that one fact sets the plugin's posture. First
+  release is the **WCAG edition only**; Revised 508, EU (EN 301 549) and International are additive
+  later against the same evidence. The artifact is ITI's VPAT, currently 2.5Rev (April 2025);
+  completed, it is an ACR.
+
+  The input contract was already written and did not need discovering:
+  `know-qa-agent/reference/wcag-mapping.md` lists what a conformance evaluation needs that automated
+  passes cannot supply — AT testing, keyboard traversal, magnification and reduced motion, cognitive
+  load, a declared page set with sampling rationale, a stated baseline, and an accountable human.
+
+  **Five constraints are recorded as decided rather than open**, because getting one wrong is how
+  this plugin would damage the organization it is for. The spine of them: **automated evidence can
+  prove failure and can never prove success.** A found contrast failure is enough to write "Does Not
+  Support"; nothing automated can establish "Supports" on a criterion that is not fully
+  machine-decidable. "Not evaluated" is a value the plugin writes, and it must never infer a level
+  from the absence of a finding — an ACR where every row is filled because the tool filled them is
+  the failure mode to design against.
+
+  **What it needs to proceed: eleven questions for an auditor**, in the brief, about current
+  practice rather than about the tool — what they produce today, where the automated portion comes
+  from, how AT testing is recorded, how they split Partially Supports from Does Not Support, the
+  AT matrix, who reviews, whose name appears, and what is actually painful today. The last one
+  decides whether to build at all: if producing an ACR is merely slow rather than error-prone, this
+  may be a template and a checklist, which would be a good outcome and cost an afternoon.
+
+  It does not depend on the `know-researcher` walk. It depends on an auditor's time.
 
 ## The cold-install walk — first run, 2026-10-30
 
@@ -644,19 +667,19 @@ which is the normal state for a returning user and a reasonable thing to test.
 
 ## Next step
 
-**Push the four local commits.** Nothing is blocked, nothing waits on Kelsey, and the migration's
-own gates are all closed: six plugins validated, the install path verified end to end against the
-private repository, and a skill from a cold install running in a real session.
+**Phase 5 is waiting on an auditor, not on work here.** `dev/phase-5/REQUIREMENTS.md` is written to
+be handed to one. Eleven questions, all about how Knowbility already audits; the eleventh decides
+whether this is a plugin or a template.
 
-Pushing also makes `know-researcher` installable, which is the one remaining walk. It matters more
-than `know-blueprint`'s did, because it is the long path — a research project runs over days, and
-resumability and the `STATE.md` handoff either work or don't. That walk starts from a machine that
-already has the marketplace added, which is the normal state for a returning user.
+**The `know-researcher` walk is the open task on this side**, now that all six plugins are on the
+remote. It is the long path: a research project runs over days and several sessions, so it tests
+resumability and the `STATE.md` handoff in a way `know-blueprint`'s single sitting could not. It
+starts from a machine that already has the marketplace added, which is the normal state for a
+returning user.
 
-**Then Phase 4**, which needs real output from a live run in front of one of Knowbility's auditors
-before any of it can be designed. **Phase 5** depends on nothing and needs a requirements pass
-first: what document, to which standard, for whose signature, carrying what evidence. It is the one
-remaining piece that is a project rather than a task.
+**Phase 4 still needs real `know-qa-agent` output in front of an auditor** before any of it can be
+designed. Same dependency as Phase 5, different artifact — worth asking for both in one
+conversation.
 
 **Kelsey's call, no action taken:** two Knowbility marketplace repositories exist —
 `knowbility/knowbility-marketplace` (this one, everything is here) and
