@@ -104,11 +104,20 @@ These were decided during the port into this marketplace. Change them deliberate
   entry in `.claude-plugin/marketplace.json`, which carries the manifest description verbatim),
   the README "Plugins at a glance" row, and the root `AGENTS.md` plugin list; add a `CHANGELOG.md`
   entry; then `node dev/scripts/check-version-prefix.mjs`,
-  `node dev/scripts/check-described-commands.mjs`, and `claude plugin validate ./know-researcher`
+  `node dev/scripts/check-described-commands.mjs`, `node dev/scripts/check-channel-routing.mjs`,
+  and `claude plugin validate ./know-researcher`
   + `claude plugin validate .`; commit, then `claude plugin tag ./know-researcher --push`, which
   writes **`know-researcher--v<X.Y.Z>`** (double dash) after checking the manifest and the catalog
   entry agree.
 - **Editing cautions specific to this plugin:**
+  - Adding or renaming a discovery channel touches four places, and
+    `dev/scripts/check-channel-routing.mjs` checks all four: the playbook file in
+    `reference/discovery/channel-playbooks/` (the filename is what resolves), its `name:` and
+    `channel-type:` frontmatter, the `active-channels` list in every type-channel map that should
+    reach it, and a `(channel-type: <name>)` section in `skills/research-discover/SKILL.md` giving
+    the channel its tool guidance. What the gate cannot check is whether a channel can actually
+    answer what a map asks it for — read the playbook's "Cannot find" against the map's routing
+    lines before adding an entry. That mismatch, not a missing file, is what 1.19.0 fixed.
   - The `outputs/` gate is the hard backstop. Don't add another writer to `outputs/`, and don't
     loosen the hook without preserving both the structural rule and the fail-closed behavior.
   - Each command in `commands/know-research/` is a thin wrapper that delegates to its matching

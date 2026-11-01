@@ -184,6 +184,7 @@ Steps 3 and 4 are the ones that get forgotten, which is exactly what the CI chec
 node dev/scripts/check-version-prefix.mjs
 node dev/scripts/check-described-commands.mjs
 node dev/scripts/check-namespace.mjs
+node dev/scripts/check-channel-routing.mjs
 claude plugin validate .
 claude plugin validate ./<plugin>
 ```
@@ -194,6 +195,19 @@ compares only the version prefix, the other compares the manifest description to
 description, which agreed because both carried the same wrong name. Neither looked inside the prose.
 
 `check-namespace.mjs` enforces convention 1 — it exists because an adversarial review pointed out that the convention was written as a rule and mapped to no gate, so a new plugin could drift without anything noticing. A rule nothing enforces is a rule that quietly stops being true.
+
+`check-channel-routing.mjs` checks that a plugin's source-discovery routing resolves: every channel
+a type-channel map activates has a playbook on disk, every playbook is reachable from some map, each
+playbook's filename and frontmatter agree, and the resolver skill carries a section for every
+channel it can be asked to run. It exits 0 when no plugin ships that structure, so it is safe to run
+always. It exists because know-researcher 1.19.0 fixed five routing lines that asked a channel for
+something it does not implement, and nothing in the repo could have noticed — but read its header
+before trusting it to catch the next one. **That specific defect still passes every check**: the
+channel resolved, the playbook existed, the frontmatter agreed, and the routing was wrong anyway.
+What the gate catches is the structural neighbourhood around it — a map entry with no playbook, a
+renamed playbook that orphans its maps, and a playbook wired into a map whose resolver was never
+given tool guidance for it, which is the step that was done by hand in 1.19.0. Matching a request to
+a channel's actual capability is still a reading job.
 
 Two more are worth running when the relevant thing changed:
 
