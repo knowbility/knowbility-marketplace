@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.2.0] 2026-10-31
+
+**The interview now asks how the thing is operated, not only what it does.**
+
+Eight question areas covered every state, every action and its write target, every failure,
+reachability, the data, the copy, the measures, and the runtime surface. None of them asked about
+a keyboard path, where focus goes, or what an error announces. The PRD had no section for it
+either, and no rubric dimension scored it — so a document with nothing on the subject could grade
+3, "explicit and testable", on all seven dimensions. The grader endorsed the omission.
+
+The full eleven-item list was already in the plugin, in `reference/surface-review.md`, read only
+by `ui-review` — after the build, against requirements nobody had written. This release closes
+that loop. It is a cross-reference and an elicitation change, not new standards content.
+
+**Deliberately not a new section.** The first draft of this change added an accessibility section
+to the skeleton. That is how the subject becomes somebody else's column, so instead each
+requirement went to the section that already owns that behavior:
+
+- **§14 Reachability** now covers keyboard reachability as part of reachability rather than
+  alongside it: every action operable without a pointer, tab order where it is not document order,
+  and where focus lands on each state change — dialog open and close, step completion, content
+  replacement, deletion of the focused element.
+- **§15 Actions** gains what each action *announces*. A visual-only result is an unspecified
+  announcement, not an exemption.
+- **§16 Failures** requires the failing field named in text rather than by color or position, and
+  the recovery.
+- **§17 Copy** treats control names as copy, because they are, and nothing downstream invents a
+  good one.
+- **§21 Design references** holds the presentation baseline — contrast, resize and reflow, reduced
+  motion, target size — which most products settle once in a design system. "Inherited from the
+  design system" is a complete answer; silence is not.
+- **§18 Acceptance criteria** replaces three generic bullets with the contract above, and requires
+  a PRD with no user-facing surface to say so explicitly rather than omit the criterion — the same
+  rule §20 already applied to infrastructure.
+
+**Scored, and blocking.** Dimension 4, Behavior contract, now covers these and anchors §5 · §13 to
+§17 · §21. The blocking-versus-deferrable enumeration gained operation and announcement: two
+builders guessing differently at a focus destination ship two different products to anyone not
+using a mouse, which was always the stated test — the old enumeration just did not list it, and a
+list that omits it reads as a licence.
+
+**Scoped by shape.** `system` PRDs carry "does not apply because" for the surface half, the way
+they already do for the experience walkthrough and copy. Write targets and failure behavior still
+apply to a pipeline.
+
+Numbering is unchanged: no section was inserted, so the exemplar PRDs and every §-reference in the
+plugin still resolve. Keywords gained `accessibility`.
+
 ## [0.1.0] 2026-10-30
 
 First release in the Knowbility marketplace.

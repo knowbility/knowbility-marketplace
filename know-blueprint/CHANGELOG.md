@@ -3,6 +3,65 @@
 All notable changes to the know-blueprint plugin. Per-plugin semver; tags are plugin-scoped
 (`know-blueprint--vX.Y.Z`).
 
+## 0.2.0 — 2026-10-31
+
+**The automation gate now has a key.**
+
+`blueprint-capture` gates the automation plan on a stakeholder walkthrough, correctly refuses to
+role-play the stakeholder who would run it, and tells the operator to go and have that
+conversation. Then there was nothing for when they came back. No skill ran the walkthrough,
+recorded which ratings moved and who moved them, or cleared the status line. In practice the only
+two exits were never automating, or taking the recorded waiver — which is a waiver of a review
+that had no way to happen.
+
+**New: `/know-blueprint:validate`** (skill `blueprint-validate`).
+
+- **Walks the ratings one at a time, ordered by consequence** rather than by step number: every
+  Automate-rated step first, because those are the ones nobody will be looking at, then every
+  rating where capture recorded a disagreement or an overruled default, then Monitor (who actually
+  watches, how, how often), then the Human-rated steps the owner may want to relax.
+- **Records confirmations, not only changes.** A rating the risk owner looked at and kept is
+  evidence; a rating nobody looked at is not. The validation record is built so those two cannot
+  end up looking the same, and **"not covered in this pass" is the line that matters most** — a
+  partial pass that reads as complete is worse than no pass, because the next person builds on it.
+- **Refuses two things on purpose.** The operator who gave the capture interview cannot validate
+  their own Blueprint: the ratings are their account of their own work, and a second pass by the
+  same person is a re-read, not a review. And Claude cannot stand in for the risk owner, which is
+  the posture capture already held. Where no risk owner is available the session still runs as
+  input gathering and says plainly that it does not clear the gate — as does a session with
+  someone who lacks the authority to move a rating, asked about up front rather than discovered at
+  the end.
+- **Holds capture's posture on checkpoint removal.** When the owner wants one gone, the
+  proportionate middle goes on the table in the same turn — raise the threshold, sample a share,
+  or audit after the fact — before any refusal. Monitor exists for this.
+- **Accessibility judgments are named out loud.** Moving one off Human is the owner's call to
+  make, and it gets recorded with who made it, the date, and the rating it would otherwise have
+  carried, in the §14 line that already asked for exactly that. Never silently, and never on
+  Claude's initiative.
+- **Works the open questions that gate automation**, separating the ones bearing on an
+  Automate-rated step from the rest, and resolving none by inference.
+
+**Supporting changes.**
+
+- **Template §16 Validation record:** the pass date, who validated and whether they had authority,
+  a row per rating reviewed with before and after, the exception paths walked, the open questions
+  closed, what was not covered, and whether the automation gate is open.
+- **`blueprint-capture`** now names the skill when it recommends the review, points at it when it
+  declines to hand over an automation plan, and says that re-validation after a revision scopes to
+  what changed rather than re-walking everything. Recommending a review without saying how to run
+  it is what left the gate with no key.
+- **`blueprint-design`** distinguishes the two gates a designed process carries: validate clears
+  the ratings and can be run now, while only real executions clear "not yet run", so validating a
+  designed Blueprint keeps that half of its Status instead of overwriting it.
+- **`blueprint-guide`** routes five jobs instead of four, including the two new cases — a Blueprint
+  whose owner wants to act on it (check the Status line first) and a process that has changed.
+
+**Known gap, not addressed here.** Capture's advice to "recapture the changed section" still has
+no partial mode: capture runs whole interviews. Validate scopes itself to what changed, so the
+re-validation half works; the re-capture half does not yet.
+
+Keywords gained `stakeholder-validation`.
+
 ## 0.1.0 — 2026-10-30
 
 First release in the Knowbility marketplace. Forked with the original author's clearance from an

@@ -1,0 +1,304 @@
+{
+  "_comment": [
+    "The live WCAG 2.2 Level A and AA success criteria. This is the ONE hand-maintained table in",
+    "the harness: everything else about coverage is read from axe-core's own rule metadata at",
+    "runtime, so it cannot drift from the pinned version. This table cannot be derived that way,",
+    "because a rule's conformance tag (wcag2a, wcag22aa) is the lowest level among ALL the criteria",
+    "that rule touches -- it does not assign a level to any individual criterion. Levels have to",
+    "come from the WCAG document itself.",
+    "",
+    "Regenerate when WCAG publishes a new version: parse the Recommendation's conformance-level",
+    "markers, bounding each criterion's section at the next 'Success Criterion' heading so a",
+    "criterion without a marker cannot inherit the next one's. 4.1.1 Parsing is the case that",
+    "catches a naive parse: it is 'Obsolete and removed' and carries no level, so it is absent here",
+    "and the live A+AA total is 55 rather than 56."
+  ],
+  "wcagVersion": "2.2",
+  "source": "https://www.w3.org/TR/WCAG22/",
+  "retrieved": "2026-10-31",
+  "counts": {
+    "A": 31,
+    "AA": 24,
+    "total": 55,
+    "excludedObsolete": [
+      "4.1.1 Parsing (Obsolete and removed)"
+    ]
+  },
+  "criteria": [
+    {
+      "sc": "1.1.1",
+      "level": "A",
+      "name": "Non-text Content"
+    },
+    {
+      "sc": "1.2.1",
+      "level": "A",
+      "name": "Audio-only and Video-only (Prerecorded)"
+    },
+    {
+      "sc": "1.2.2",
+      "level": "A",
+      "name": "Captions (Prerecorded)"
+    },
+    {
+      "sc": "1.2.3",
+      "level": "A",
+      "name": "Audio Description or Media Alternative (Prerecorded)"
+    },
+    {
+      "sc": "1.2.4",
+      "level": "AA",
+      "name": "Captions (Live)"
+    },
+    {
+      "sc": "1.2.5",
+      "level": "AA",
+      "name": "Audio Description (Prerecorded)"
+    },
+    {
+      "sc": "1.3.1",
+      "level": "A",
+      "name": "Info and Relationships"
+    },
+    {
+      "sc": "1.3.2",
+      "level": "A",
+      "name": "Meaningful Sequence"
+    },
+    {
+      "sc": "1.3.3",
+      "level": "A",
+      "name": "Sensory Characteristics"
+    },
+    {
+      "sc": "1.3.4",
+      "level": "AA",
+      "name": "Orientation"
+    },
+    {
+      "sc": "1.3.5",
+      "level": "AA",
+      "name": "Identify Input Purpose"
+    },
+    {
+      "sc": "1.4.1",
+      "level": "A",
+      "name": "Use of Color"
+    },
+    {
+      "sc": "1.4.2",
+      "level": "A",
+      "name": "Audio Control"
+    },
+    {
+      "sc": "1.4.3",
+      "level": "AA",
+      "name": "Contrast (Minimum)"
+    },
+    {
+      "sc": "1.4.4",
+      "level": "AA",
+      "name": "Resize Text"
+    },
+    {
+      "sc": "1.4.5",
+      "level": "AA",
+      "name": "Images of Text"
+    },
+    {
+      "sc": "1.4.10",
+      "level": "AA",
+      "name": "Reflow"
+    },
+    {
+      "sc": "1.4.11",
+      "level": "AA",
+      "name": "Non-text Contrast"
+    },
+    {
+      "sc": "1.4.12",
+      "level": "AA",
+      "name": "Text Spacing"
+    },
+    {
+      "sc": "1.4.13",
+      "level": "AA",
+      "name": "Content on Hover or Focus"
+    },
+    {
+      "sc": "2.1.1",
+      "level": "A",
+      "name": "Keyboard"
+    },
+    {
+      "sc": "2.1.2",
+      "level": "A",
+      "name": "No Keyboard Trap"
+    },
+    {
+      "sc": "2.1.4",
+      "level": "A",
+      "name": "Character Key Shortcuts"
+    },
+    {
+      "sc": "2.2.1",
+      "level": "A",
+      "name": "Timing Adjustable"
+    },
+    {
+      "sc": "2.2.2",
+      "level": "A",
+      "name": "Pause, Stop, Hide"
+    },
+    {
+      "sc": "2.3.1",
+      "level": "A",
+      "name": "Three Flashes or Below Threshold"
+    },
+    {
+      "sc": "2.4.1",
+      "level": "A",
+      "name": "Bypass Blocks"
+    },
+    {
+      "sc": "2.4.2",
+      "level": "A",
+      "name": "Page Titled"
+    },
+    {
+      "sc": "2.4.3",
+      "level": "A",
+      "name": "Focus Order"
+    },
+    {
+      "sc": "2.4.4",
+      "level": "A",
+      "name": "Link Purpose (In Context)"
+    },
+    {
+      "sc": "2.4.5",
+      "level": "AA",
+      "name": "Multiple Ways"
+    },
+    {
+      "sc": "2.4.6",
+      "level": "AA",
+      "name": "Headings and Labels"
+    },
+    {
+      "sc": "2.4.7",
+      "level": "AA",
+      "name": "Focus Visible"
+    },
+    {
+      "sc": "2.4.11",
+      "level": "AA",
+      "name": "Focus Not Obscured (Minimum)"
+    },
+    {
+      "sc": "2.5.1",
+      "level": "A",
+      "name": "Pointer Gestures"
+    },
+    {
+      "sc": "2.5.2",
+      "level": "A",
+      "name": "Pointer Cancellation"
+    },
+    {
+      "sc": "2.5.3",
+      "level": "A",
+      "name": "Label in Name"
+    },
+    {
+      "sc": "2.5.4",
+      "level": "A",
+      "name": "Motion Actuation"
+    },
+    {
+      "sc": "2.5.7",
+      "level": "AA",
+      "name": "Dragging Movements"
+    },
+    {
+      "sc": "2.5.8",
+      "level": "AA",
+      "name": "Target Size (Minimum)"
+    },
+    {
+      "sc": "3.1.1",
+      "level": "A",
+      "name": "Language of Page"
+    },
+    {
+      "sc": "3.1.2",
+      "level": "AA",
+      "name": "Language of Parts"
+    },
+    {
+      "sc": "3.2.1",
+      "level": "A",
+      "name": "On Focus"
+    },
+    {
+      "sc": "3.2.2",
+      "level": "A",
+      "name": "On Input"
+    },
+    {
+      "sc": "3.2.3",
+      "level": "AA",
+      "name": "Consistent Navigation"
+    },
+    {
+      "sc": "3.2.4",
+      "level": "AA",
+      "name": "Consistent Identification"
+    },
+    {
+      "sc": "3.2.6",
+      "level": "A",
+      "name": "Consistent Help"
+    },
+    {
+      "sc": "3.3.1",
+      "level": "A",
+      "name": "Error Identification"
+    },
+    {
+      "sc": "3.3.2",
+      "level": "A",
+      "name": "Labels or Instructions"
+    },
+    {
+      "sc": "3.3.3",
+      "level": "AA",
+      "name": "Error Suggestion"
+    },
+    {
+      "sc": "3.3.4",
+      "level": "AA",
+      "name": "Error Prevention (Legal, Financial, Data)"
+    },
+    {
+      "sc": "3.3.7",
+      "level": "A",
+      "name": "Redundant Entry"
+    },
+    {
+      "sc": "3.3.8",
+      "level": "AA",
+      "name": "Accessible Authentication (Minimum)"
+    },
+    {
+      "sc": "4.1.2",
+      "level": "A",
+      "name": "Name, Role, Value"
+    },
+    {
+      "sc": "4.1.3",
+      "level": "AA",
+      "name": "Status Messages"
+    }
+  ]
+}

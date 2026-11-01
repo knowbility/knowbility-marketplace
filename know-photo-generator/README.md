@@ -4,6 +4,8 @@ Get a professional-grade photo from a plain-language description — without kno
 
 `/know-photo:generate` walks you from a scene description to a complete, physics-aware Nano Banana Pro prompt: camera body, lens, lighting setup, semantic cleanup, and color grade, each chosen from a curated reference library. Add `--generate` and it renders the image directly via the Gemini API at the right aspect ratio and resolution for print, social, or hero-banner use.
 
+**And it hands you the alt text.** Every run ends with a drafted text alternative written beside the image file — because an image that gets used needs one, and this is the step people skip.
+
 ## Install
 
 ```
@@ -50,6 +52,29 @@ want. It lands in `output/` under whatever folder you are working in, timestampe
 Generated images land in `output/` under your current directory, timestamped unless you pass `--output`. After a render, the workflow offers a refinement pass — describe what to change and it re-renders using the previous image as the base.
 
 **Batch mode:** put one scene per line (or bullet, or heading) in a file; each entry optionally takes a name and platform override. The workflow confirms the parsed shot list, asks the essential questions once for the whole set, and renders each shot, ending with a summary table. `--variations N` combines with batch for N takes per shot; runs over 3 images confirm the count first.
+
+## Alt text
+
+Every run produces a drafted text alternative for the image, written to a sidecar beside it
+(`output/photo-20261031-143022.png` pairs with `output/photo-20261031-143022.alt.md`) and shown in
+the conversation so you can use it immediately. Prompt-only runs get one too, drafted from the
+prompt and labelled that way.
+
+**What decides the wording is not what is in the frame.** It is what job the image does where it
+lands, so the workflow asks:
+
+| Role | What you get |
+|---|---|
+| **Decorative** — nearby text already says it | `alt=""`, and why an empty alternative is the right answer here rather than a missing one. No description "just in case" — that makes the result worse, not safer. |
+| **Informative** — it carries something the text does not | A 10–25 word draft naming what a reader would otherwise lose, leading with that rather than the photography. Longer point, and you get a short alternative plus a description for a `figcaption`. |
+| **Functional** — it is a link or a button | A draft describing the destination or action. A logo linking home is "Home". |
+| **Not decided yet** | The informative draft, plus a plain statement that the role is unresolved and has to be settled before publishing. |
+
+**It is a draft, not a verdict.** Adequacy depends on the page, so the person placing the image
+owns the final wording. Nothing here claims an image is accessible. And it will not state a
+person's race, ethnicity, apparent gender, body, age, or whether they appear disabled unless you
+put it in the scene description — rendering someone tells you nothing about how they would
+describe themselves.
 
 ### Platforms
 

@@ -98,11 +98,11 @@ its prerequisites before, rather than after, you hit them.
 
 | Tool | Version | What you get | What it needs |
 |---|---|---|---|
-| [**know-qa-agent**](./know-qa-agent) | 0.1.1 | Point it at a web page and it tests like a skeptical engineer, then tells you what broke, why, and shows the evidence. Baseline accessibility checks run in every test; a deeper tier you turn on per test adds the full axe-core ruleset and computed WCAG AA contrast ratios, with accessibility findings labelled by the success criteria they map to where the rule has one. Not a conformance evaluation, and the caveat below matters. | [Node 18+](https://nodejs.org) and [Google Chrome](https://www.google.com/chrome/), both installed by you. Also one global browser driver (`npm install -g @playwright/cli`), which `/know-qa:init` installs for you if it is missing. |
-| [**know-product-spec**](./know-product-spec) | 0.1.0 | Interviews you and writes a product spec an engineer can build from. Starts by testing whether the thing is worth building at all, and will tell you when it isn't. | Nothing extra to write or grade a spec. Filing and grooming need a tracker connected to Claude plus a `tracker_connection` block in your project profile (see [`know-product-spec/reference/profile.md`](./know-product-spec/reference/profile.md)); the UI review needs browser tools and somewhere your designs live. |
+| [**know-qa-agent**](./know-qa-agent) | 0.2.0 | Point it at a web page and it tests like a skeptical engineer, then tells you what broke, why, and shows the evidence. Baseline accessibility checks run in every test; a deeper tier you turn on per test adds the axe-core ruleset and computed WCAG AA contrast ratios, with accessibility findings labelled by the success criteria they map to where the rule has one — and every run says which of the 55 Level A/AA criteria nothing tested. Not a conformance evaluation, and the caveat below matters. | [Node 18+](https://nodejs.org) and [Google Chrome](https://www.google.com/chrome/), both installed by you. Also one global browser driver (`npm install -g @playwright/cli`), which `/know-qa:init` installs for you if it is missing. |
+| [**know-product-spec**](./know-product-spec) | 0.2.0 | Interviews you and writes a product spec an engineer can build from. Starts by testing whether the thing is worth building at all, and will tell you when it isn't, and asks how the thing is operated — keyboard path, focus, announcements, names — not just what it does. | Nothing extra to write or grade a spec. Filing and grooming need a tracker connected to Claude plus a `tracker_connection` block in your project profile (see [`know-product-spec/reference/profile.md`](./know-product-spec/reference/profile.md)); the UI review needs browser tools and somewhere your designs live. |
 | [**know-security**](./know-security) | 0.1.0 | Reads your code the way someone trying to get at the data would read it, and reports what they would find. It never probes the system under review, holds no credentials, and runs no exploit. Its dependency check does contact your package registry, the same way `npm audit` does. | Node 18+ |
-| [**know-photo-generator**](./know-photo-generator) | 0.1.0 | Describe a photo in plain language and get a professional-grade image, without knowing what a key light or an 85mm prime is. | [Python 3](https://www.python.org/downloads/) with `pip3` on your PATH, and a Google Gemini API key you get from [AI Studio](https://aistudio.google.com/apikey). Rendering images is billed per image ([pricing](https://ai.google.dev/pricing)); building a prompt without rendering needs no key. |
-| [**know-blueprint**](./know-blueprint) | 0.1.0 | Interviews you into a written process. Ask someone how they do a thing they do every week and you get the idealized version; this gets the real one, including the exceptions and the judgment calls, and marks each step for whether automation is safe there. | **Nothing.** No key, no account, no installed tool. It reads and writes Markdown files and nothing else. |
+| [**know-photo-generator**](./know-photo-generator) | 0.2.0 | Describe a photo in plain language and get a professional-grade image, without knowing what a key light or an 85mm prime is — and a drafted text alternative with it. | [Python 3](https://www.python.org/downloads/) with `pip3` on your PATH, and a Google Gemini API key you get from [AI Studio](https://aistudio.google.com/apikey). Rendering images is billed per image ([pricing](https://ai.google.dev/pricing)); building a prompt without rendering needs no key. |
+| [**know-blueprint**](./know-blueprint) | 0.2.0 | Interviews you into a written process. Ask someone how they do a thing they do every week and you get the idealized version; this gets the real one, including the exceptions and the judgment calls, and marks each step for whether automation is safe there — then runs the review where the person who owns the risk goes through those marks. | **Nothing.** No key, no account, no installed tool. It reads and writes Markdown files and nothing else. |
 | [**know-researcher**](./know-researcher) | 1.18.1 | Phased research where every claim is audited back to its source note and every note to a declared source. Finds sources, turns them into structured notes, cross-references them, maps what is still missing, drafts from the evidence, and refuses to promote a draft that does not hold up. Numbers are registered once so they cannot drift between note and summary. | **Nothing to start.** Runs on Claude's built-in web search with no keys. Optional search tools sharpen it. `jq` is needed only for the hook that guards the output folder on Claude Code, and macOS 15+ already has it. The optional second corpus reviewer is the OpenAI Codex CLI and it reads the whole corpus — see the detail section before installing it. |
 
 Each version matches that plugin's `plugin.json`, which is the source of truth.
@@ -138,23 +138,37 @@ finding arrives as the symptom, the cause, and the proof held together.
 For accessibility it runs two tiers. **Baseline checks ride along in every test**: keyboard
 reachability, visible focus, alt text, form labels, obvious contrast problems. **The deeper tier is
 opt-in**, turned on per test with an `## Accessibility Focus` section in the spec or
-`--a11y-depth deep` when generating one. It adds the full bundled axe-core ruleset — 105 rules in
-the pinned 4.12.1 — and WCAG AA contrast ratios computed from the resolved colors of
-solid-background text rather than estimated.
+`--a11y-depth deep` when generating one. It adds the bundled axe-core ruleset and WCAG AA contrast
+ratios computed from the resolved colors of solid-background text rather than estimated. The pinned
+axe-core 4.12.1 ships 105 rules and runs 89 of them; this plugin opts one more back in
+(`target-size`, SC 2.5.8, the only Level AA rule axe leaves off that is neither deprecated nor
+experimental), for 90.
 
 **Accessibility findings from that deeper tier carry the WCAG success criteria they map to, where
 the rule has one**, read from axe's own rule metadata so the mapping cannot drift from the rules
-actually running. Of those 105 rules, 75 carry a success criterion and 30 are axe's own
-best-practice rules that map to none; a result from one of those 30 is reported with no criterion,
-and must not be presented as a WCAG violation. The labelling applies to accessibility findings
+actually running. Of the 105 shipped rules, 75 carry a success criterion and 30 are axe's own
+best-practice rules that map to none; of the 90 that actually run here, 63 carry a criterion and 27
+are best-practice. A result from a best-practice rule is reported with no criterion, and must not
+be presented as a WCAG violation. The labelling applies to accessibility findings
 only, not to the tool's other findings such as a hung request or a layout shift. Anything the tools
 cannot resolve is reported as needs-review rather than guessed.
 
+**Every accessibility run also reports its own coverage, which is the part worth having.** "0
+violations" means the rules that ran found nothing across the fraction of the standard those rules
+reach, and the output now says which fraction. Each of the 55 live Level A/AA criteria lands in one
+of four grades, never merged: a rule failed, a rule could not decide, a rule ran and found nothing
+(the automated check is satisfied, which is not the criterion being met), or **no rule reaches it
+at all**. The last group is listed by number and name. For the pinned axe-core that group is 35
+criteria — including 1.4.11 Non-text Contrast, 2.1.2 No Keyboard Trap, 2.4.3 Focus Order, 2.4.7
+Focus Visible and 3.3.1 Error Identification — and it is a work list for whoever does the manual
+pass, not a blemish on the tool.
+
 **Please read [`know-qa-agent/reference/wcag-mapping.md`](./know-qa-agent/reference/wcag-mapping.md)
-before showing this output to anyone outside the team.** It is coverage, not conformance. Automated rules exist for only a subset of the
-success criteria, so a criterion that does not appear is untested rather than satisfied, and the
-tool cannot tell those apart. It does not produce a VPAT or an accessibility statement, and it does
-not replace screen-reader or keyboard-only testing by a person.
+before showing this output to anyone outside the team.** It is coverage, not conformance. Automated
+rules exist for only a subset of the success criteria, so a criterion nothing tested is untested
+rather than satisfied — the tool can now tell you which ones those are, which is not the same as
+having tested them. It does not produce a VPAT or an accessibility statement, and it does not
+replace screen-reader or keyboard-only testing by a person.
 
 Start with `/know-qa:init` in your project, then `/know-qa:start`.
 → [Full guide](./know-qa-agent/README.md)
@@ -170,6 +184,14 @@ Once the case holds it asks how the thing behaves, drafts the document, then gra
 by breaking it into workstreams and tasks and reporting every product decision it had to invent
 along the way. Those inventions are the point: each one is a decision somebody will otherwise make
 later, quietly, differently from how you would have made it.
+
+**The behavior it asks for includes how the thing is operated.** Not only what each state renders
+and what each action writes, but the keyboard path, where focus goes when a state changes, the name
+of every control whose meaning is not carried by visible text, and which field a validation error
+names and how to recover. Those sit in the sections that already own that behavior rather than in a
+section of their own, the grader scores them, and an unstated one counts as blocking — two builders
+guessing differently at a focus destination ship two different products to anyone not using a
+mouse.
 
 Start with `/know-spec:start`.
 → [Full guide](./know-product-spec/README.md)
@@ -199,6 +221,14 @@ Start with `/know-security:init`.
 from a scene description to a complete, physics-aware image prompt, choosing camera body, lens,
 lighting setup, and color grade from a reference library, then optionally renders the image at the
 right size for print, social, or a hero banner.
+
+**Every run also ends with a drafted text alternative.** Before building the prompt it asks one
+more question — what job this image does where it will be used: decorative, informative, or the
+content of a link — because that, not what is in the frame, is what decides the alternative. It
+then writes the draft beside the image file and shows it in the conversation. The draft is for the
+person placing the image to approve, since adequacy depends on the page; the plugin never claims
+an image is accessible, and it will not describe a person's race, gender, body, or apparent
+disability unless you put it in the scene yourself.
 
 **One thing to know before using it for anything public:** a Knowbility house photo style is not
 defined yet. The style section is a deliberately empty template, because a photographic style for
@@ -230,10 +260,18 @@ anything to the person hearing it — a tool can find a missing attribute, but w
 describes is *right* is a judgment about what a person needs. You can overrule the default; the
 document records that you did.
 
+**And the marks get reviewed by somebody who can overrule them.** They come out of one interview
+with one person, which makes them the most consequential and least verified thing in the document,
+so `/know-blueprint:validate` walks them one at a time with whoever owns the consequence — the
+money, the compliance exposure, the customer trust, the safety call. It records what they kept as
+well as what they moved, and names what the session did not reach, so a partial review cannot read
+as a finished one. The operator who gave the interview cannot sign off on their own process, and
+neither can Claude.
+
 It needs nothing installed, and it is the only one of the six for which "works identically in
 Claude Code and Claude Desktop" is true without qualification.
 
-Start with `/know-blueprint:guide` if you are not sure which of its four jobs you want, or
+Start with `/know-blueprint:guide` if you are not sure which of its five jobs you want, or
 `/know-blueprint:capture` if you already know which process to write down.
 → [Full guide](./know-blueprint/README.md)
 

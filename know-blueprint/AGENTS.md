@@ -8,15 +8,17 @@ self-contained. (Current version lives in `plugin.json` and `CHANGELOG.md`.)
 
 ## What it is
 
-A process extraction interviewer with a discovery front-door. Four jobs, four
+A process extraction interviewer with a discovery front-door. Five jobs, five
 skills/commands: **discover** finds recurring work the operator can't yet name and lists it
 in a thin Process Inventory; **capture** (quick or deep) turns one named process the operator
 *already runs* into a structured Process Blueprint that a human, workflow, or AI agent could
 execute against — with explicit per-step autonomy ratings (Automate / Monitor / Human) marking
 where automation is safe and where a human must stay in the loop; **design** models a process
 the operator *doesn't yet run*, proposing an intended flow grounded only in their real
-constraints and nearest analog; **guide** orients the user to the right entry point. The funnel
-is discover → design (net-new) or capture (already run); guide points people into it. "Correct" capture
+constraints and nearest analog; **validate** runs the stakeholder review that capture gates the
+automation plan on, walking the autonomy ratings with the risk owner and recording what the pass
+did not cover; **guide** orients the user to the right entry point. The funnel
+is discover → design (net-new) or capture (already run) → validate; guide points people into it. "Correct" capture
 output is a Blueprint whose steps carry intent and observable success criteria, whose judgment
 calls have explicit criteria, and whose gaps are flagged rather than invented. The target is
 not "document the task" but "model the work as a system." Discovery's correct output is a thin
@@ -24,8 +26,9 @@ inventory that recognizes work without inventing its boundaries.
 
 ## Structure
 
-- `commands/know-blueprint/` — four thin command wrappers: `capture` (`/know-blueprint:capture`),
-  `discover` (`/know-blueprint:discover`), `design` (`/know-blueprint:design`), `guide` (`/know-blueprint:guide`).
+- `commands/know-blueprint/` — five thin command wrappers: `capture` (`/know-blueprint:capture`),
+  `discover` (`/know-blueprint:discover`), `design` (`/know-blueprint:design`),
+  `validate` (`/know-blueprint:validate`), `guide` (`/know-blueprint:guide`).
   Each runs its matching skill.
 - `skills/blueprint-capture/SKILL.md` — the interview engine (both capture modes); models a process
   the operator *already runs*.
@@ -33,9 +36,15 @@ inventory that recognizes work without inventing its boundaries.
 - `skills/blueprint-design/SKILL.md` — models a process that *doesn't exist yet*: a grounded
   proposer that builds an intended flow only from the operator's real constraints + nearest analog,
   written as a designed Blueprint ("proposed, not yet run").
-- `skills/blueprint-guide/SKILL.md` — orientation + routing; explains the four jobs (split on
-  whether the process already exists), sends the user to discover / design / capture. Content lives
-  inline (behavior, not a doctrine doc).
+- `skills/blueprint-validate/SKILL.md` — runs the stakeholder review capture gates the automation
+  plan on. Walks the autonomy ratings with the risk owner ordered by consequence, records
+  confirmations as well as moves, and writes template §16 including what the pass did not cover.
+  Refuses operator self-validation and refuses to stand in for the risk owner; a session without
+  that authority is input gathering that does not clear the gate.
+- `skills/blueprint-guide/SKILL.md` — orientation + routing; explains the five jobs (split on
+  whether the process already exists, and whether a Blueprint is waiting on its review), sends the
+  user to discover / design / capture / validate. Content lives inline (behavior, not a doctrine
+  doc).
 - `reference/` — read-only library. Capture: `blueprint-template.md` (shared output structure,
   Design mode + "Designed — not yet run" status), `example-blog-content-blueprint.md`. Discover:
   `discovery-sweep.md`, `process-inventory-template.md`. Design: `design-doctrine.md` (grounded
@@ -77,7 +86,7 @@ inventory that recognizes work without inventing its boundaries.
 
 ## Surface differences (Claude Code vs Claude Desktop)
 
-None. All four skills use Read/Write/Edit/Glob/Grep only — no hooks, no shell, no subagents, no
+None. All five skills use Read/Write/Edit/Glob/Grep only — no hooks, no shell, no subagents, no
 network, no installed dependency — so behavior is identical on both surfaces. This plugin is the
 only one in the marketplace for which "works the same in both places" is unqualifiedly true; say so
 where it helps a reader choose, and don't let it get rewritten into a claim about the others.

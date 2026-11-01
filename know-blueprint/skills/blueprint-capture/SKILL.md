@@ -244,9 +244,16 @@ Before calling it done:
 
    Note in the Blueprint's status line that this review hasn't happened yet.
 
+   **Then name how it gets run:** `/know-blueprint:validate` walks the ratings one at a time
+   with the risk owner, pressure-tests the exception paths, works the open questions that gate
+   Automate-rated steps, and writes the result into the Blueprint's validation record — including
+   what the pass did not cover. Offer it for whenever they have that person. Recommending a
+   review without saying how to run it is what left this gate with no key.
+
    If the operator asks you to *be* the stakeholder — review as them, sign off, mark it
    approved — decline and say why: approving your own work under someone else's name isn't
-   validation. Your read-back in step 1 is yours to do and is not a substitute.
+   validation. Your read-back in step 1 is yours to do and is not a substitute. The same holds
+   in validation: that skill refuses an operator signing off on their own Blueprint.
 
 ## Step 6: After the capture
 
@@ -261,11 +268,14 @@ Suggest next steps in order:
    steps are resolved. If either is unmet, don't hand over the plan. Say plainly what's
    standing between here and safe automation — the stakeholder walkthrough hasn't happened,
    and/or these specific open questions gate these specific Automate-rated steps — and offer
-   to help resolve or route them. If the operator insists on the plan anyway, you may draft
-   it, but record in the Blueprint that it was produced ahead of validation at their explicit
-   direction (an honest, recorded waiver — the same posture as declining to simulate the
-   stakeholder). Never present an automation plan built on an unvalidated Blueprint as if the
-   ratings were settled.
+   to help resolve or route them — **and say that `/know-blueprint:validate` is what clears
+   them**, so the honest path forward is a real option and not just a closed door. If the
+   operator insists on the plan anyway, you may draft it, but record in the Blueprint that it was
+   produced ahead of validation at their explicit direction (an honest, recorded waiver — the same
+   posture as declining to simulate the stakeholder). Never present an automation plan built on an
+   unvalidated Blueprint as if the ratings were settled.
 3. Remind the user that Blueprints age. When the process changes, recapture the changed
    section rather than letting the document drift — and bump the Blueprint's Version and reset
-   its validation status, since a changed process is an unvalidated one again.
+   its validation status, since a changed process is an unvalidated one again. Re-running
+   `/know-blueprint:validate` after a revision scopes to what changed plus anything downstream of
+   it, rather than re-walking every rating.

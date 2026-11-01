@@ -1,6 +1,6 @@
 ---
 name: blueprint-guide
-description: This skill should be used when the user asks how Blueprint works, where to start, which mode to use, what the difference between discovery, design, and capture is, or what they should document first (e.g. "how does blueprint work", "where do I start", "quick or deep?", "what should I capture first", "what can this do"), or runs /know-blueprint:guide. Explains the four jobs — discover, design, quick capture, deep capture — and routes the user to the right entry point based on whether they can name the process and whether they already run it.
+description: This skill should be used when the user asks how Blueprint works, where to start, which mode to use, what the difference between discovery, design, capture, and validation is, or what they should document first (e.g. "how does blueprint work", "where do I start", "quick or deep?", "what should I capture first", "what can this do"), or runs /know-blueprint:guide. Explains the five jobs — discover, design, quick capture, deep capture, validate — and routes the user to the right entry point based on whether they can name the process, whether they already run it, and whether a Blueprint is waiting on its stakeholder review.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -17,7 +17,7 @@ execute against — built by interviewing you, not by asking you to write it up.
 
 ## The jobs (this is the thing to get across)
 
-Blueprint does four distinct things. People conflate them; keep them separate — the key split is
+Blueprint does five distinct things. People conflate them; keep them separate — the key split is
 whether the process **already exists**.
 
 1. **Discover** (`/know-blueprint:discover`) — a short sweep that surfaces the recurring work you might
@@ -39,17 +39,26 @@ whether the process **already exists**.
    you run: decision criteria, exception paths, approval authority, evidence, timing, and risk.
    Detailed enough to take to a new hire or an automation build once a stakeholder has validated it.
 
+5. **Validate** (`/know-blueprint:validate`) — run the stakeholder review a Blueprint is waiting
+   on. A fresh Blueprint's autonomy ratings came from one operator's account of their own work, so
+   capture deliberately won't sign them off; this walks them one at a time with the person who owns
+   the risk, pressure-tests the exception paths, works the open questions that gate the
+   Automate-rated steps, and records what they decided — including what the pass didn't cover.
+   Until this happens, the automation plan stays gated. Use it when you have that person; a
+   revision reopens it, scoped to what changed.
+
 The dividing line: **capture is for work you already run; design is for work you don't yet.** A
 designed process graduates to a captured one once it's been run a few times — design proposes, reality
 corrects, capture records. The natural path is **Discover** (what do I have) → **Design** (something
-new) *or* **Capture** (something I run).
+new) *or* **Capture** (something I run) → **Validate** (before anything gets automated).
 
 ## Two things worth knowing
 
 - **Every captured step gets rated Automate, Monitor, or Human** — so you know where automation is
   safe and where a human must stay in the loop, decided by one question: *if this step were done
   wrong with no review, what would happen?* The ratings are a reviewed draft, not a safety
-  certification: they come from one interview and hold until the person who owns the risk signs off.
+  certification: they come from one interview and hold until the person who owns the risk signs off, which
+  `/know-blueprint:validate` is how you actually run.
   (Discovery deliberately does **not** rate anything — there are no steps yet to judge.) One
   default worth knowing up front: a step whose output is an accessibility judgment — is this image
   decorative, is this alt text right, is this reading order correct — comes out **Human**, because
@@ -75,6 +84,13 @@ already run it?**
   for automation- or handoff-ready. Offer to run `/know-blueprint:capture` now.
 - **They already have a Process Inventory from a past discovery →** point them at it, and offer to run
   a capture on whichever candidate they choose; capture will pick up what the inventory already holds.
+- **They have a Blueprint already and want to act on it — automate a step, hand it to an agent, or
+  train someone against it →** check its Status line first. "Stakeholder validation not yet done"
+  means recommend **validate**, and say plainly what it unblocks. Offer `/know-blueprint:validate`
+  now. If the risk owner isn't available, say the session can still gather input and won't clear
+  the gate.
+- **Their process changed since it was captured →** recapture the changed section, then
+  **validate** again — a changed process is an unvalidated one.
 
 Then, if they say yes, hand off to the matching skill. Don't re-explain what that skill will do — just
 start it.

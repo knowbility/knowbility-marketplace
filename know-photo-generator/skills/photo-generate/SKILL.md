@@ -99,6 +99,12 @@ Fast generation using brand defaults or scene presets.
      Options: "Nothing specific" / "Yes — I'll list them".
    - *Text* — "Any text/labels that must stay legible?"
      Options: "No text in scene" / "Yes — I'll give the exact text".
+   - *Role* — "Where this image gets used, what job will it do?"
+     Options: "Decorative — nearby text already says it" / "Informative — it carries
+     something the text doesn't" / "Functional — it's a link or a button" / "Not decided
+     yet". This is the question that decides the image's text alternative, so it is asked
+     here rather than guessed later — see **Alt text** below. An *informative* answer also
+     bears on the prompt: whatever the image has to convey needs to be legible in the frame.
 3. **Generate the prompt.** Combine the scene with the brand's Master Prompt Template
    from the brand styles file. Apply that style's Brand Rules automatically, including its
    subject treatment, rather than asking again. Output the complete prompt.
@@ -115,7 +121,7 @@ Fast generation using brand defaults or scene presets.
    covers everything else).
 2. **Find a preset.** Read `${CLAUDE_PLUGIN_ROOT}/reference/scene-presets.md` and find
    the best match. Present it with a brief explanation; ask if they want adjustments.
-3. **Essential questions.** Same three as above.
+3. **Essential questions.** Same four as above.
 4. **Generate the prompt.** Read `${CLAUDE_PLUGIN_ROOT}/reference/nano-banana-engine.md`
    for physics triggers. Output the prompt using preset values + reasoning triggers.
 
@@ -200,6 +206,10 @@ Ensure text '[EXACT TEXT]' remains crisp and legible, following 3D perspective a
    - "Tweak the prompt first" — take changes conversationally, re-deliver
    - "Done — prompt only"
 
+   On "Done — prompt only", still deliver the alt-text draft described below: a
+   prompt-only run ends with an image somewhere, rendered by something else. On the two
+   render options, Image Generation's last step handles it.
+
 ---
 
 ## Batch Mode (`--batch <file>`)
@@ -212,9 +222,9 @@ Shot-list mode: many images in one run, minimal ceremony. Implies `--generate`.
    `hero shot (hero-banner): founder at a whiteboard...`). Show the parsed list —
    name, platform, scene — then confirm via AskUserQuestion:
    "Proceed with these N shots" / "Let me correct the list" / "Cancel".
-2. **Ask the three essential questions ONCE** for the whole batch (identity
-   preservation, objects to remove, text to keep legible). Apply the answers to
-   every shot.
+2. **Ask the four essential questions ONCE** for the whole batch (identity
+   preservation, objects to remove, text to keep legible, the role the images will
+   play). Apply the answers to every shot.
 3. **Build one prompt per entry** using quick mode with the shared settings: style
    (flag or default), platform (per-entry override, else `--platform`, else
    `social-square`), size. No per-entry interviewing.
@@ -224,7 +234,8 @@ Shot-list mode: many images in one run, minimal ceremony. Implies `--generate`.
 5. **Render sequentially**, one script call per image. Output names: `output/<slug>.png`
    from the shot name (or a slug of the scene's first words). A failed shot does not
    stop the batch — record the error and continue.
-6. **Summary table** at the end: shot, output file, status (saved / failed + reason).
+6. **Summary table** at the end: shot, output file, status (saved / failed + reason),
+   and `alt` — written, or "none needed (decorative)".
 
 ## Variations (`--variations N`)
 
@@ -276,3 +287,59 @@ python3 "${CLAUDE_PLUGIN_ROOT}/scripts/generate_image.py" "<prompt>" \
    reference image as the base, keep everything identical except: <requested changes>."
    Save as the same name with a `-r1` (then `-r2`, …) suffix. Repeat while they keep
    requesting changes; skip this offer in batch mode.
+
+6. **Write the alt text** for whichever file the user settles on, per **Alt text** below.
+   Do this once the refinement loop is finished — a refined image is a different image, and
+   an alternative written for the first render would describe something nobody kept.
+
+---
+
+## Alt text
+
+Every image this plugin produces gets placed somewhere, and wherever that is, somebody has to
+decide its text alternative. Make that decision part of delivery instead of something the user
+discovers afterwards. Every run does this; there is no flag for it and no run skips it.
+
+**What this plugin can and cannot settle.** It knows what is in the frame — it wrote the prompt.
+It does not know what job the image does on the page it lands on, and that is what decides the
+alternative: one photograph is decorative beside a paragraph that already says it, informative
+when it carries something the text does not, and a destination when it is the content of a link.
+So the role comes from the user, and the wording you produce is **a draft the person placing the
+image approves in context**. Never present it as finished, and never say the image is accessible —
+a drafted alternative is a starting point for the person who knows the page.
+
+### What to produce, by role
+
+| Role (essential question 4) | What to deliver |
+|---|---|
+| **Decorative** | `alt=""`, plus one line on why an empty alternative is the correct answer here rather than a missing one. Do not write a description "just in case" — a decorative image carrying a description is a worse result, not a safer one. |
+| **Informative** | A draft of roughly 10–25 words naming what a reader would otherwise lose. Lead with that, never with the photographic treatment. No "image of" or "photo of" — the context already says it is an image. If the point genuinely needs more room, draft a short alternative *and* a longer description for nearby prose or a `figcaption`, and say which is which. |
+| **Functional** | A draft describing the destination or the action, not the picture. A logo that links home is "Home", not a description of the logo. |
+| **Not decided yet** | Draft the informative version, and say plainly that the role is unresolved and has to be answered before the image is published. The unanswered role is the finding, not the wording. |
+
+### Where it goes
+
+Write a sidecar beside the image — the image's path with `.alt.md` replacing the extension, so
+`output/photo-20261031-143022.png` pairs with `output/photo-20261031-143022.alt.md` — and also
+show the draft in the conversation, where it can be used immediately. The file holds three things:
+
+- the drafted alternative, or the empty-alt recommendation
+- the role it was written for, in the user's own words
+- one line recording that adequacy depends on where the image lands, so the person placing it owns
+  the final wording
+
+One sidecar per file the user keeps: each variation, and each `-rN` refinement they settle on.
+
+**Prompt-only runs** (no `--generate`) still get a draft, written from the prompt rather than from
+a render and labelled that way: it describes the *intended* image and has to be checked against
+whatever is finally produced.
+
+**Batch mode** writes one sidecar per shot from the role answered once for the whole batch.
+
+### Describing people
+
+Do not state a person's race, ethnicity, apparent gender, body, age, or whether they appear
+disabled unless the user put it in the scene description or it is the point of the image. Rendering
+a person does not tell you how they would describe themselves, and an alternative that guesses is
+worse than one that omits. Where such a detail is the point and the user supplied it, use their
+words rather than substituting your own.

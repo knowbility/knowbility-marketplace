@@ -423,6 +423,51 @@ No systemic themes — the findings appear independent.
 
 ---
 
+## Accessibility coverage
+
+{Only when an accessibility tier ran. Omit the section entirely otherwise — an empty
+coverage table reads like a clean one.}
+
+**The number people misread is "0 violations".** Report the four grades separately and never
+merge them:
+
+| Grade | Where it comes from | What it means |
+|---|---|---|
+| **Failed** | an axe rule returned a violation | a defect, with the node and the criterion |
+| **Needs review** | axe returned `incomplete` | a rule ran and could not decide; a person judges it |
+| **Checked by rule** | a rule ran and found nothing | the automated check is satisfied — **not** that the criterion is met, since a rule tests part of a criterion |
+| **Looked at by a person or a heuristic** | the baseline tier (keyboard reachability, visible focus, alt text, form labels), `contrast.mjs` (1.4.3 computed from resolved colors), the ARIA-widget keyboard checks | somebody or something examined it outside axe; carries the method, not a rule id |
+| **Untested** | nothing above touched it | nobody looked. Not a pass. |
+
+Take the first three plus the untested list from `axe.md`'s coverage section, which computes
+them from the pinned axe-core's own rule metadata. **The fourth is yours to merge:** axe.mjs
+reports only what axe did, and deliberately does not claim credit for the other tiers. Move a
+criterion out of untested only when a tool or a person in this run actually examined it, and say
+which.
+
+```
+**WCAG 2.2 Level A/AA — {C} of 55 criteria examined in this run**
+
+Failed: {n} — {list with criterion numbers}
+Needs review: {n} — {list}
+Checked by rule: {n} — {list}
+Looked at by a person or a heuristic: {n} — {list, each with the method}
+Untested: {n} — {list}
+
+{When a disabled rule would reach an untested criterion, say so and name it.}
+
+Coverage, not conformance. A criterion nothing touched was not looked at. Automated passes
+cannot establish conformance and do not substitute for assistive-technology or keyboard-only
+testing by a person.
+```
+
+**Trend it the way failures are trended, and the right direction is up.** A run whose untested
+count fell because somebody added a manual check is progress; a run whose failures fell because
+a tier stopped running is a regression that looks like an improvement. If the untested count
+moved, say which of the two happened.
+
+---
+
 ## Filed
 
 {If --file / --create-issues was used:}
@@ -553,6 +598,8 @@ This means:
 | `.know-qa/areas.json` | Optional area registry — area/owner roll-up, scoping, escalation, assignee suggestion |
 | `.know-qa/reporting.json` | Optional sink config — where the roll-up posts (Step 7); absent = no posting |
 | `.know-qa/.reporting-state.json` | Thread references for threaded sinks (read and written; gitignored) |
+| `.know-qa/tools/runs/axe-*/axe.md` | Per-run axe output, including its WCAG A/AA coverage section — the first three grades and the untested list |
+| `.know-qa/tools/wcag-aa-criteria.json` | The 55 live Level A/AA criteria, for naming an untested criterion rather than only numbering it |
 
 ## Example: Recurring Failure Detection
 

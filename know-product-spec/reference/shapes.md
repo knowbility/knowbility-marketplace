@@ -10,7 +10,7 @@ Getting this wrong costs in two directions. Too heavy, and a copy fix has to sur
 | --- | --- | --- |
 | No solution is settled yet, or the minimal path may not be software | `problem-brief` | The case, current state, outcome, solution-type recommendation, open questions |
 | Users interact with it directly: pages, screens, flows | `surface` | Full skeleton. §6 to §9 may reshape into one section per surface |
-| No user-facing surface of its own: pipeline, service, integration, scheduled job | `system` | Full skeleton, with the experience walkthrough and copy carrying "does not apply because". Data contract and interfaces carry more weight |
+| No user-facing surface of its own: pipeline, service, integration, scheduled job | `system` | Full skeleton, with the experience walkthrough and copy carrying "does not apply because". The surface half of §14 to §17 and §21 — keyboard path, focus, announcements, control names, heading structure, presentation baseline — carries the same line; failures and write targets still apply. Data contract and interfaces carry more weight |
 | Copy fix, bug fix, token or style drift, with no change to who sees what or what is stored | `small-change` | The case in three sentences, plus the affected contract sections only |
 
 ## The trap case

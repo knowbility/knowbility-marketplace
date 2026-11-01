@@ -18,6 +18,7 @@ what a bad run costs.
 /know-blueprint:discover    you can't yet name your processes
 /know-blueprint:capture     model one process you already run
 /know-blueprint:design      model one you've been handed but nobody runs yet
+/know-blueprint:validate    run the stakeholder review a Blueprint is waiting on
 ```
 
 ## Install
@@ -36,7 +37,7 @@ Desktop.
 Blueprints save to a `blueprints/` folder in whatever project you run the capture in. To put them
 somewhere else, copy `templates/CLAUDE.md` into your project root and set `blueprints_dir`.
 
-## The four jobs
+## The five jobs
 
 The dividing line is whether the process **already exists**: capture is for work you run, design is
 for work you don't yet.
@@ -46,7 +47,8 @@ for work you don't yet.
 | **`discover`** | A short sweep that surfaces your recurring work into a **Process Inventory** — candidates in your own words, plus which few to tackle first. For when the honest answer to "which process?" is "I'm not sure what I'd even call them." |
 | **`capture`** | Model **one** process you already run. Quick mode (~15 min) gets the trigger, main steps, outputs, and a first-cut rating per step. Deep mode (~45-60 min) adds decision criteria, exception paths, approval authority, evidence, timing, and risk. |
 | **`design`** | Model a process you've been **handed but nobody runs yet**. There is no real run to extract, so it *proposes* a flow — built only from your stated goal, your real constraints, and the nearest process you actually run, never from generic best practice — and labels every step as proposed, not observed. |
-| **`guide`** | Explains the four jobs and routes you to the right one. Or just ask "how does this work?" |
+| **`validate`** | Run the stakeholder review. A fresh Blueprint's ratings came from one operator's account of their own work, so capture won't sign them off — this walks them one at a time with the person who owns the risk, pressure-tests the exception paths, works the open questions that gate the Automate-rated steps, and records what they decided, **including what the pass did not cover**. Until it runs, the automation plan stays gated. |
+| **`guide`** | Explains the five jobs and routes you to the right one. Or just ask "how does this work?" |
 
 A designed process graduates to a captured one once you have run it a few times. Design proposes,
 reality corrects, capture records.
@@ -81,6 +83,15 @@ with one person. They hold until the person who owns the risk has gone through t
 and said which ones they would move. Until that happens the Blueprint's status line says so, and
 it will not hand you an automation plan built on unvalidated ratings without recording that you
 asked for it anyway.
+
+`/know-blueprint:validate` is how that review gets run and recorded. It refuses two things on
+purpose: the operator who gave the interview cannot sign off on their own Blueprint, and Claude
+cannot stand in for the risk owner. It also records confirmations, not only changes — a rating
+somebody looked at and kept is evidence, a rating nobody looked at is not, and a partial pass says
+which ratings it did not reach rather than reading as a complete one. A validated Blueprint is
+still a reviewed model and a dated claim by whoever signed it, not a certification; and a changed
+process is an unvalidated one again, which is why each revision row carries its own
+re-validated marker.
 
 **It never invents.** When it does not know where data comes from, who has authority, or what a
 threshold is, it writes that down as an open question instead of filling the gap with something

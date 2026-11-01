@@ -3,6 +3,76 @@
 All notable changes to the know-qa-agent plugin. Per-plugin semver; tags are plugin-scoped
 (`know-qa-agent--vX.Y.Z`).
 
+## 0.2.0 — 2026-10-31
+
+**An accessibility run now reports what it did not test.**
+
+The number people misread is "0 violations". A clean axe pass meant 89 rules ran and found
+nothing, across the fraction of the standard those rules reach — and the output had no way to say
+which fraction, so silence about a criterion looked exactly like a pass on it. `axe.mjs` said as
+much in a comment: a per-criterion table was declined because "this script cannot tell untested
+from satisfied." It can now, and this is that change.
+
+**Four grades, never merged.**
+
+| Grade | Means |
+|---|---|
+| Failed | a rule ran and returned a violation — a defect, with the node |
+| Needs review | a rule ran and could not decide — a person judges it |
+| Checked by rule | a rule ran and found nothing. The automated check is satisfied, **not** the criterion: a rule tests part of one |
+| No rule reaches it | untested. Nobody looked. Not a pass |
+
+Every axe pass now ends with that breakdown over all 55 live Level A/AA criteria, and lists the
+untested ones by number and name rather than leaving them as an absence.
+
+**What the measurement actually came to**, since the earlier read of this was wrong twice:
+
+- axe-core 4.12.1 ships **105 rules and runs 89** by default. Nine are disabled outright (five
+  deprecated, three AAA-only, `target-size`) and seven are experimental.
+- Those 89 reach **19 of the 55** live A/AA criteria.
+- **`target-size` is now opted in** — the only one of the sixteen that is at A/AA and neither
+  deprecated nor experimental, and SC 2.5.8 Target Size (Minimum) is reachable by no other rule.
+  That takes the run to **20 of 55**, leaving **35 criteria no rule reaches**, among them 1.4.11
+  Non-text Contrast, 2.1.2 No Keyboard Trap, 2.4.3 Focus Order, 2.4.7 Focus Visible and 3.3.1
+  Error Identification.
+- **Read rule metadata with `axe.getRules()`, never `axe._audit.rules`.** The internal array
+  reports the seven experimental rules as `enabled: true` when `axe.run` does not evaluate them.
+  Settled by running axe against a DOM and taking the union of violations, passes, incomplete and
+  inapplicable: 89 rule ids, not 96. Trusting the internal array overstates coverage by two
+  criteria (1.3.4 Orientation, 2.5.3 Label in Name) — the exact error `reference/wcag-mapping.md`
+  exists to prevent, now recorded there.
+- **The experimental rules stay off.** They would reach those two criteria, and they are
+  experimental because their false-positive rate is not production-grade. Three false findings and
+  a tool gets switched off, which costs more coverage than it buys. The coverage section names
+  them against the criteria they would reach, so the trade is visible instead of invisible.
+
+**The fourth grade is not axe's to claim, and `axe.mjs` does not claim it.** The baseline tier,
+`contrast.mjs` deciding 1.4.3 from resolved colors, and the ARIA-widget keyboard checks all examine
+criteria axe has no rule for. The script reports only what axe did; `report` merges the others in as
+*looked at by a person or a heuristic*, carrying the method rather than a rule id. **So 20 of 55 is
+axe's reach, not the plugin's** — quoting it as the plugin's understates the tool, and quoting the
+merged figure as axe's overstates the rules.
+
+**One hand-maintained table, and only one.** `harness/tools/wcag-aa-criteria.json` holds the 55
+live A/AA criteria with numbers, names and levels, carrying its source URL and retrieval date. It
+cannot be derived from rule metadata: a rule's conformance tag is the *lowest* level among all the
+criteria that rule touches and assigns a level to none of them individually. Levels have to come
+from the WCAG document. Three of the four grades need no table at all — only the untested
+complement does. Parsing note recorded in the file: 4.1.1 Parsing is "Obsolete and removed" and
+carries no level marker, so the live A+AA total is 55, and a parse that lets a criterion inherit the
+next one's marker gets 56.
+
+**`report` gained an Accessibility coverage section** that states the four grades, merges the
+fourth, and trends the untested count — with the warning that a falling failure count because a
+tier stopped running is a regression that looks like an improvement. The section is omitted
+entirely when no accessibility tier ran, because an empty coverage table reads like a clean one.
+
+**`reference/wcag-mapping.md`** no longer says the tooling cannot tell untested from satisfied.
+That was true when it was written and is the gap this closes — and distinguishing the 35 is not
+closing them. Scoping a manual audit is now a supported use: the untested list is the work list.
+
+Keywords gained `wcag`.
+
 ## 0.1.1 — 2026-10-31
 
 **The install-UI description claimed the deep accessibility tier as if it were the default.**

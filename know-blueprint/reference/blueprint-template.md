@@ -11,6 +11,9 @@
 | **Last validated** | Not yet validated — [owner who will sign off, once known] |
 | **Next review** | Set after validation |
 
+<!-- Status, Last validated and Next review are written by /know-blueprint:validate, which runs
+     the walkthrough with the person who owns the risk. Nothing else should claim them. -->
+
 <!-- In quick mode, mark any section the interview didn't cover "Not captured — quick
      mode." Never silently omit a section.
      In DESIGN mode (a process modelled before it has ever run): set Mode to "Design" and Status
@@ -131,3 +134,24 @@ moved it and when. "None in this process" is a valid and common answer.]
 | Version | Date | What changed | By | Re-validated? |
 |---|---|---|---|---|
 | 1 | [YYYY-MM-DD] | Initial capture | [Operator] | Not yet |
+
+## 16. Validation record
+
+<!-- Written by /know-blueprint:validate. One row per rating actually reviewed. A rating the risk
+     owner looked at and kept is evidence; a rating nobody looked at is not, and these two must
+     never look the same in this table. "Not covered" below is the most important line here. -->
+
+**Pass:** [YYYY-MM-DD] · **Validated by:** [Name, role] · **Authority to move a rating:** [Yes / No]
+
+| Step | Rating before | Rating after | Decided by |
+|---|---|---|---|
+| [Step] | [Automate / Monitor / Human] | [same = confirmed, or the new rating] | [Name] |
+
+**Exception paths walked:** [Which ones, and anything new that came out of it]
+
+**Open questions closed:** [Which, with the answer written into the step it belongs to]
+
+**Not covered in this pass:** [Ratings not reviewed, exception paths not walked, open questions
+still open. "Nothing — full pass" is a valid answer and has to be earned.]
+
+**Automation gate:** [Open / Not open — and if not open, exactly what is in the way]

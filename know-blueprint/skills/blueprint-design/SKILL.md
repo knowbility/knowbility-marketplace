@@ -122,4 +122,7 @@ Then close by making the first real runs the plan:
   with what actually happened.
 - The automation-plan handoff stays gated **twice**: a designed process is not ready to automate until
   it has been validated **and** run. Don't offer an automation plan for a process that has never
-  executed.
+  executed. The two gates lift separately and by different means: `/know-blueprint:validate` clears
+  the ratings with the risk owner and can be run now, while only real executions clear "not yet
+  run" — so a validated designed Blueprint keeps that half of its Status, and validate says so
+  rather than overwriting it.

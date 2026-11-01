@@ -3,6 +3,45 @@
 All notable changes to the know-photo-generator plugin. Per-plugin semver; tags are
 plugin-scoped (`know-photo-generator--vX.Y.Z`).
 
+## 0.2.0 — 2026-10-31
+
+**The generator now hands you the alt text.**
+
+An image generator shipped by a digital accessibility organization produced a PNG and nothing else.
+Every one of those images needs a text alternative wherever it gets used, and the plugin was the
+only thing in the room that already knew what was in the frame — it had just written a paragraph
+specifying subject, framing, expression and environment.
+
+- **A fourth essential question: the image's role.** Decorative, informative, functional, or not
+  decided yet. It is asked with the other three (identity, cleanup, legible text), so batch mode
+  asks it once for the whole shot list. The reason it is a question rather than an inference is
+  the point of the feature: what decides an alternative is the job the image does on the page, not
+  what is in the frame, and the plugin cannot see the page. An *informative* answer also bears on
+  the prompt, since whatever the image must convey has to be legible in it.
+- **A drafted alternative per kept file**, written to a `.alt.md` sidecar beside the image and
+  shown in the conversation. Each variation and each refinement the user settles on gets its own.
+  Drafting happens after the refinement loop finishes — a refined image is a different image, and
+  an alternative written for the first render describes something nobody kept.
+- **Role-specific output rather than one description.** Decorative returns `alt=""` and says why an
+  empty alternative is correct here rather than missing, and explicitly does not write a
+  description "just in case." Functional describes the destination or action, not the picture.
+  Informative gets 10–25 words leading with what a reader would otherwise lose, with no "image
+  of". An unresolved role is reported as the finding it is.
+- **Prompt-only runs get a draft too**, written from the prompt rather than a render and labelled
+  that way, since it describes the intended image and has to be checked against what is finally
+  produced.
+- **It is a draft and says so.** Adequacy depends on where the image lands, so the person placing
+  it owns the final wording. No output claims an image is accessible — the marketplace house rule
+  is that nothing may imply an automated pass substitutes for a person's judgment, and alt-text
+  adequacy is rated Human by `know-blueprint`'s own doctrine for exactly this reason.
+- **A rule about describing people.** The workflow will not state a person's race, ethnicity,
+  apparent gender, body, age, or whether they appear disabled unless the user put it in the scene
+  description or it is the point of the image, and then it uses their words. Rendering a person
+  tells you nothing about how they would describe themselves.
+
+Keywords gained `accessibility` and `alt-text`. No change to the prompt engine, the reference
+library, the Gemini path, or the key-hygiene rules.
+
 ## 0.1.0 — 2026-10-30
 
 First release in the Knowbility marketplace.

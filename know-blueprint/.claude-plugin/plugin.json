@@ -1,7 +1,7 @@
 {
   "name": "know-blueprint",
-  "version": "0.1.0",
-  "description": "v0.1.0 \u2014 Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down \u2014 triggers, data movement, decision criteria, exceptions, approval authority \u2014 then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off, and any step that turns on accessibility judgment defaults to Human. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own.",
+  "version": "0.2.0",
+  "description": "v0.2.0 \u2014 Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down \u2014 triggers, data movement, decision criteria, exceptions, approval authority \u2014 then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off, which validate is how you run \u2014 it walks the ratings one at a time with the person who owns the risk, pressure-tests the exception paths, and records what the pass did not cover, so a partial review never reads as a complete one, and any step that turns on accessibility judgment defaults to Human. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Five entry points: discover, capture, design, validate, and a guide that routes you. Standalone; runs on its own.",
   "author": {
     "name": "Knowbility",
     "url": "https://github.com/knowbility"
@@ -15,6 +15,7 @@
     "workflow-design",
     "automation-readiness",
     "human-in-the-loop",
-    "operations"
+    "operations",
+    "stakeholder-validation"
   ]
 }
