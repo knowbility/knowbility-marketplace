@@ -169,7 +169,7 @@ assumed.
 3. Update the `v<X.Y.Z> — ` prefix in that manifest's `description`.
 4. Update the same prefix in the plugin's entry in `.claude-plugin/marketplace.json`.
 5. Add a `CHANGELOG.md` entry in the plugin.
-6. Run the gates below. All three must pass.
+6. Run the gates below. All four must pass.
 7. Commit, then tag with `claude plugin tag ./<plugin>`, which validates that the manifest and the
    catalog entry agree before writing anything. It produces `<plugin>--v<X.Y.Z>` with a **double**
    dash, and that is the convention here: a single dash is ambiguous about where a hyphenated
@@ -177,6 +177,12 @@ assumed.
    to push the tag.
 
 Steps 3 and 4 are the ones that get forgotten, which is exactly what the CI check exists to catch.
+
+**What does not need a release:** a change to `dev/` tooling, and maintainer documentation inside a
+plugin directory — a plugin's own `AGENTS.md`, which ships but describes how to work on the plugin
+rather than how it behaves. Precedent is `581b2ea`, `9032d45` and `b6f8d9a`, each of which changed
+a plugin's `AGENTS.md` with no `plugin.json` touched. If the plugin's behavior, its commands, or
+any text a user reads changed, that is a release.
 
 ## Gates
 
