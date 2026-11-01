@@ -17,21 +17,28 @@ de-branded, validated, registered, and installable from the private repository. 
 | Plugin | Version | Invoked as | State |
 |---|---|---|---|
 | `know-product-spec` | 0.2.0 | `/know-spec:*` | Manifest validated. Never driven end to end. |
-| `know-security` | 0.1.0 | `/know-security:*` | 66-case suite passing. `init` never run from a cold install. **A README claim is wrong — see next steps 3.** |
+| `know-security` | 0.1.0 | `/know-security:*` | 66-case suite passing. `init` never run from a cold install. **A README claim is wrong — see next steps 2.** |
 | `know-photo-generator` | 0.2.0 | `/know-photo:*` | Key check passing. **No image has ever been rendered** (bills a real generation). **A Knowbility brand style is undefined** — the section is a template awaiting the organization's input, representation guidance included. |
 | `know-qa-agent` | 0.2.0 | `/know-qa:*` | Engine and harness verified; 0.2.0 reports what a run did *not* cover. **Never driven against a live site.** Needs Node 18+ and Chrome. |
 | `know-blueprint` | 0.2.0 | `/know-blueprint:*` | Five skills/commands as of 0.2.0 (`validate` added). No interview run end to end. |
-| `know-researcher` | **1.19.0** | `/know-research:*` | Output gate verified blocking an unaudited write in a live session. **The new standards channel has never been executed through the discover skill** — see next steps 2. `init` not run. |
+| `know-researcher` | **1.19.0** | `/know-research:*` | Output gate verified blocking an unaudited write in a live session. **The new standards channel has never been executed through the discover skill** — see next steps 1. `init` not run. |
 
 Per-plugin detail lives in each `CHANGELOG.md`. Install verification lives in
 `dev/review/install-walk.md`. Provenance and licensing live in `dev/PROVENANCE.md`. The two
 adversarial/value reviews live in `dev/review/adversarial-review-2026-10-31.md` and
 `dev/review/value-review.md`.
 
-**The installed copies on this machine are behind the repo.** Verified by reading the cache:
-`~/.claude/plugins/cache/knowbility/` holds `know-blueprint` **0.1.0** and `know-researcher`
-**1.18.0**, against 0.2.0 and 1.19.0 in the tree. Anything run from the installed path gets the old
-behavior, so the standards channel is not reachable there yet.
+**The installed copies on this machine are current as of 2026-11-01.** `know-blueprint` 0.2.0 and
+`know-researcher` 1.19.0 at user scope, updated from 0.1.0 and 1.18.0 after refreshing the
+marketplace from GitHub. Verified by reading the cache and by hashing: the standards playbook, the
+three corrected type-channel maps, the resolver skill and the source-assessment guide are all
+byte-identical between `~/.claude/plugins/cache/knowbility/know-researcher/1.19.0/` and this tree.
+The cache keeps the old version directories alongside the new ones.
+
+**The other four plugins are not installed on this machine at all**, so their 0.2.0 releases exist
+only in the repo: `know-photo-generator`, `know-product-spec`, `know-qa-agent` and `know-security`.
+Installing any of them makes this machine less representative of a cold one, which is the only
+reason not to.
 
 ## Done this session
 
@@ -60,11 +67,7 @@ behavior, so the standards channel is not reachable there yet.
 
 ## Next steps (in order)
 
-1. **Update the installed plugins** so the installed path matches the tree (`know-blueprint`
-   0.1.0 → 0.2.0, `know-researcher` 1.18.0 → 1.19.0). Cheap, and it is a prerequisite for step 2.
-   Leaving them stale is also a legitimate choice — it preserves a returning-user state at known
-   older versions — but then nothing below can be exercised.
-2. **Run `/know-research:init` on a real topic, and reach the standards channel.** Still the last
+1. **Run `/know-research:init` on a real topic, and reach the standards channel.** Still the last
    unwalked path and still the only one needing something from Kelsey: an actual research subject.
    It is now worth more than it was. The standards channel's six query templates were each run
    against the live API by direct `curl` before being written down, **but the channel has never
@@ -73,19 +76,19 @@ behavior, so the standards channel is not reachable there yet.
    `edition` fields, and the degradation chain has never been walked. Those are different claims
    from "the APIs work," which is all that was verified. A research subject touching US federal
    accessibility requirements would exercise it directly.
-3. **Fix or disprove `know-security/README.md:66`.** It claims "every skill injects it verbatim
+2. **Fix or disprove `know-security/README.md:66`.** It claims "every skill injects it verbatim
    into the reviewer's assignment so five entry points cannot drift," referring to
    `reference/finding-contract.md`. Only `skills/security-review/SKILL.md` references that file;
    the plugin ships 4 skills, 4 commands and 1 agent. Either the wiring is missing or the sentence
    is wrong, and it is a false claim in a shipped README. Flagged twice and not acted on. Small —
    read the five entry points, then either wire them or rewrite the line. `know-security` is at
    0.1.0 and was in neither release, so this would be its first change.
-4. **One auditor conversation unblocks both Phase 4 and Phase 5.** Phase 5's eleven questions are
+3. **One auditor conversation unblocks both Phase 4 and Phase 5.** Phase 5's eleven questions are
    in `dev/phase-5/REQUIREMENTS.md` and are about current practice, not about the tool; its
    eleventh question decides whether this is a plugin at all. Phase 4 needs real `know-qa-agent`
    output in front of the same person — grounding in `dev/review/migration-plan.md` under "The
    deferred accessibility work".
-5. **Walk the remaining plugins' first-run paths** when there is a reason to. `know-qa-agent`
+4. **Walk the remaining plugins' first-run paths** when there is a reason to. `know-qa-agent`
    against a live site is the most valuable and the most expensive (Node 18+, Chrome, a real
    target). An actual image render through `know-photo-generator` bills a generation.
 
@@ -165,7 +168,7 @@ and the README slash-command sweep.
 to this session's work. Nothing here starts or stops browsers at checkpoint.
 
 **Left installed on this machine:** the `knowbility` marketplace, plus `know-blueprint` and
-`know-researcher` at user scope, both at the older versions noted above. This machine is no longer
+`know-researcher` at user scope, both now at the current versions. This machine is no longer
 cold for a future walk, which is the returning-user state and fine.
 
 ## How to resume
