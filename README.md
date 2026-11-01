@@ -103,7 +103,7 @@ its prerequisites before, rather than after, you hit them.
 | [**know-security**](./know-security) | 0.1.0 | Reads your code the way someone trying to get at the data would read it, and reports what they would find. It never probes the system under review, holds no credentials, and runs no exploit. Its dependency check does contact your package registry, the same way `npm audit` does. | Node 18+ |
 | [**know-photo-generator**](./know-photo-generator) | 0.2.0 | Describe a photo in plain language and get a professional-grade image, without knowing what a key light or an 85mm prime is — and a drafted text alternative with it. | [Python 3](https://www.python.org/downloads/) with `pip3` on your PATH, and a Google Gemini API key you get from [AI Studio](https://aistudio.google.com/apikey). Rendering images is billed per image ([pricing](https://ai.google.dev/pricing)); building a prompt without rendering needs no key. |
 | [**know-blueprint**](./know-blueprint) | 0.2.0 | Interviews you into a written process. Ask someone how they do a thing they do every week and you get the idealized version; this gets the real one, including the exceptions and the judgment calls, and marks each step for whether automation is safe there — then runs the review where the person who owns the risk goes through those marks. | **Nothing.** No key, no account, no installed tool. It reads and writes Markdown files and nothing else. |
-| [**know-researcher**](./know-researcher) | 1.18.1 | Phased research where every claim is audited back to its source note and every note to a declared source. Finds sources, turns them into structured notes, cross-references them, maps what is still missing, drafts from the evidence, and refuses to promote a draft that does not hold up. Numbers are registered once so they cannot drift between note and summary. | **Nothing to start.** Runs on Claude's built-in web search with no keys. Optional search tools sharpen it. `jq` is needed only for the hook that guards the output folder on Claude Code, and macOS 15+ already has it. The optional second corpus reviewer is the OpenAI Codex CLI and it reads the whole corpus — see the detail section before installing it. |
+| [**know-researcher**](./know-researcher) | 1.19.0 | Phased research where every claim is audited back to its source note and every note to a declared source. Finds sources, turns them into structured notes, cross-references them, maps what is still missing, drafts from the evidence, and refuses to promote a draft that does not hold up. Numbers are registered once so they cannot drift between note and summary. A standards channel reads US federal requirements from the Federal Register and eCFR and W3C specifications from the W3C API, carrying whether each one is in force, proposed, or superseded. | **Nothing to start.** Runs on Claude's built-in web search with no keys. Optional search tools sharpen it. `jq` is needed only for the hook that guards the output folder on Claude Code, and macOS 15+ already has it. The optional second corpus reviewer is the OpenAI Codex CLI and it reads the whole corpus — see the detail section before installing it. |
 
 Each version matches that plugin's `plugin.json`, which is the source of truth.
 
@@ -300,6 +300,15 @@ well-sourced, high-confidence finding about *what an accessibility requirement s
 of the standard. It is not a determination that some product meets it. That determination takes a
 person exercising the thing with assistive technology, and no amount of good sourcing substitutes
 for it. The tool is built to keep those two claims apart and flags a draft that blurs them.
+
+**A requirement is read from the requirement.** Discovery includes a standards channel that goes to
+the Federal Register for rulemaking, eCFR for the regulation as in force on a stated date, and the
+W3C API for a specification's status — three open APIs, no keys. It is there because age does not
+tell you whether a standard is current: 36 CFR 1194 incorporates WCAG 2.0 Level A and AA, 28 CFR
+35.200 adopts WCAG 2.1 Level AA, and the current W3C Recommendation is WCAG 2.2, all at the same
+time. Every source from the channel says whether it is in force, proposed, draft, informative, or
+superseded, so a proposal cannot be quoted as a requirement and a 2008 document can be recognized
+as the live one.
 
 **One thing to know before a research project touches client material.** The final corpus review
 runs two independent reviewers. One is Claude. The other is optional, and it is the OpenAI Codex

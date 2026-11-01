@@ -3,6 +3,69 @@
 All notable changes to the know-researcher plugin. Per-plugin semver; tags are plugin-scoped
 (`know-researcher--vX.Y.Z`).
 
+## 1.19.0 — 2026-11-01
+
+**Three type-channel maps told discovery to find standards and regulation text. No channel implemented it.**
+
+The `regulatory` channel is corporate disclosure — SEC EDGAR full-text search and the ProPublica
+990 API — and its own playbook lists non-SEC and non-US regulatory documents under "Cannot find."
+Three maps routed standards work there anyway:
+
+- `market-industry.md` sent "NIST, ISO, and standards body documentation" to `regulatory`, and its
+  Regulatory Environment group asked the same channel for "official regulation text."
+- `curriculum-research.md` sent "professional body standards updates" there.
+- `exploratory-thesis.md` sent standards bodies to `domain-specific` with the method named
+  (`tvly search` scoped to standards domains) — but that playbook ships four type hooks and none of
+  them is a standards hook, so the domain list was invented at runtime. That is how a superseded
+  version gets cited as current.
+
+`domain-specific.md` compounded it by advertising what it could not do: its overview claimed it
+discovers "standards bodies," its tool configuration promised "direct URL construction for known
+standards bodies" without constructing a single URL, and its Tier 1 credibility list named ANSI,
+ISO, NIST, IEEE and W3C.
+
+**New `standards` channel** (`reference/discovery/channel-playbooks/standards.md`), scoped to US
+federal requirements and the standards they adopt. Three APIs, no keys: the Federal Register for
+rulemaking at every stage, eCFR for the regulation as in force on a stated date, and the W3C API
+for specification maturity and supersession. Every query template and example response in it was
+run against the live API before it was written down.
+
+Details that only a live probe produces, and that a runtime guess gets wrong:
+
+- The US Access Board's Federal Register agency slug is its statutory name,
+  `architectural-and-transportation-barriers-compliance-board`.
+- eCFR full-text endpoints reject uncompressed requests with HTTP 406 and `supportCode 11`. Without
+  `--compressed` the call fails in a way that looks like an outage, so the playbook and the skill
+  both say to add the flag and retry the same tier rather than degrade.
+- `conditions[term]` on the Federal Register is full text across the whole publication and
+  saturates at `count: 10000`; a search for "web accessibility" returns Medicare payment rules.
+  Scope by agency or CFR citation first.
+- **WCAG 2.0, 2.1 and 2.2 all report `status: "Recommendation"`.** A version check that reads the
+  specification record concludes WCAG 2.0 is current. Supersession is a property of the series
+  (`specification-series/wcag` → `current-specification`), never of the document, so the playbook
+  requires the series check on every W3C citation.
+
+**Staleness by supersession and adoption, not by age** (`source-assessment-guide.md` §1). The guide
+graded recency by age alone: older than two years "may be misleading," older than five "likely
+obsolete," with legal precedents exempted as timeless. Both readings mis-grade a standard. Verified
+from the regulation text itself: **36 CFR 1194 incorporates WCAG 2.0 Level A and AA, 28 CFR 35.200
+adopts WCAG 2.1 Level AA, and the current W3C Recommendation is WCAG 2.2** — three versions
+operative at once, with a 2008 document as the live Section 508 requirement. Sources from this
+channel now carry `authority` (`in-force` / `proposed` / `draft` / `informative` / `superseded`)
+and `edition`, both read from a field rather than inferred. On a fallback tier that returns pages
+instead of records, `authority` is written `unconfirmed`.
+
+The per-type staleness thresholds in the research-type templates are unchanged; they are age
+thresholds and remain right for market and adoption data, which is what they were written for.
+
+**Known coverage gap, recorded rather than papered over.** `curriculum-research.md` also routed
+O*NET occupational framework data to `regulatory`. O*NET is a Department of Labor database that
+none of the channels reach, including this one. The map now says so instead of pointing at a
+channel that returns nothing.
+
+Scope is US federal by decision, not oversight. EU (EN 301 549, EUR-Lex), UK, and Canada are named
+in the playbook's "Cannot find" so the boundary is visible to whoever reads it next.
+
 ## 1.18.1 — 2026-10-31
 
 **The "What leaves your machine" section contradicted its own table.**

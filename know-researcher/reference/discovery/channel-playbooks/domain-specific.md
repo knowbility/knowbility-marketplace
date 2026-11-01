@@ -9,13 +9,13 @@ channel-type: domain-specific
 
 ## 1. Channel Overview
 
-**Discovers:** Sources that don't fit the other five channels — patent databases, specialized industry databases, niche registries, standards bodies, educational repositories, and professional credentialing databases.
+**Discovers:** Sources that don't fit the other named channels — patent databases, specialized industry databases, niche registries, educational repositories, and professional credentialing databases.
 
 **Best for:** Research types requiring specialized sources beyond general web, academic, regulatory, financial, or social channels. This channel is type-dependent — different research types route to entirely different specialized sources.
 
 **How this channel works:** The type-channel maps (Phase 2) specify which domain-specific type hooks each research type uses. The discover skill reads the relevant type-channel map first, then selects the appropriate hooks from this playbook to execute. Do not run all hooks — only the hooks specified by the research type's channel map.
 
-**Cannot find:** Sources adequately covered by the other five channels, proprietary industry databases requiring subscriptions (except via Tavily discovery), unpublished internal data.
+**Cannot find:** Sources adequately covered by the other channels, proprietary industry databases requiring subscriptions (except via Tavily discovery), unpublished internal data. **Technical standards and regulation text belong to the `standards` channel**, which reads maturity and supersession from the W3C API and adoption from eCFR — this channel once advertised standards bodies and never shipped a hook for them, so anything routed here was searched from a domain list invented at runtime.
 
 ---
 
@@ -24,7 +24,6 @@ channel-type: domain-specific
 **Primary tool:** Varies by type hook (see Query Templates section):
 - **Patent search:** URL construction + `tvly extract` (Google Patents has no API — URLs are constructed and then extracted)
 - **Industry databases:** `tvly search` with domain scoping
-- **Standards bodies:** `tvly search` with domain scoping, or direct URL construction for known standards bodies
 - **Educational repositories:** `tvly search` with domain scoping
 - **Professional registries:** `tvly search` with domain scoping
 
@@ -123,7 +122,7 @@ Substitute: `{person_name}` = full name, `{field}` = domain/discipline, `{creden
 
 **Tier 1 (Highest credibility):**
 - Patent office filings from USPTO, EPO, WIPO (legally filed, publicly recorded)
-- Official standards documents from ANSI, ISO, NIST, IEEE, W3C
+- Educational standards frameworks from government and recognized bodies (corestandards.org, nextgenscience.org, ed.gov) — the Educational Resources hook's own territory. Technical standards from ANSI, ISO, NIST, IEEE and W3C are **not** this channel's: see `${CLAUDE_PLUGIN_ROOT}/reference/discovery/channel-playbooks/standards.md`
 - Government educational databases (.gov, .edu institutional repositories)
 - ORCID-verified researcher profiles (researcher-controlled, linked to publications)
 
@@ -143,7 +142,7 @@ Substitute: `{person_name}` = full name, `{field}` = domain/discipline, `{creden
 - **Vanity registries:** "Who's Who" style directories that charge subjects for inclusion — high name recognition but low credibility
 - **Industry reports as vendor marketing:** Reports from companies about markets they participate in — check if report author has commercial interest in the findings
 - **Patent trolls:** Companies or individuals with high patent volume but no products — patents exist but may not reflect meaningful innovation; note when assignee is a holding entity with no operating business
-- **Outdated standards:** Standards bodies update regularly — confirm you have the current version (check publication date and whether a newer version supersedes it)
+- **Outdated standards:** publication date does not establish currency, and for anything published in editions neither does the document's own status field. Supersession and adoption are separate facts resolved by the `standards` channel's `authority` and `edition` fields — see `${CLAUDE_PLUGIN_ROOT}/reference/source-assessment-guide.md` §1
 
 ---
 

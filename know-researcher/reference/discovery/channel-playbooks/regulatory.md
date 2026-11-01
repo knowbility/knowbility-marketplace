@@ -15,6 +15,8 @@ channel-type: regulatory
 
 **Cannot find:** Private company filings (not SEC-registered), international regulatory documents (non-US jurisdictions), state-level regulatory filings, pre-EDGAR historical filings (generally pre-1993), small nonprofits below 990 filing threshold.
 
+**Not this channel, despite the name:** the text of a regulation, a technical standard, or a rule in progress. This channel is corporate disclosure — EDGAR and 990s. For the CFR as in force, Federal Register rulemaking, or a W3C specification and its status, use `${CLAUDE_PLUGIN_ROOT}/reference/discovery/channel-playbooks/standards.md`. Several type-channel maps used to route "official regulation text" here, where it returns a company filing that happens to contain the phrase.
+
 ---
 
 ## 2. Tool Configuration

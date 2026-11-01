@@ -10,6 +10,24 @@ How to assess source credibility beyond the basic hierarchy in `source-standards
 
 **How to flag:** Note the data year (not just publication year — a 2024 article may cite 2021 data). If the data year is more than 2 years old for a time-sensitive claim, flag it as "potentially stale" in the credibility assessment.
 
+**When age is the wrong question entirely:** standards, regulations, specifications, and anything else published in editions. Age does not grade these, and both of the rules above get them wrong — the two-year rule flags a current requirement as stale, and the "legal precedents" exemption waves a withdrawn one through as timeless. A document with editions is stale on two conditions that have nothing to do with how old it is:
+
+- **Superseded** — a later edition has replaced it *for the body that publishes it*.
+- **No longer adopted** — the law or policy that made it binding now points somewhere else.
+
+These are independent, and a document can be current on one and not the other. The case that shows it: **36 CFR 1194 incorporates WCAG 2.0 Level A and AA by reference, 28 CFR 35.200 adopts WCAG 2.1 Level AA, and the current W3C Recommendation is WCAG 2.2.** All three are true at the same time. WCAG 2.0 is superseded and still binding. WCAG 2.2 is current and binding on nobody by itself. A 2008 document is the operative Section 508 requirement, and an age heuristic cannot represent that.
+
+**How to flag:** record two fields alongside the credibility assessment, and never infer either one from the publication date:
+
+| Field | What it answers | Where to get it |
+|---|---|---|
+| `edition` | which version this is | the document's own dated identifier — a W3C dated URI, a CFR snapshot date, the edition a regulation names |
+| `authority` | `in-force` / `proposed` / `draft` / `informative` / `superseded` | the publisher's status **and** the series or adoption record; see the standards channel playbook |
+
+**Status on the document is not enough to establish supersession.** W3C specifications are the clearest example: WCAG 2.0, 2.1 and 2.2 each report their own status as "Recommendation," so a check that reads only the document concludes 2.0 is current. Supersession lives at the series level (`api.w3.org/specification-series/{name}` → `current-specification`), and adoption lives in the regulation, not in the standard. If you cannot confirm either, write `authority: unconfirmed` rather than guessing — an inferred authority reads exactly like a verified one downstream, which is the whole problem.
+
+Use `${CLAUDE_PLUGIN_ROOT}/reference/discovery/channel-playbooks/standards.md` for the queries that resolve these fields.
+
 ## 2. Methodology Quality
 
 For sources that cite studies, surveys, or original research:

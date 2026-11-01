@@ -5,6 +5,7 @@ active-channels:
   - web-search
   - academic
   - regulatory
+  - standards
   - financial
   - social-signals
   - domain-specific
@@ -71,11 +72,11 @@ active-channels:
 
 **Primary channels:**
 - academic — peer-reviewed benchmarks, technical evaluations, and capability assessments rank highest for technology claims
-- domain-specific — patent search (Google Patents) for IP landscape and innovation direction; industry databases for standards body publications
+- domain-specific — patent search (Google Patents) for IP landscape and innovation direction; industry databases for market structure
 
 **Secondary channels:**
 - web-search — technical documentation, benchmark publications, developer surveys (Stack Overflow, JetBrains) for adoption signals within tech
-- regulatory — NIST, ISO, and standards body documentation for technical standards and specifications
+- standards — W3C technical reports with their maturity and supersession status, and the CFR text of any federal rule that adopts them. Use the standards channel for this, not regulatory: regulatory is SEC filings and 990s and reaches no standards body
 
 **Rationale:** Technology assessment demands peer-reviewed research and patent evidence over commercial claims — academic and domain-specific (patents) align with the credibility hierarchy's preference for methodology-backed and legally-filed sources.
 
@@ -101,7 +102,8 @@ active-channels:
 **Phase keywords:** regulatory, regulation, compliance, policy, government, legislation, legal, standards, regulatory environment
 
 **Primary channels:**
-- regulatory — SEC filings (industry-specific disclosures), government agency publications, official regulation text, industry association reports
+- standards — official regulation text as in force (eCFR) and federal rulemaking at every stage (Federal Register), including what is proposed but not yet required
+- regulatory — SEC filings for industry-specific disclosures, and industry association reports
 - web-search — trade press and news for regulatory developments; official government agency pages
 
 **Secondary channels:**

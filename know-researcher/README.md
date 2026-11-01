@@ -74,8 +74,10 @@ up to refuse single-source financial claims outright.
 
 Each phase runs the same loop:
 
-1. **Collect** — `discover` finds candidates across channels chosen for your research type; you
-   decide what gets processed; `process-source` turns each one into a structured note.
+1. **Collect** — `discover` finds candidates across channels chosen for your research type — web
+   search, academic, financial, corporate filings, practitioner communities, standards and
+   rulemaking, and type-specific databases; you decide what gets processed; `process-source` turns
+   each one into a structured note.
 2. **Connect** — `cross-ref` surfaces patterns, agreements, and genuine contradictions.
 3. **Assess** — `check-gaps` measures coverage by *independent* sources that directly answer a
    question, not by how many files you have.
@@ -85,6 +87,29 @@ Each phase runs the same loop:
 
 Phases are sequential and resumable. State lives in `STATE.md`, so clearing context between phases
 is encouraged rather than tolerated — nothing important lives in conversation history.
+
+### Requirements come from the requirement, not from a summary of it
+
+The standards channel reads US federal requirements from their source: the Federal Register for
+rulemaking at every stage, eCFR for the regulation as in force on a date you state, and the W3C API
+for a specification's maturity and whether it is still current. No keys and no accounts — all three
+are open APIs.
+
+It exists because a standard cannot be graded by age. **36 CFR 1194 incorporates WCAG 2.0 Level A
+and AA, 28 CFR 35.200 adopts WCAG 2.1 Level AA, and the current W3C Recommendation is WCAG 2.2** —
+all true at once, with a 2008 document as the operative Section 508 requirement. So every source
+from this channel carries whether it is **in force, proposed, draft, informative, or superseded**,
+and which **edition** it is, each read from a field rather than guessed from a date. A proposed rule
+cannot be written up as a requirement, and a superseded Recommendation that a regulation still
+points at stays visible as both.
+
+Supersession is checked against the series that publishes the specification, not the specification
+itself: WCAG 2.0, 2.1 and 2.2 all report their own status as "Recommendation," so asking the
+document whether it is current gets the wrong answer every time.
+
+Scope is **US federal**. EU (EN 301 549, EUR-Lex), UK, and Canada are out of scope for this channel
+and named as such in its playbook, as is anything sold rather than published — most ISO and IEEE
+documents, where this finds the citation and the status but never the text.
 
 ## Research types
 

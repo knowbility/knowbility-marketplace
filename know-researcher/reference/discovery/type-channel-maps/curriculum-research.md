@@ -6,6 +6,7 @@ active-channels:
   - web-search
   - social-signals
   - regulatory
+  - standards
   - domain-specific
 ---
 
@@ -92,7 +93,8 @@ Synthesis phases are omitted — no new discovery needed for that phase. If the 
 
 **Secondary channels (if primary returns fewer than 5 sources):**
 - social-signals — practitioner community discussions about what's changing, conference talk announcements revealing emerging topics, professional group debates about best practice
-- regulatory — professional body standards updates, government occupational framework revisions (O*NET updates); high for officially recognized shifts in field standards
+- standards — professional and technical standards updates, and federal rulemaking that changes what a field is required to do; high for officially recognized shifts in field standards
+- regulatory — only where the shift shows up in a filing or a 990. Occupational framework data (O*NET) is a Department of Labor database that no channel currently reaches; treat it as a known coverage gap rather than routing it here, where it returns nothing
 
 ---
 

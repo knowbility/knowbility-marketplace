@@ -485,9 +485,10 @@ Fallback for all domain-specific hooks: `npx firecrawl-cli search` with `site:` 
 
 ## Channel Execution: HTTP API Channels
 
-For academic and regulatory channels, read the full playbooks at:
+For academic, regulatory, and standards channels, read the full playbooks at:
 - `${CLAUDE_PLUGIN_ROOT}/reference/discovery/channel-playbooks/academic.md`
 - `${CLAUDE_PLUGIN_ROOT}/reference/discovery/channel-playbooks/regulatory.md`
+- `${CLAUDE_PLUGIN_ROOT}/reference/discovery/channel-playbooks/standards.md`
 
 These playbooks contain curl templates, response parsing instructions, rate limits, and complete degradation chains. Read them at execution time, not from memory.
 
@@ -530,6 +531,34 @@ Fallback chain (per regulatory.md):
 2. `npx firecrawl-cli search` with `site:` operators — label: `[via Firecrawl fallback]`
 3. `WebSearch` with `site:sec.gov OR site:projects.propublica.org` — label: `[via WebSearch fallback]`
 
+### Standards (channel-type: standards)
+
+Primary: `Bash` curl to the Federal Register, eCFR, and W3C APIs. No keys, no authentication.
+
+**Federal Register (rulemaking, in force and in progress):**
+- Scope by `conditions[agencies][]` or `conditions[cfr][title]`, never by `conditions[term]` alone — term search is full text across the whole publication and saturates at `count: 10000`
+- Read agency slugs from `https://www.federalregister.gov/api/v1/agencies`; they are statutory names (the US Access Board is `architectural-and-transportation-barriers-compliance-board`)
+- Extract per result: `type` (Rule / Proposed Rule / Notice), `action` (which separates a proposed rule from an *advance* notice), `publication_date`, `document_number`, `cfr_references`, `docket_ids`, `html_url`
+- Status: ACCESSIBLE — published by law
+
+**eCFR (the regulation as in force):**
+- **Pass `--compressed`.** Full-text endpoints answer HTTP 406 with `supportCode 11` otherwise. This is a missing flag, not an outage — add it and retry the same tier rather than degrading
+- Request one part at a time; confirm it exists with the structure endpoint before pulling text
+- Record the snapshot date you requested as part of the citation — the same URL returns different text later
+- Status: ACCESSIBLE
+
+**W3C (specification status and supersession):**
+- `https://api.w3.org/specifications/{SHORTNAME}` for maturity; `https://api.w3.org/specification-series/{series}` for whether it is current
+- **Run the series check on every W3C citation.** WCAG 2.0, 2.1 and 2.2 all report `status: "Recommendation"` on their own records, so per-specification status cannot detect supersession; only `_links.current-specification` on the series can
+- Status: ACCESSIBLE
+
+Every candidate from this channel carries `authority` (`in-force` / `proposed` / `draft` / `informative` / `superseded`) and `edition`. Below Tier 1 these cannot be read from a field — mark `authority: unconfirmed` rather than inferring it from prose.
+
+Fallback chain (per standards.md):
+1. `tvly search --include-domains "federalregister.gov,ecfr.gov,govinfo.gov,w3.org,access-board.gov"` — label: `[via tvly fallback]`
+2. `npx firecrawl-cli search` with `site:` operators — label: `[via Firecrawl fallback]`
+3. `WebSearch` with `site:` operators — label: `[via WebSearch fallback]`
+
 ---
 
 ## Guardrails
@@ -543,7 +572,8 @@ Fallback chain (per regulatory.md):
 7. **When a channel fails, continue with remaining channels.** Never abort discovery due to a single channel failure. Log the failure, report it in the summary table, move on.
 8. **Label all degraded and fallback results inline.** Every result from a fallback method must be tagged with the actual method used: `[Firecrawl fallback]`, `[WebSearch fallback]`, `[via tvly fallback]`, etc.
 9. **Retrieval log write must never block discovery.** If `retrieval-log.json` cannot be read, parsed, or written, print a WARNING and proceed. The candidates file is the primary artifact — the retrieval log is supplementary infrastructure. Never abort discovery, never retry the write, never ask the user to fix the file before continuing.
-10. **Every explicit exclusion is ledgered; no exclusion is contested.** When the user declines a candidate, the decline stands — record it in `research/discovery/exclusions.md` with the reason (or `no reason given`) and move on. Do not lobby for a declined source, and do not silently drop the record because the reason seems thin. User curation of the evidence base is legitimate; invisible curation is the defect the ledger exists to prevent.
+10. **Never infer a standard's authority.** A source from the standards channel is `in-force`, `proposed`, `draft`, `informative`, or `superseded` because a field said so — the Federal Register `type`, or the W3C series `current-specification`. When running on a fallback tier that returns pages instead of records, write `authority: unconfirmed`. Publication date does not establish currency and a specification's own status does not establish supersession.
+11. **Every explicit exclusion is ledgered; no exclusion is contested.** When the user declines a candidate, the decline stands — record it in `research/discovery/exclusions.md` with the reason (or `no reason given`) and move on. Do not lobby for a declined source, and do not silently drop the record because the reason seems thin. User curation of the evidence base is legitimate; invisible curation is the defect the ledger exists to prevent.
 
 ---
 

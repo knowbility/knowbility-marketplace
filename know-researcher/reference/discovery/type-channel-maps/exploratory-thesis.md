@@ -5,6 +5,7 @@ active-channels:
   - academic
   - web-search
   - regulatory
+  - standards
   - social-signals
   - financial
 ---
@@ -102,7 +103,7 @@ Exploratory thesis research is primarily academic and web-search driven. Domain-
 - None required by default — thesis research does not typically need patent search, industry databases, or professional registries
 
 **Conditionally applicable (at discover skill discretion):**
-- Standards bodies — if the thesis engages a domain with relevant standards (technology, engineering, healthcare), the domain-specific channel can surface ISO, NIST, IEEE, or W3C documents. Execute via `tvly search` scoped to known standards body domains.
+- Standards bodies — if the thesis engages a domain with relevant standards (technology, engineering, healthcare), use the **standards** channel, not domain-specific. The domain-specific playbook has no standards hook, so routing here left the agent to invent a domain list at runtime, which is how a superseded version gets cited as current. The standards channel reads W3C maturity and supersession from the W3C API and federal adoption from eCFR.
 - Specialized academic databases — if the thesis domain has a major niche database not covered by OpenAlex or Semantic Scholar (e.g., PsycINFO for psychology, ERIC for education), note this as a domain-specific extension of the academic channel.
 
 **Note:** Do not force domain-specific hooks that don't apply to the thesis domain. Consult the type-channel map for the thesis's subject domain (if one exists) for domain-specific source guidance.
